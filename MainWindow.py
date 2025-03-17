@@ -1,14 +1,12 @@
-import sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
+import time
 
 class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.setStyleSheet("QMainWindow { background-color: rgb(36, 36, 35);}")
         self.initUI()
 
     def initUI(self):
@@ -26,6 +24,18 @@ class MainWindow(QMainWindow):
             background-color: rgb(18, 18, 17);
         """)
 
+        # Status bar
+        status_bar = QStatusBar(self)
+        status_bar.resize(800,25)
+        status_bar.setFont(QFont("Helvetica", 20))
+
+        current_realtime_label = QLabel(f"{time.strftime("%H:%M")} | {time.strftime("%B %d, %Y")}", self)
+        status_bar.addPermanentWidget(current_realtime_label)
+
+        status_bar.move(0, 675)
+
+
+
         # PushButtons and their connections
         add_task_button = QPushButton("ADD TASK", self)
         del_task_button = QPushButton("DELETE TASK", self)
@@ -37,22 +47,7 @@ class MainWindow(QMainWindow):
         change_theme_button.clicked.connect(self.on_click_change_theme_button)
         about_button.clicked.connect(self.on_click_about_button)
 
-        self.setStyleSheet("""
-            QPushButton {
-                font-family: Helvetica;
-                font-size: 16px;
-                font: bold;
-                color: white;
-                background-color: rgb(18, 18, 17);
-                padding: 15px;
-            }
-            QMainWindow {
-                background-color: rgb(36, 36, 35)
-                }
-            QMenu {
-                background-color: rgb(79, 79, 75)
-            }
-        """)
+
 
         # Create Menu and add action widgets
         menu = QMenu(self)
@@ -71,14 +66,43 @@ class MainWindow(QMainWindow):
         tool_button.setPopupMode(QToolButton.InstantPopup)
         tool_button.setMenu(menu)
 
-        tool_button.setStyleSheet(""" 
-                                    background-color: rgb(18, 18, 17);
-                                    border-radius: 0px;
-                                """)
+
+        # Create object name before styling
+        current_realtime_label.setObjectName("current_realtime_label")
+        tool_button.setObjectName("tool_button")
+
+        self.setStyleSheet("""
+                    QPushButton {
+                        font-family: Helvetica;
+                        font-size: 16px;
+                        font: bold;
+                        color: white;
+                        background-color: rgb(18, 18, 17);
+                        padding: 15px;
+                    }
+                    QMainWindow {
+                        background-color: rgb(36, 36, 35)
+                        }
+                    QMenu {
+                        background-color: rgb(79, 79, 75)
+                    }
+                    QToolButton#tool_button {
+                            background-color: rgb(18, 18, 17);
+                            border-radius: 0px;
+                    }
+                    QStatusBar {
+                        font-family: Helvetica;
+                        background-color: rgb(110, 110, 109);     
+                    }
+                    QLabel#current_realtime_label {
+                        font-family: Helvetica;
+                        font-size: 14px;
+                        color: white;
+                    }
+                """)
 
 
         self.show()
-
 
     def on_click_task_button(self):
         sender = self.sender()
