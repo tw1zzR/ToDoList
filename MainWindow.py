@@ -21,13 +21,12 @@ class MainWindow(QMainWindow):
         title_label.setAlignment(Qt.AlignCenter)
         title_label.resize(800, 100)
         title_label.setFont(QFont("Helvetica", 40, QFont.Bold))
-
         title_label.setStyleSheet(""" 
             color: white;
             background-color: rgb(18, 18, 17);
         """)
 
-        # Tool Menu PushButtons
+        # PushButtons and their connections
         add_task_button = QPushButton("ADD TASK", self)
         del_task_button = QPushButton("DELETE TASK", self)
         change_theme_button = QPushButton("CHANGE THEME", self)
@@ -38,27 +37,44 @@ class MainWindow(QMainWindow):
         change_theme_button.clicked.connect(self.on_click_change_theme_button)
         about_button.clicked.connect(self.on_click_about_button)
 
-        add_task_button.move(200, 200)
-        del_task_button.move(200, 300)
-        change_theme_button.move(200, 400)
-        about_button.move(200, 500)
+        self.setStyleSheet("""
+            QPushButton {
+                font-family: Helvetica;
+                font-size: 16px;
+                font: bold;
+                color: white;
+                background-color: rgb(18, 18, 17);
+                padding: 15px;
+            }
+            QMainWindow {
+                background-color: rgb(36, 36, 35)
+                }
+            QMenu {
+                background-color: rgb(79, 79, 75)
+            }
+        """)
 
-        tool_menu_buttons = [add_task_button, del_task_button, change_theme_button, about_button]
+        # Create Menu and add action widgets
+        menu = QMenu(self)
+        menu_buttons = [add_task_button, del_task_button, change_theme_button, about_button]
+
+        for button in menu_buttons:
+            action = QWidgetAction(self)
+            action.setDefaultWidget(button)
+            menu.addAction(action)
 
         # Tool Menu Button
         tool_button = QToolButton(self)
         tool_button.resize(100, 100)
         tool_button.setIcon(QIcon("assets/white_menu_icon.png"))
         tool_button.setIconSize(QSize(50, 50))
-
-        for button in tool_menu_buttons:
-            tool_button.addAction(self, button)
+        tool_button.setPopupMode(QToolButton.InstantPopup)
+        tool_button.setMenu(menu)
 
         tool_button.setStyleSheet(""" 
-                    background-color: rgb(18, 18, 17);
-                    border-radius: 0px;
-                """)
-
+                                    background-color: rgb(18, 18, 17);
+                                    border-radius: 0px;
+                                """)
 
 
         self.show()
