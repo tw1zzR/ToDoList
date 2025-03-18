@@ -7,12 +7,16 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        # Task List
+        self.tasks = []
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle("To Do List")
         self.setWindowIcon(QIcon("assets/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
+
+
 
         # TOP Label
         title_label = QLabel("To Do List", self)
@@ -46,7 +50,6 @@ class MainWindow(QMainWindow):
         del_task_button.clicked.connect(self.on_click_task_button)
         change_theme_button.clicked.connect(self.on_click_change_theme_button)
         about_button.clicked.connect(self.on_click_about_button)
-
 
 
         # Create Menu and add action widgets
@@ -99,6 +102,20 @@ class MainWindow(QMainWindow):
                         font-size: 14px;
                         color: white;
                     }
+                    QCheckBox {
+                        font-family: Helvetica;
+                        font-size: 16px;
+                        color: black;
+                        background-color: rgb(0, 0, 0);                      
+                    }
+                    QInputDialog {
+                        font-family: Helvetica;
+                        font-size: 16px;
+                        background-color: rgb(36, 36, 35);
+                    }
+                    QPushButton#OKBUTTON {
+                        background-color: rgb(0, 0, 0);
+                    }
                 """)
 
 
@@ -108,6 +125,13 @@ class MainWindow(QMainWindow):
         sender = self.sender()
         if sender.text() == "ADD TASK":
             print("ADD TASK")
+            text, ok = self.show_dialog_box("Add Task", "Enter the task:")
+            if ok:
+                print("DIALOG BOX")
+                task_checkbox = QCheckBox(f"{text}", self)
+                self.tasks.append(task_checkbox)
+                task_checkbox.move(50, 200)
+                task_checkbox.show()
         elif sender.text() == "DELETE TASK":
             print("DELETE TASK")
 
@@ -118,3 +142,7 @@ class MainWindow(QMainWindow):
     def on_click_about_button(self):
         print("ABOUT APP")
         pass
+
+    def show_dialog_box(self, dialog_title, dialog_text):
+        text, ok = QInputDialog.getText(self, dialog_title, dialog_text)
+        return text, ok
