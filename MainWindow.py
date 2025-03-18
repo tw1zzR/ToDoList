@@ -57,11 +57,12 @@ class MainWindow(QMainWindow):
 
         # Tool Menu Button
         tool_button = QToolButton(self)
-        tool_button.resize(100, 100)
         tool_button.setIcon(QIcon("assets/white_menu_icon.png"))
         tool_button.setIconSize(QSize(50, 50))
         tool_button.setPopupMode(QToolButton.InstantPopup)
         tool_button.setMenu(menu)
+        tool_button.resize(100, 100)
+        tool_button.move(0,0)
 
 
         # Create object name before styling
@@ -117,9 +118,6 @@ class MainWindow(QMainWindow):
                         font-family: Helvetica;
                         font-size: 16px;
                         background-color: rgb(36, 36, 35);
-                    }
-                    QPushButton#OKBUTTON {
-                        background-color: rgb(0, 0, 0);
                     }
                 """)
 
