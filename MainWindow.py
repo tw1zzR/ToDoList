@@ -7,7 +7,6 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        # Task List
         self.tasks = []
         self.initUI()
 
@@ -16,29 +15,24 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("assets/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
 
-
-
         # TOP Label
         title_label = QLabel("To Do List", self)
         title_label.setAlignment(Qt.AlignCenter)
         title_label.resize(800, 100)
-        title_label.setFont(QFont("Helvetica", 40, QFont.Bold))
-        title_label.setStyleSheet(""" 
-            color: white;
-            background-color: rgb(18, 18, 17);
-        """)
+        title_label.move(0,0)
 
-        # Status bar
-        status_bar = QStatusBar(self)
-        status_bar.resize(800,25)
-        status_bar.setFont(QFont("Helvetica", 20))
+        # Status bar (label)
+        status_label = QLabel(f"{time.strftime("%B %d, %Y")}", self)
+        status_label.setAlignment(Qt.AlignCenter)
+        status_label.resize(800,25)
+        status_label.move(0, 675)
 
-        current_realtime_label = QLabel(f"{time.strftime("%H:%M")} | {time.strftime("%B %d, %Y")}", self)
-        status_bar.addPermanentWidget(current_realtime_label)
-
-        status_bar.move(0, 675)
-
-
+        # User Log In PushButton
+        user_login_button = QPushButton(self)
+        user_login_button.setIcon(QIcon("assets/white_user_icon.png"))
+        user_login_button.setIconSize(QSize(50, 50))
+        user_login_button.resize(100,100)
+        user_login_button.move(700,0)
 
         # PushButtons and their connections
         add_task_button = QPushButton("ADD TASK", self)
@@ -71,10 +65,30 @@ class MainWindow(QMainWindow):
 
 
         # Create object name before styling
-        current_realtime_label.setObjectName("current_realtime_label")
+        title_label.setObjectName("title_label")
+        status_label.setObjectName("status_label")
+        user_login_button.setObjectName("user_login_button")
+
         tool_button.setObjectName("tool_button")
 
         self.setStyleSheet("""
+                    QLabel#title_label {
+                        font-family: Helvetica;
+                        font-size: 40px;
+                        font: bold;
+                        color: white;
+                        background-color: rgb(18, 18, 17);
+                    }
+                    QLabel#status_label {
+                        font-family: Helvetica;
+                        font-size: 14px;
+                        color: white;
+                        background-color: rgb(110, 110, 109); 
+                    }
+                    QLabel#user_login_button {
+                        background-color: transparent;
+                        border-radius: 0px;
+                    }
                     QPushButton {
                         font-family: Helvetica;
                         font-size: 16px;
@@ -84,23 +98,14 @@ class MainWindow(QMainWindow):
                         padding: 15px;
                     }
                     QMainWindow {
-                        background-color: rgb(36, 36, 35)
-                        }
+                        background-color: rgb(36, 36, 35);
+                    }
                     QMenu {
-                        background-color: rgb(79, 79, 75)
+                        background-color: rgb(79, 79, 75);
                     }
                     QToolButton#tool_button {
-                            background-color: rgb(18, 18, 17);
-                            border-radius: 0px;
-                    }
-                    QStatusBar {
-                        font-family: Helvetica;
-                        background-color: rgb(110, 110, 109);     
-                    }
-                    QLabel#current_realtime_label {
-                        font-family: Helvetica;
-                        font-size: 14px;
-                        color: white;
+                        background-color: transparent;
+                        border-radius: 0px;
                     }
                     QCheckBox {
                         font-family: Helvetica;
