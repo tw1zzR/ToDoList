@@ -1,4 +1,5 @@
 from PyQt5 import QtCore
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
@@ -27,6 +28,7 @@ class AddTaskDialog(QDialog):
 
     def initUI(self):
         self.setWindowTitle("Add Task")
+        self.setWindowIcon(QIcon("assets/task_icon.png"))
         self.resize(420, 560)
         self.setStyleSheet("background-color: rgb(255, 255, 255);")
 
