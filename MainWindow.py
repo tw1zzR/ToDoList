@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         title_label.move(0,0)
 
         # Status bar (label)
-        status_label = QLabel(f"{time.strftime("%B %d, %Y")}", self)
+        status_label = QLabel(time.strftime("%B %d, %Y"), self)
         status_label.setAlignment(Qt.AlignCenter)
         status_label.resize(800,25)
         status_label.move(0, 675)
@@ -135,17 +135,20 @@ class MainWindow(QMainWindow):
 
     def on_click_task_button(self):
         sender = self.sender()
+
         if sender.text() == "ADD TASK":
             print("ADD TASK")
-            add_task_dialog = AddTaskDialog(self)
-            add_task_dialog.
-            text, ok = self.setup_dialog_box("Add Task", "Enter the task:")
-            if ok:
-                print("DIALOG BOX")
-                task_checkbox = QCheckBox(f"{text}", self)
+
+            add_task_dialog = AddTaskDialog()
+
+            if add_task_dialog.exec_():
+                user_task_name, user_task_deadline, user_task_description = add_task_dialog.get_task_data()
+
+                task_checkbox = QCheckBox(f"{user_task_name} | {user_task_description} ||| {user_task_deadline}",self)
                 self.tasks.append(task_checkbox)
                 task_checkbox.move(50, 200)
                 task_checkbox.show()
+
         elif sender.text() == "DELETE TASK":
             print("DELETE TASK")
             text, ok = self.setup_dialog_box("Delete Task", "Enter the task:")
