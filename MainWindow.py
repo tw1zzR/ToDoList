@@ -125,35 +125,35 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+    # checkbox methods
+    def create_checkbox(self, task_dialog_box):
+        user_task_name, user_task_deadline, user_task_description = task_dialog_box.get_task_data()
+        task_checkbox = QCheckBox(f"{user_task_name} | {user_task_description} ||| {user_task_deadline}", self)
+        self.tasks.append(task_checkbox)
 
-    # Other methods
+        task_checkbox.setFixedWidth(700)
+        task_checkbox.setFixedHeight(50)
+
+    def show_checkboxes(self):
+        x, y = 50, 200
+        for task_checkbox in self.tasks:
+            task_checkbox.move(x, y)
+            y += 80
+            task_checkbox.show()
+
+    # onclick methods
     def on_click_task_button(self):
         sender = self.sender()
 
-        if sender.text() == "ADD TASK":
-            print("ADD TASK")
+        match sender.text():
+            case "ADD TASK":
+                add_task_dialog_box = AddTaskDialog()
 
-            add_task_dialog = AddTaskDialog()
-
-            if add_task_dialog.exec_():
-                user_task_name, user_task_deadline, user_task_description = add_task_dialog.get_task_data()
-
-                task_checkbox = QCheckBox(f"{user_task_name} | {user_task_description} ||| {user_task_deadline}",self)
-                self.tasks.append(task_checkbox)
-                task_checkbox.setFixedWidth(700)
-                task_checkbox.setFixedHeight(50)
-                task_checkbox.move(50, 200)
-                task_checkbox.show()
-
-        elif sender.text() == "DELETE TASK":
-            print("DELETE TASK")
-            text, ok = self.setup_dialog_box("Delete Task", "Enter the task:")
-            if ok:
-                pass
-
-    def setup_dialog_box(self, dialog_title, dialog_text):
-        text, ok = QInputDialog.getText(self, dialog_title, dialog_text)
-        return text, ok
+                if add_task_dialog_box.exec_():
+                    self.create_checkbox(add_task_dialog_box)
+                    self.show_checkboxes()
+            case "DELETE TASK":
+                print("DELETE TASK")
 
     def on_click_change_theme_button(self):
         print("CHANGE THEME")
@@ -162,3 +162,8 @@ class MainWindow(QMainWindow):
     def on_click_about_button(self):
         print("ABOUT APP")
         pass
+
+    # other methods
+    def setup_dialog_box(self, dialog_title, dialog_text):
+        text, ok = QInputDialog.getText(self, dialog_title, dialog_text)
+        return text, ok
