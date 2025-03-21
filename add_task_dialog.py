@@ -13,6 +13,7 @@ class AddTaskDialog(QDialog):
         self.task_description_label = QLabel("Task Description", self)
 
         self.user_input_task_name = QLineEdit(self)
+
         self.user_input_datetime = QDateTimeEdit(self)
         self.user_input_task_description = QTextEdit(self)
 
@@ -36,6 +37,7 @@ class AddTaskDialog(QDialog):
         self.deadline_label.setGeometry(70, 140, 160, 40)
         self.task_description_label.setGeometry(70, 245, 160, 40)
 
+        self.user_input_task_name.setMaxLength(24)
         self.user_input_task_name.setGeometry(70, 70, 280, 50)
         self.user_input_task_name.setPlaceholderText("Enter task name")
         self.user_input_task_name.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -43,6 +45,7 @@ class AddTaskDialog(QDialog):
         self.user_input_datetime.setGeometry(QtCore.QRect(70, 175, 280, 50))
 
         self.user_input_datetime.setDateTime(self.current_time)
+        self.user_input_datetime.setMinimumDateTime(self.current_time)
 
         self.user_input_task_description.setGeometry(QtCore.QRect(70, 280, 280, 150))
         self.user_input_task_description.setPlaceholderText("Enter task description")
@@ -114,8 +117,6 @@ class AddTaskDialog(QDialog):
         user_task_name = self.user_input_task_name.text()
         user_task_deadline = self.user_input_datetime.text()
         user_task_description = self.user_input_task_description.toPlainText()
-
         self.accept()
 
-        print(user_task_name, user_task_deadline, user_task_description)
         return user_task_name, user_task_deadline, user_task_description

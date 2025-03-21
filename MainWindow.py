@@ -13,10 +13,10 @@ class MainWindow(QMainWindow):
         self.tasks = []
 
         self.title_label = QLabel("To Do List", self)
-
+        self.title_tasks_label = QLabel("Tasks", self)
         self.status_label = QLabel(time.strftime("%B %d, %Y"), self)
-        self.user_login_button = QPushButton(self)
 
+        self.user_login_button = QPushButton(self)
         self.add_task_button = QPushButton("ADD TASK", self)
         self.del_task_button = QPushButton("DELETE TASK", self)
         self.change_theme_button = QPushButton("CHANGE THEME", self)
@@ -34,10 +34,14 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("assets/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
 
-        # Title Label
+        # Title Labels
         self.title_label.setAlignment(Qt.AlignCenter)
         self.title_label.resize(800, 100)
         self.title_label.move(0,0)
+
+        self.title_tasks_label.setAlignment(Qt.AlignCenter)
+        self.title_tasks_label.resize(200, 100)
+        self.title_tasks_label.move(300,100)
 
         # Status Label
         self.status_label.setAlignment(Qt.AlignCenter)
@@ -72,9 +76,11 @@ class MainWindow(QMainWindow):
 
         # Create object name before styling
         self.title_label.setObjectName("title_label")
+        self.title_tasks_label.setObjectName("title_tasks_label")
         self.status_label.setObjectName("status_label")
         self.user_login_button.setObjectName("user_login_button")
         self.tool_button.setObjectName("tool_button")
+        self.user_login_button.setObjectName("user_login_button")
 
         self.setStyleSheet("""
             QLabel {
@@ -85,12 +91,17 @@ class MainWindow(QMainWindow):
                 font-size: 40px;
                 font: bold;
                 background-color: rgb(18, 18, 17);
+                border-bottom: 2px solid rgb(41, 41, 39);
+            }
+            QLabel#title_tasks_label {
+                font-size: 36px;
+                font: bold;
             }
             QLabel#status_label {
                 font-size: 14px;
                 background-color: rgb(110, 110, 109); 
             }
-            QLabel#user_login_button, QToolButton#tool_button {
+            QLabel#user_login_button, QToolButton#tool_button, QPushButton#user_login_button {
                 background-color: transparent;
                 border-radius: 0px;
             }
