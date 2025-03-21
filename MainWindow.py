@@ -126,9 +126,10 @@ class MainWindow(QMainWindow):
         self.show()
 
     # checkbox methods
-    def create_checkbox(self, task_dialog_box):
+    def create_and_setup_checkbox(self, task_dialog_box):
         user_task_name, user_task_deadline, user_task_description = task_dialog_box.get_task_data()
         task_checkbox = QCheckBox(f"{user_task_name} | {user_task_description} ||| {user_task_deadline}", self)
+        task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
         self.tasks.append(task_checkbox)
 
         task_checkbox.setFixedWidth(700)
@@ -141,6 +142,26 @@ class MainWindow(QMainWindow):
             y += 80
             task_checkbox.show()
 
+    def checkbox_set_style_sheet(self, sender, checked):
+        if checked:
+            sender.setStyleSheet(
+                "background-color: rgb(93, 217, 110);"
+                "font-family: Helvetica;"
+                "font-size: 18px;"
+                "border: 3px solid;"
+                "border-color: rgb(66, 135, 76);"
+                "color: rgb(0,0,0);")
+        else:
+            sender.setStyleSheet(
+                "background-color: rgb(246, 246, 246);"
+                "font-family: Helvetica;"
+                "font-size: 18px;"
+                "border: 3px solid rgb(222, 222, 222);"
+                "color: rgb(0, 0, 0);"
+                "padding: 0 10px;  "
+            )
+
+
     # onclick methods
     def on_click_task_button(self):
         sender = self.sender()
@@ -150,7 +171,7 @@ class MainWindow(QMainWindow):
                 add_task_dialog_box = AddTaskDialog()
 
                 if add_task_dialog_box.exec_():
-                    self.create_checkbox(add_task_dialog_box)
+                    self.create_and_setup_checkbox(add_task_dialog_box)
                     self.show_checkboxes()
             case "DELETE TASK":
                 print("DELETE TASK")
@@ -161,6 +182,19 @@ class MainWindow(QMainWindow):
 
     def on_click_about_button(self):
         print("ABOUT APP")
+        pass
+
+    def on_click_task_checkbox(self):
+        sender = self.sender()
+
+        match sender.isChecked():
+            case True:
+                print("123")
+                self.checkbox_set_style_sheet(sender, True)
+            case False:
+                print("456")
+                self.checkbox_set_style_sheet(sender, False)
+        print("TASK CHECKBOX")
         pass
 
     # other methods
