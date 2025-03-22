@@ -132,6 +132,14 @@ class MainWindow(QMainWindow):
                 font-size: 16px;
                 background-color: rgb(36, 36, 35);
             }
+            QCheckBox::indicator {
+                border-image: url(assets/full_gray_checkbox_unchecked.png);
+                width: 30px;
+                height: 30px;
+            }
+            QCheckBox::indicator::checked {
+                border-image: url(assets/full_gray_checkbox_checked.png);
+            }
         """)
 
         self.show()
