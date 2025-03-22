@@ -29,7 +29,7 @@ class AddTaskDialog(QDialog):
 
     def initUI(self):
         self.setWindowTitle("Add Task")
-        self.setWindowIcon(QIcon("assets/task_icon.png"))
+        self.setWindowIcon(QIcon("assets/AddTaskDialogBox/addtask_dialogbox_icon.png"))
         self.resize(420, 560)
         self.setStyleSheet("background-color: rgb(255, 255, 255);")
 

@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from add_task_dialog import AddTaskDialog
+from AddTaskDialogBox import AddTaskDialog
 
 
 class MainWindow(QMainWindow):
@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle("To Do List")
-        self.setWindowIcon(QIcon("assets/todolist_icon.png"))
+        self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
 
         # Title Labels
@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         self.status_label.move(0, 675)
 
         # Login
-        self.user_login_button.setIcon(QIcon("assets/white_user_icon.png"))
+        self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
         self.user_login_button.setIconSize(QSize(50, 50))
         self.user_login_button.resize(100,100)
         self.user_login_button.move(700,0)
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
             self.menu.addAction(action)
 
         # Tool Menu Button
-        self.tool_button.setIcon(QIcon("assets/white_menu_icon.png"))
+        self.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
         self.tool_button.setIconSize(QSize(50, 50))
         self.tool_button.setPopupMode(QToolButton.InstantPopup)
         self.tool_button.setMenu(self.menu)
@@ -133,12 +133,12 @@ class MainWindow(QMainWindow):
                 background-color: rgb(36, 36, 35);
             }
             QCheckBox::indicator {
-                border-image: url(assets/full_gray_checkbox_unchecked.png);
+                border-image: url(assets/MainWindow/full_gray_checkbox_unchecked.png);
                 width: 30px;
                 height: 30px;
             }
             QCheckBox::indicator::checked {
-                border-image: url(assets/full_gray_checkbox_checked.png);
+                border-image: url(assets/MainWindow/full_gray_checkbox_checked.png);
             }
         """)
 
