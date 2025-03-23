@@ -64,8 +64,6 @@ class MainWindow(QMainWindow):
         self.change_theme_button.clicked.connect(self.on_click_change_theme_button)
         self.about_button.clicked.connect(self.on_click_about_button)
 
-        self.user_login_button.clicked.connect(self.print_tasks)
-
         # Add action widgets into menu
         for button in self.menu_buttons:
             action = QWidgetAction(self)
@@ -136,7 +134,7 @@ class MainWindow(QMainWindow):
                 font-size: 18px;
                 border: 3px solid rgb(222, 222, 222);
                 color: rgb(0, 0, 0);
-                padding: 0 10px;       
+                padding: 10px;       
             }
             QCheckBox::indicator {
                 border-image: url(assets/MainWindow/CheckBox/full_gray_checkbox_unchecked_icon.png);
@@ -151,110 +149,88 @@ class MainWindow(QMainWindow):
 
         self.show()
 
-    def print_tasks(self):
-        print(f"tasks:{self.checkbox_tasks}")
-        print(f"checkbox_buttons:{self.checkbox_buttons}")
-        print(f"checkbox_dict: {self.checkbox_dict}")
-
-    def link_checkbox_and_his_buttons(self):
-        self.checkbox_dict = [dict(zip(self.checkbox_tasks, self.checkbox_buttons))]
-
     # checkbox methods
-    def create_and_setup_checkbox(self, task_dialog_box):
+    def create_task_checkbox_with_buttons(self, task_dialog_box):
         user_task_name, user_task_deadline, user_task_description = task_dialog_box.get_task_data()
+
         task_checkbox = QCheckBox(user_task_name, self)
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
-        task_checkbox.setFixedWidth(650)
-        task_checkbox.setFixedHeight(50)
+        task_checkbox.setFixedSize(650, 50)
 
-        self.checkbox_tasks.append(task_checkbox)
-        buttons = self.create_and_setup_checkbox_buttons()
-        self.link_checkbox_and_his_buttons()
-        self.connect_and_show_checkboxes_with_buttons(buttons)
-
-    def show_checkboxes_and_his_buttons(self, checkbox_buttons):
-        checkbox_x, checkbox_buttons_x = 75, 560
-        y = 200
-
-        for task_checkbox in self.checkbox_tasks:
-            task_checkbox.move(checkbox_x, y)
-            task_checkbox.show()
-
-            for checkbox_button in checkbox_buttons:
-                checkbox_button.move(checkbox_buttons_x, y)
-                checkbox_buttons_x += 50
-
-            y += 80
-            checkbox_buttons_x = 560
-
-    def checkbox_set_style_sheet(self, sender, checked):
-        if checked:
-            sender.setStyleSheet(
-                "background-color: rgb(93, 217, 110);"
-                "font-family: Helvetica;"
-                "font-size: 18px;"
-                "border: 3px solid;"
-                "border-color: rgb(66, 135, 76);"
-                "color: rgb(0,0,0);")
-        else:
-            sender.setStyleSheet(
-                "background-color: rgb(246, 246, 246);"
-                "font-family: Helvetica;"
-                "font-size: 18px;"
-                "border: 3px solid rgb(222, 222, 222);"
-                "color: rgb(0, 0, 0);")
-
-    def create_and_setup_checkbox_buttons(self):
         task_info_button = QPushButton(self)
         edit_task_button = QPushButton(self)
         delete_task_button = QPushButton(self)
-
-        buttons = [task_info_button, edit_task_button, delete_task_button]
-        self.checkbox_buttons.append(buttons)
-
-        for button in buttons:
-            button.resize(50,50)
-            button.setIconSize(QSize(30, 30))
-            button.setStyleSheet(
-                "background-color: transparent;"
-                "border-radius: 0px;")
-            button.show()
 
         task_info_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png"))
         edit_task_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_edit_task_button_icon.png"))
         delete_task_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"))
 
-        return buttons
+        buttons = [task_info_button, edit_task_button, delete_task_button]
+
+        for button in buttons:
+            button.resize(50, 50)
+            button.setIconSize(QSize(30, 30))
+            button.setStyleSheet(
+                "background-color: transparent;"
+                "border-radius: 0px;")
+
+        # Add to data lists
+        self.checkbox_tasks.append(task_checkbox)
+        self.checkbox_buttons.append(buttons)
+
+        # Link checkbox and his keys by dictionary & connect
+        self.link_checkbox_and_his_buttons()
+        self.connect_checkbox_buttons()
+
+    def link_checkbox_and_his_buttons(self):
+        self.checkbox_dict = dict(zip(self.checkbox_tasks, self.checkbox_buttons))
+
+    def connect_checkbox_buttons(self):
+        for checkbox, checkbox_buttons in self.checkbox_dict.items():
+            for checkbox_button in checkbox_buttons:
+                checkbox_button.clicked.connect(lambda: print("123"))
+
+    def show_task_checkbox(self):
+        checkbox_x, button_x = 75, 560
+        y = 200
+
+        for task_checkbox, task_buttons in self.checkbox_dict.items():
+            task_checkbox.move(checkbox_x, y)
+            task_checkbox.show()
+
+            for button in task_buttons:
+                button.move(button_x, y)
+                button_x += 50
+                button.show()
+
+            y += 80
+            button_x = 560
 
 
-    def connect_and_show_checkboxes_with_buttons(self, buttons):
-        self.show_checkboxes_and_his_buttons(buttons)
-        # for checkbox, checkbox_buttons in self.checkbox_dict:
-        #     checkbox
-
-
+    def task_checkbox_set_style_sheet(self, sender, checked):
+        if checked:
+            sender.setStyleSheet(
+                "background-color: rgb(93, 217, 110);"
+                "border-color: rgb(66, 135, 76);")
+        else:
+            sender.setStyleSheet(
+                "background-color: rgb(246, 246, 246);"
+                "border-color: rgb(222, 222, 222);")
 
     # onclick methods
+
+        # Tool menu button methods
     def on_click_task_button(self):
         sender = self.sender()
 
         match sender.text():
             case "ADD TASK":
                 add_task_dialog_box = AddTaskDialog()
-
                 if add_task_dialog_box.exec_():
-                    self.create_and_setup_checkbox(add_task_dialog_box)
-                    # self.show_checkboxes_and_his_buttons()
+                    self.create_task_checkbox_with_buttons(add_task_dialog_box)
+                    self.show_task_checkbox()
             case "DELETE TASK":
                 print("DELETE TASK")
-
-
-
-
-
-
-
-
 
     def on_click_change_theme_button(self):
         print("CHANGE THEME")
@@ -264,20 +240,12 @@ class MainWindow(QMainWindow):
         print("ABOUT APP")
         pass
 
+        # Set checkbox checked method
     def on_click_task_checkbox(self):
         sender = self.sender()
 
         match sender.isChecked():
             case True:
-                print("123")
-                self.checkbox_set_style_sheet(sender, True)
+                self.task_checkbox_set_style_sheet(sender, True)
             case False:
-                print("456")
-                self.checkbox_set_style_sheet(sender, False)
-        print("TASK CHECKBOX")
-        pass
-
-    # other methods
-    def setup_dialog_box(self, dialog_title, dialog_text):
-        text, ok = QInputDialog.getText(self, dialog_title, dialog_text)
-        return text, ok
+                self.task_checkbox_set_style_sheet(sender, False)
