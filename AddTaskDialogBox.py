@@ -63,7 +63,7 @@ class AddTaskDialog(QDialog):
         label_style = (
             "background-color: transparent;"
             "font-family: Helvetica;"
-            "font-size: 20px;"
+            "font-size: 18px;"
             "font: bold;"
             "color: rgb(0,0,0);"
         )
