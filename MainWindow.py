@@ -3,15 +3,14 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from AddTaskDialogBox import AddTaskDialog
+from TaskInfoMessageBox import CustomTaskInfoMessageBox
 
 
 class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        self.checkbox_tasks = []
-        self.checkbox_buttons = []
-        self.checkbox_dict = []
+        self.checkbox_dict = {}
 
         self.title_label = QLabel("To Do List", self)
         self.title_tasks_label = QLabel("Tasks", self)
@@ -152,7 +151,7 @@ class MainWindow(QMainWindow):
         self.show()
 
     def print_buttons(self):
-        print(self.checkbox_buttons)
+        print(self.checkbox_dict)
 
     # checkbox methods
     def create_task_checkbox_with_buttons(self, task_dialog_box):
@@ -180,49 +179,47 @@ class MainWindow(QMainWindow):
                 "border-radius: 0px;")
 
         # Add to data lists
-        self.checkbox_tasks.append(task_checkbox)
-        self.checkbox_buttons.append(buttons)
+        self.checkbox_dict[task_checkbox] = {
+            "buttons": buttons,
+            "name": user_task_name,
+            "deadline": user_task_deadline,
+            "description": user_task_description
+        }
 
-        # Link checkbox and his keys by dictionary & connect
-        self.link_checkbox_and_his_buttons()
         self.connect_checkbox_buttons()
 
-    def link_checkbox_and_his_buttons(self):
-        self.checkbox_dict = dict(zip(self.checkbox_tasks, self.checkbox_buttons))
+    def find_checkbox_by_button(self, clicked_button):
+        for checkbox, data in self.checkbox_dict.items():
+            if clicked_button in data["buttons"]:
+                return checkbox
+        return None
 
     def connect_checkbox_buttons(self):
-        for checkbox, buttons in self.checkbox_dict.items():
-            task_info_button, edit_task_button, delete_task_button = buttons
-
-            try:
-                task_info_button.clicked.disconnect()
-                edit_task_button.clicked.disconnect()
-                delete_task_button.clicked.disconnect()
-            except:
-                pass
+        for checkbox, data in self.checkbox_dict.items():
+            task_info_button  = data["buttons"][0]
+            edit_task_button  = data["buttons"][1]
+            delete_task_button = data["buttons"][2]
 
             task_info_button.clicked.connect(self.on_click_task_info_checkbox)
+
             edit_task_button.clicked.connect(lambda: print("456"))
             delete_task_button.clicked.connect(lambda: print("789"))
 
     def create_task_info_messagebox(self, checkbox_sender):
-        task_info_messagebox = QMessageBox(self)
-        task_info_messagebox.setWindowTitle("Task Info")
-
-        task_info_messagebox.setText("12312123123132132312132123")
-        task_info_messagebox.addButton(checkbox_sender)
-
-        task_info_messagebox.show()
+        self.task_info_messagebox = CustomTaskInfoMessageBox(self.checkbox_dict[checkbox_sender]["name"],
+                                                        self.checkbox_dict[checkbox_sender]["deadline"],
+                                                        self.checkbox_dict[checkbox_sender]["description"])
+        self.task_info_messagebox.show()
 
     def show_task_checkbox(self):
         checkbox_x, button_x = 75, 560
         y = 200
 
-        for task_checkbox, task_buttons in self.checkbox_dict.items():
-            task_checkbox.move(checkbox_x, y)
-            task_checkbox.show()
+        for checkbox, data in self.checkbox_dict.items():
+            checkbox.move(checkbox_x, y)
+            checkbox.show()
 
-            for button in task_buttons:
+            for button in data["buttons"]:
                 button.move(button_x, y)
                 button_x += 50
                 button.show()
@@ -276,4 +273,5 @@ class MainWindow(QMainWindow):
     def on_click_task_info_checkbox(self):
         sender = self.sender()
 
-        self.create_task_info_messagebox(sender)
+        sender_checkbox = self.find_checkbox_by_button(sender)
+        self.create_task_info_messagebox(sender_checkbox)
