@@ -64,6 +64,8 @@ class MainWindow(QMainWindow):
         self.change_theme_button.clicked.connect(self.on_click_change_theme_button)
         self.about_button.clicked.connect(self.on_click_about_button)
 
+        self.user_login_button.clicked.connect(self.print_buttons)
+
         # Add action widgets into menu
         for button in self.menu_buttons:
             action = QWidgetAction(self)
@@ -149,6 +151,9 @@ class MainWindow(QMainWindow):
 
         self.show()
 
+    def print_buttons(self):
+        print(self.checkbox_buttons)
+
     # checkbox methods
     def create_task_checkbox_with_buttons(self, task_dialog_box):
         user_task_name, user_task_deadline, user_task_description = task_dialog_box.get_task_data()
@@ -186,9 +191,28 @@ class MainWindow(QMainWindow):
         self.checkbox_dict = dict(zip(self.checkbox_tasks, self.checkbox_buttons))
 
     def connect_checkbox_buttons(self):
-        for checkbox, checkbox_buttons in self.checkbox_dict.items():
-            for checkbox_button in checkbox_buttons:
-                checkbox_button.clicked.connect(lambda: print("123"))
+        for checkbox, buttons in self.checkbox_dict.items():
+            task_info_button, edit_task_button, delete_task_button = buttons
+
+            try:
+                task_info_button.clicked.disconnect()
+                edit_task_button.clicked.disconnect()
+                delete_task_button.clicked.disconnect()
+            except:
+                pass
+
+            task_info_button.clicked.connect(self.on_click_task_info_checkbox)
+            edit_task_button.clicked.connect(lambda: print("456"))
+            delete_task_button.clicked.connect(lambda: print("789"))
+
+    def create_task_info_messagebox(self, checkbox_sender):
+        task_info_messagebox = QMessageBox(self)
+        task_info_messagebox.setWindowTitle("Task Info")
+
+        task_info_messagebox.setText("12312123123132132312132123")
+        task_info_messagebox.addButton(checkbox_sender)
+
+        task_info_messagebox.show()
 
     def show_task_checkbox(self):
         checkbox_x, button_x = 75, 560
@@ -205,7 +229,6 @@ class MainWindow(QMainWindow):
 
             y += 80
             button_x = 560
-
 
     def task_checkbox_set_style_sheet(self, sender, checked):
         if checked:
@@ -249,3 +272,8 @@ class MainWindow(QMainWindow):
                 self.task_checkbox_set_style_sheet(sender, True)
             case False:
                 self.task_checkbox_set_style_sheet(sender, False)
+
+    def on_click_task_info_checkbox(self):
+        sender = self.sender()
+
+        self.create_task_info_messagebox(sender)
