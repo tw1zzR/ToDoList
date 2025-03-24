@@ -50,7 +50,7 @@ class AddTaskDialog(QDialog):
         self.user_input_task_description.setGeometry(QtCore.QRect(70, 280, 280, 150))
         self.user_input_task_description.setPlaceholderText("Enter task description")
 
-        self.button_widget.setGeometry(70, 450, 281, 58)
+        self.button_widget.setGeometry(70, 450, 280, 60)
         self.button_layout.setContentsMargins(0, 0, 0, 0)
 
         self.send_button.clicked.connect(self.get_task_data)
