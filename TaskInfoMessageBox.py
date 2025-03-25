@@ -32,6 +32,12 @@ class CustomTaskInfoMessageBox(QDialog):
 
         self.OK_Button.clicked.connect(self.close)
 
+        self.setWhatsThis("It's a message box containing task information.")
+        self.user_task_name_label.setWhatsThis("It's the task name.")
+        self.user_task_deadline_label.setWhatsThis("It's the task deadline.")
+        self.user_task_description_textedit.setWhatsThis("It's the task description.")
+        self.OK_Button.setWhatsThis("It's an OK button to close message box.")
+
         self.task_name_label.move(50, 50)
         self.user_task_name_label.move(50, 75)
 
