@@ -33,6 +33,13 @@ class AddTaskDialog(QDialog):
         self.resize(420, 560)
         self.setStyleSheet("background-color: rgb(255, 255, 255);")
 
+        self.setWhatsThis("It's a dialog box that allows you to enter data for your task.")
+        self.user_input_task_name.setWhatsThis("It's an input field for the task name.")
+        self.user_input_datetime.setWhatsThis("It's a field displaying the task deadline.")
+        self.user_input_task_description.setWhatsThis("It's a field for entering the task description.")
+        self.send_button.setWhatsThis("It's a Send button to submit the task data.")
+        self.cancel_button.setWhatsThis("It's a Cancel button to close the window and discard the task.")
+
         self.task_name_label.setGeometry(70, 35, 160, 40)
         self.deadline_label.setGeometry(70, 140, 160, 40)
         self.task_description_label.setGeometry(70, 245, 160, 40)
