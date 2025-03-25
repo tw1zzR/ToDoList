@@ -7,17 +7,16 @@ class CustomTaskInfoMessageBox(QDialog):
     def __init__(self, task_name, task_deadline, task_description):
         super().__init__()
 
-        self.task_name = task_name
         self.task_name_label = QLabel("Name:", self)
-        self.user_task_name_label = QLabel(task_name, self)
+        self.user_task_name_label = QLabel(self)
 
-        self.task_deadline = task_deadline
         self.task_deadline_label = QLabel("Deadline:", self)
-        self.user_task_deadline_label = QLabel(task_deadline, self)
+        self.user_task_deadline_label = QLabel(self)
 
-        self.task_description = task_description
         self.task_description_label = QLabel("Description:", self)
-        self.user_task_description_textedit = QTextEdit(task_description, self)
+        self.user_task_description_textedit = QTextEdit(self)
+
+        self.set_CustomTaskInfoMessageBox_new_data(task_name, task_deadline, task_description)
 
         self.OK_Button = QPushButton("OK", self)
 
@@ -101,3 +100,14 @@ class CustomTaskInfoMessageBox(QDialog):
         """)
 
         self.show()
+
+    def set_CustomTaskInfoMessageBox_new_data(self, task_name, task_deadline, task_description):
+        self.task_name = task_name
+        self.task_deadline = task_deadline
+        self.task_description = task_description
+
+        self.user_task_name_label.setText(task_name)
+        self.user_task_deadline_label.setText(task_deadline)
+        self.user_task_description_textedit.setText(task_description)
+
+        self.user_task_description_textedit.setAlignment(Qt.AlignCenter)
