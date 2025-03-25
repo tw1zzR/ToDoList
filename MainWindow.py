@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         self.change_theme_button.clicked.connect(self.on_click_change_theme_button)
         self.about_button.clicked.connect(self.on_click_about_button)
 
-        self.user_login_button.clicked.connect(self.print_buttons)
+        self.user_login_button.clicked.connect(self.print_buttons) # test column (delete)
 
         # Add action widgets into menu
         for button in self.menu_buttons:
@@ -201,7 +201,6 @@ class MainWindow(QMainWindow):
         for checkbox, data in self.checkbox_dict.items():
             if clicked_button in data["buttons"]:
                 return checkbox
-        return None
 
     def connect_checkbox_buttons(self):
         for checkbox, data in self.checkbox_dict.items():
@@ -219,7 +218,6 @@ class MainWindow(QMainWindow):
                 delete_task_button.clicked.connect(self.on_click_delete_task_checkbox_button)
                 delete_task_button._clicked_connected = True
 
-
     def create_task_info_messagebox(self, checkbox_sender):
         task_name = self.checkbox_dict[checkbox_sender]["name"]
         task_deadline = self.checkbox_dict[checkbox_sender]["deadline"]
@@ -234,7 +232,6 @@ class MainWindow(QMainWindow):
         self.current_task_info_window.show()
 
     def delete_task_checkbox(self, checkbox_sender):
-
         if checkbox_sender in self.checkbox_dict:
             buttons = self.checkbox_dict[checkbox_sender]["buttons"]
             for button in buttons[:]:
@@ -307,6 +304,7 @@ class MainWindow(QMainWindow):
             case False:
                 self.task_checkbox_set_style_sheet(sender, False)
 
+        # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
         sender = self.sender()
 

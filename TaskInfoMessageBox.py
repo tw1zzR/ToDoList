@@ -8,12 +8,11 @@ class CustomTaskInfoMessageBox(QDialog):
         super().__init__()
 
         self.task_name_label = QLabel("Name:", self)
-        self.user_task_name_label = QLabel(self)
-
         self.task_deadline_label = QLabel("Deadline:", self)
-        self.user_task_deadline_label = QLabel(self)
-
         self.task_description_label = QLabel("Description:", self)
+
+        self.user_task_name_label = QLabel(self)
+        self.user_task_deadline_label = QLabel(self)
         self.user_task_description_textedit = QTextEdit(self)
 
         self.set_CustomTaskInfoMessageBox_new_data(task_name, task_deadline, task_description)
