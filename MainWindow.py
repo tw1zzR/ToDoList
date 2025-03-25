@@ -146,6 +146,10 @@ class MainWindow(QMainWindow):
             QCheckBox::indicator::checked {
                 border-image: url(assets/MainWindow/CheckBox/full_gray_checkbox_checked_icon.png);
             }
+            QToolTip {
+                font-family: Helvetica;
+                color: rgb(255, 255, 255);
+            }
         """)
 
         self.show()
@@ -164,6 +168,10 @@ class MainWindow(QMainWindow):
         task_info_button = QPushButton(self)
         edit_task_button = QPushButton(self)
         delete_task_button = QPushButton(self)
+
+        task_info_button.setToolTip("View task details")
+        edit_task_button.setToolTip("Edit task")
+        delete_task_button.setToolTip("Delete task")
 
         task_info_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png"))
         edit_task_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_edit_task_button_icon.png"))
