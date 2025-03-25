@@ -226,7 +226,7 @@ class MainWindow(QMainWindow):
         task_description = self.checkbox_dict[checkbox_sender]["description"]
 
         if self.current_task_info_window:
-            self.current_task_info_window.hide()
+            self.current_task_info_window.close()
             self.current_task_info_window.set_CustomTaskInfoMessageBox_new_data(task_name, task_deadline, task_description)
         else:
             self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
@@ -321,3 +321,4 @@ class MainWindow(QMainWindow):
 
         sender_checkbox = self.find_checkbox_by_button(sender)
         self.delete_task_checkbox(sender_checkbox)
+        self.show_task_checkbox()
