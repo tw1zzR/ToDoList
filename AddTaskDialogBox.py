@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
@@ -23,6 +23,7 @@ class AddTaskDialog(QDialog):
         self.cancel_button = QPushButton("CANCEL")
 
         self.current_time = QDateTime.currentDateTime()
+        self.max_chars = 175
 
         self.initUI()
 
@@ -55,6 +56,7 @@ class AddTaskDialog(QDialog):
 
         self.user_input_task_description.setGeometry(QtCore.QRect(70, 280, 280, 150))
         self.user_input_task_description.setPlaceholderText("Enter task description")
+        self.user_input_task_description.textChanged.connect(self.limit_max_chars_in_textedit)
 
         self.button_widget.setGeometry(70, 450, 280, 60)
         self.button_layout.setContentsMargins(0, 0, 0, 0)
@@ -126,3 +128,10 @@ class AddTaskDialog(QDialog):
         self.accept()
 
         return user_task_name, user_task_deadline, user_task_description
+
+    def limit_max_chars_in_textedit(self):
+        text_chars = self.user_input_task_description.toPlainText()
+
+        if len(text_chars) > self.max_chars:
+            self.user_input_task_description.setPlainText(text_chars[:self.max_chars])
+            self.user_input_task_description.moveCursor(QTextCursor.End)

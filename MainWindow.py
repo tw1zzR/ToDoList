@@ -218,7 +218,7 @@ class MainWindow(QMainWindow):
                 delete_task_button.clicked.connect(self.on_click_delete_task_checkbox_button)
                 delete_task_button._clicked_connected = True
 
-    def create_task_info_messagebox(self, checkbox_sender):
+    def create_task_info_messagebox_checkbox_button(self, checkbox_sender):
         task_name = self.checkbox_dict[checkbox_sender]["name"]
         task_deadline = self.checkbox_dict[checkbox_sender]["deadline"]
         task_description = self.checkbox_dict[checkbox_sender]["description"]
@@ -231,7 +231,7 @@ class MainWindow(QMainWindow):
 
         self.current_task_info_window.show()
 
-    def delete_task_checkbox(self, checkbox_sender):
+    def delete_task_checkbox_button(self, checkbox_sender):
         if checkbox_sender in self.checkbox_dict:
             buttons = self.checkbox_dict[checkbox_sender]["buttons"]
             for button in buttons[:]:
@@ -244,6 +244,9 @@ class MainWindow(QMainWindow):
         checkbox_sender.deleteLater()
 
         del self.checkbox_dict[checkbox_sender]
+
+    def edit_task_checkbox_button(self):
+        pass
 
     def show_task_checkbox(self):
         checkbox_x, button_x = 75, 560
@@ -309,7 +312,7 @@ class MainWindow(QMainWindow):
         sender = self.sender()
 
         sender_checkbox = self.find_checkbox_by_button(sender)
-        self.create_task_info_messagebox(sender_checkbox)
+        self.create_task_info_messagebox_checkbox_button(sender_checkbox)
 
     def on_click_edit_task_checkbox_button(self):
         print("EDIT TASK")
@@ -318,5 +321,5 @@ class MainWindow(QMainWindow):
         sender = self.sender()
 
         sender_checkbox = self.find_checkbox_by_button(sender)
-        self.delete_task_checkbox(sender_checkbox)
+        self.delete_task_checkbox_button(sender_checkbox)
         self.show_task_checkbox()
