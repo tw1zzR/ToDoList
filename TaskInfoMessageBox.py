@@ -56,6 +56,7 @@ class CustomTaskInfoMessageBox(QDialog):
         self.user_task_deadline_label.setAlignment(Qt.AlignCenter)
         self.user_task_description_textedit.setAlignment(Qt.AlignCenter)
 
+        # Styling
         self.task_name_label.setObjectName("task_name_label")
         self.task_deadline_label.setObjectName("task_deadline_label")
         self.task_description_label.setObjectName("task_description_label")
@@ -86,6 +87,8 @@ class CustomTaskInfoMessageBox(QDialog):
             }
             QTextEdit#user_task_description_textedit {
                 padding-top: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
             }
             QPushButton#OK_Button {
                 background-color: rgb(93, 217, 110);

@@ -21,7 +21,7 @@ class MainWindow(QMainWindow):
 
         # ToolMenu PushButtons
         self.add_task_button = QPushButton("ADD TASK", self)
-        self.del_task_button = QPushButton("DELETE TASK", self)
+        self.del_task_button = QPushButton("DELETE ALL TASKS", self)
         self.change_theme_button = QPushButton("CHANGE THEME", self)
         self.about_button = QPushButton("ABOUT APP", self)
 
@@ -231,7 +231,7 @@ class MainWindow(QMainWindow):
 
         self.current_task_info_window.show()
 
-    def delete_task_checkbox_button(self, checkbox_sender):
+    def delete_task_checkbox_with_buttons(self, checkbox_sender):
         if checkbox_sender in self.checkbox_dict:
             buttons = self.checkbox_dict[checkbox_sender]["buttons"]
             for button in buttons[:]:
@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
     def edit_task_checkbox_button(self):
         pass
 
-    def show_task_checkbox(self):
+    def show_all_task_checkboxes(self):
         checkbox_x, button_x = 75, 560
         y = 200
 
@@ -274,6 +274,29 @@ class MainWindow(QMainWindow):
                 "background-color: rgb(246, 246, 246);"
                 "border-color: rgb(222, 222, 222);")
 
+    def create_and_setup_delete_confirmation_dialog(self):
+        delete_confirmation_dialog = QMessageBox()
+
+        delete_confirmation_dialog.setWindowTitle("Delete All Tasks")
+        delete_confirmation_dialog.setText("Are you sure you want to delete all tasks?")
+
+        delete_confirmation_dialog.setIcon(QMessageBox.Warning)
+        delete_confirmation_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+        delete_confirmation_dialog.setStyleSheet("""
+                        QMessageBox {
+                            font-family: Helvetica;
+                            color: rgb(0,0,0);
+                            font-size: 16px;
+                        }
+                        QPushButton {
+                            font-family: Helvetica;
+                            font-size: 14px;
+                        }
+                        """)
+
+        return delete_confirmation_dialog
+
     # onclick methods
 
         # Tool menu button methods
@@ -285,9 +308,17 @@ class MainWindow(QMainWindow):
                 add_task_dialog_box = AddTaskDialog()
                 if add_task_dialog_box.exec_():
                     self.create_task_checkbox_with_buttons(add_task_dialog_box)
-                    self.show_task_checkbox()
-            case "DELETE TASK":
-                print("DELETE TASK")
+                    self.show_all_task_checkboxes()
+            case "DELETE ALL TASKS":
+                if self.checkbox_dict:
+                    delete_confirmation_dialog = self.create_and_setup_delete_confirmation_dialog()
+
+                    user_reply = delete_confirmation_dialog.exec_()
+
+                    if user_reply == QMessageBox.Yes:
+                        for checkbox in list(self.checkbox_dict.keys()):
+                            self.delete_task_checkbox_with_buttons(checkbox)
+                        self.current_task_info_window = None
 
     def on_click_change_theme_button(self):
         print("CHANGE THEME")
@@ -321,5 +352,5 @@ class MainWindow(QMainWindow):
         sender = self.sender()
 
         sender_checkbox = self.find_checkbox_by_button(sender)
-        self.delete_task_checkbox_button(sender_checkbox)
-        self.show_task_checkbox()
+        self.delete_task_checkbox_with_buttons(sender_checkbox)
+        self.show_all_task_checkboxes()
