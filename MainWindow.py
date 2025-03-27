@@ -17,17 +17,19 @@ class MainWindow(QMainWindow):
         self.title_tasks_label = QLabel("Tasks", self)
         self.status_label = QLabel(time.strftime("%B %d, %Y"), self)
 
+        self.add_task_plus_button = QPushButton(self)
+
         self.user_login_button = QPushButton(self)
 
         # ToolMenu PushButtons
         self.add_task_button = QPushButton("ADD TASK", self)
-        self.del_task_button = QPushButton("DELETE ALL TASKS", self)
+        self.del_tasks_button = QPushButton("DELETE ALL TASKS", self)
         self.change_theme_button = QPushButton("CHANGE THEME", self)
         self.about_button = QPushButton("ABOUT APP", self)
 
         # Menu
         self.menu = QMenu(self)
-        self.menu_buttons = [self.add_task_button, self.del_task_button, self.change_theme_button, self.about_button]
+        self.menu_buttons = [self.add_task_button, self.del_tasks_button, self.change_theme_button, self.about_button]
 
         self.tool_button = QToolButton(self)
 
@@ -53,6 +55,11 @@ class MainWindow(QMainWindow):
         self.status_label.resize(800,25)
         self.status_label.move(0, 675)
 
+        # PushButtons
+        self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1.png"))
+        self.add_task_plus_button.setIconSize(QSize(30, 30))
+        self.add_task_plus_button.setGeometry(75,200,50,50)
+
         # Login
         self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
         self.user_login_button.setIconSize(QSize(50, 50))
@@ -61,9 +68,11 @@ class MainWindow(QMainWindow):
 
         # PushButtons connections
         self.add_task_button.clicked.connect(self.on_click_task_button)
-        self.del_task_button.clicked.connect(self.on_click_task_button)
+        self.del_tasks_button.clicked.connect(self.on_click_task_button)
         self.change_theme_button.clicked.connect(self.on_click_change_theme_button)
         self.about_button.clicked.connect(self.on_click_about_button)
+
+        self.add_task_plus_button.clicked.connect(self.on_click_task_button)
 
         self.user_login_button.clicked.connect(self.print_buttons) # test column (delete)
 
@@ -87,6 +96,9 @@ class MainWindow(QMainWindow):
         self.status_label.setObjectName("status_label")
         self.user_login_button.setObjectName("user_login_button")
         self.tool_button.setObjectName("tool_button")
+        self.add_task_plus_button.setObjectName("add_task_plus_button")
+        self.add_task_button.setObjectName("add_task_button")
+        self.del_tasks_button.setObjectName("del_tasks_button")
         self.user_login_button.setObjectName("user_login_button")
 
         self.setStyleSheet("""
@@ -119,6 +131,13 @@ class MainWindow(QMainWindow):
                 color: white;
                 background-color: rgb(18, 18, 17);
                 padding: 15px;
+            }
+            QPushButton#add_task_plus_button {
+                width: 50px;
+                height: 50px;
+                background-color: rgb(246, 246, 246);
+                border: 3px solid rgb(222, 222, 222);
+                padding: 10px;       
             }
             QMainWindow {
                 background-color: rgb(36, 36, 35);
@@ -268,6 +287,8 @@ class MainWindow(QMainWindow):
             y += 80
             button_x = 560
 
+        self.add_task_plus_button.move(checkbox_x, y)
+
         self.set_statusbar_over_all_widgets()
 
     def task_checkbox_set_style_sheet(self, sender, checked):
@@ -309,14 +330,14 @@ class MainWindow(QMainWindow):
     def on_click_task_button(self):
         sender = self.sender()
 
-        match sender.text():
-            case "ADD TASK":
+        match sender.objectName():
+            case "add_task_button" | "add_task_plus_button":
                 add_task_dialog_box = TaskDialogBox()
 
                 if add_task_dialog_box.exec_():
                     self.create_task_checkbox_with_buttons(add_task_dialog_box)
                     self.show_all_task_checkboxes()
-            case "DELETE ALL TASKS":
+            case "del_tasks_button":
                 if self.checkbox_dict:
                     delete_confirmation_dialog = self.create_and_setup_delete_confirmation_dialog()
 
@@ -326,6 +347,8 @@ class MainWindow(QMainWindow):
                         for checkbox in list(self.checkbox_dict.keys()):
                             self.delete_task_checkbox_with_buttons(checkbox)
                         self.current_task_info_window = None
+
+                    self.show_all_task_checkboxes()
 
     def on_click_change_theme_button(self):
         print("CHANGE THEME")
