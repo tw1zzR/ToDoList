@@ -2,7 +2,7 @@ import time
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from AddTaskDialogBox import AddTaskDialog
+from TaskDialogBox import TaskDialogBox
 from TaskInfoMessageBox import CustomTaskInfoMessageBox
 
 
@@ -305,7 +305,8 @@ class MainWindow(QMainWindow):
 
         match sender.text():
             case "ADD TASK":
-                add_task_dialog_box = AddTaskDialog()
+                add_task_dialog_box = TaskDialogBox()
+
                 if add_task_dialog_box.exec_():
                     self.create_task_checkbox_with_buttons(add_task_dialog_box)
                     self.show_all_task_checkboxes()
@@ -341,16 +342,43 @@ class MainWindow(QMainWindow):
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
         sender = self.sender()
-
         sender_checkbox = self.find_checkbox_by_button(sender)
+
         self.create_task_info_messagebox_checkbox_button(sender_checkbox)
 
     def on_click_edit_task_checkbox_button(self):
-        print("EDIT TASK")
+        sender = self.sender()
+        sender_checkbox = self.find_checkbox_by_button(sender)
+
+        # Get primary checkbox data
+        sender_checkbox_task_name = self.checkbox_dict[sender_checkbox]["name"]
+        sender_checkbox_task_deadline = self.checkbox_dict[sender_checkbox]["deadline"]
+        sender_checkbox_task_description = self.checkbox_dict[sender_checkbox]["description"]
+
+        edit_task_dialogbox = TaskDialogBox()
+
+        date_format = "dd.MM.yyyy HH:mm"
+        user_task_deadline = QDateTime.fromString(sender_checkbox_task_deadline, date_format)
+
+        # Set primary checkbox data
+        edit_task_dialogbox.user_input_task_name.setText(sender_checkbox_task_name)
+        edit_task_dialogbox.user_input_task_deadline.setDateTime(user_task_deadline)
+        edit_task_dialogbox.user_input_task_description.setText(sender_checkbox_task_description)
+
+        if edit_task_dialogbox.exec_():
+            # Change to edited checkbox data
+            edited_task_name, edited_task_deadline, edited_task_description = edit_task_dialogbox.get_task_data()
+
+            self.checkbox_dict[sender_checkbox]["name"] = edited_task_name
+            self.checkbox_dict[sender_checkbox]["deadline"] = edited_task_deadline
+            self.checkbox_dict[sender_checkbox]["description"] = edited_task_description
+
+            sender_checkbox.setText(edited_task_name)
+            self.show_all_task_checkboxes()
 
     def on_click_delete_task_checkbox_button(self):
         sender = self.sender()
-
         sender_checkbox = self.find_checkbox_by_button(sender)
+
         self.delete_task_checkbox_with_buttons(sender_checkbox)
         self.show_all_task_checkboxes()

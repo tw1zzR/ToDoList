@@ -1,10 +1,9 @@
-from PyQt5 import QtCore
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 
-class AddTaskDialog(QDialog):
+class TaskDialogBox(QDialog):
     def __init__(self):
         super().__init__()
 
@@ -29,7 +28,7 @@ class AddTaskDialog(QDialog):
 
     def initUI(self):
         self.setWindowTitle("Add Task")
-        self.setWindowIcon(QIcon("assets/AddTaskDialogBox/addtask_dialogbox_icon.png"))
+        self.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         self.resize(520, 600)
 
         self.setWhatsThis("It's a dialog box that allows you to enter data for your task.")
