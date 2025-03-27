@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self.title_tasks_label.move(300,100)
 
         # Status Label
+        self.set_statusbar_over_all_widgets()
         self.status_label.setAlignment(Qt.AlignCenter)
         self.status_label.resize(800,25)
         self.status_label.move(0, 675)
@@ -158,6 +159,9 @@ class MainWindow(QMainWindow):
     def print_buttons(self):
         print(self.checkbox_dict)
 
+    def set_statusbar_over_all_widgets(self):
+        self.status_label.raise_()
+
     # checkbox methods
     def create_task_checkbox_with_buttons(self, task_dialog_box):
         user_task_name, user_task_deadline, user_task_description = task_dialog_box.get_task_data()
@@ -263,6 +267,8 @@ class MainWindow(QMainWindow):
 
             y += 80
             button_x = 560
+
+        self.set_statusbar_over_all_widgets()
 
     def task_checkbox_set_style_sheet(self, sender, checked):
         if checked:
