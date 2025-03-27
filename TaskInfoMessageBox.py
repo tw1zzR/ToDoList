@@ -15,7 +15,7 @@ class CustomTaskInfoMessageBox(QDialog):
         self.user_task_deadline_label = QLabel(self)
         self.user_task_description_textedit = QTextEdit(self)
 
-        self.set_CustomTaskInfoMessageBox_new_data(task_name, task_deadline, task_description)
+        self.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
 
         self.OK_Button = QPushButton("OK", self)
 
@@ -103,7 +103,7 @@ class CustomTaskInfoMessageBox(QDialog):
 
         self.show()
 
-    def set_CustomTaskInfoMessageBox_new_data(self, task_name, task_deadline, task_description):
+    def set_task_info_msgbox_new_data(self, task_name, task_deadline, task_description):
         self.task_name = task_name
         self.task_deadline = task_deadline
         self.task_description = task_description

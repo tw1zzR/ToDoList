@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
 
         self.tool_button = QToolButton(self)
 
-        self.timer = QTimer()
+        self.timer = QTimer(self)
 
         self.initUI()
 
@@ -241,7 +241,7 @@ class MainWindow(QMainWindow):
 
         if self.current_task_info_window:
             self.current_task_info_window.close()
-            self.current_task_info_window.set_CustomTaskInfoMessageBox_new_data(task_name, task_deadline, task_description)
+            self.current_task_info_window.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
         else:
             self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
 
