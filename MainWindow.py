@@ -1,4 +1,3 @@
-import time
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -15,10 +14,9 @@ class MainWindow(QMainWindow):
 
         self.title_label = QLabel("To Do List", self)
         self.title_tasks_label = QLabel("Tasks", self)
-        self.status_label = QLabel(time.strftime("%B %d, %Y"), self)
+        self.status_label = QLabel(self)
 
         self.add_task_plus_button = QPushButton(self)
-
         self.user_login_button = QPushButton(self)
 
         # ToolMenu PushButtons
@@ -33,12 +31,17 @@ class MainWindow(QMainWindow):
 
         self.tool_button = QToolButton(self)
 
+        self.timer = QTimer()
+
         self.initUI()
 
     def initUI(self):
         self.setWindowTitle("To Do List")
         self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
+
+        self.start_track_realtime()
+        self.timer.timeout.connect(self.refresh_realtime)
 
         # Title Labels
         self.title_label.setAlignment(Qt.AlignCenter)
@@ -71,7 +74,6 @@ class MainWindow(QMainWindow):
         self.del_tasks_button.clicked.connect(self.on_click_task_button)
         self.change_theme_button.clicked.connect(self.on_click_change_theme_button)
         self.about_button.clicked.connect(self.on_click_about_button)
-
         self.add_task_plus_button.clicked.connect(self.on_click_task_button)
 
         self.user_login_button.clicked.connect(self.print_buttons) # test column (delete)
@@ -90,7 +92,7 @@ class MainWindow(QMainWindow):
         self.tool_button.resize(100, 100)
         self.tool_button.move(0,0)
 
-        # Create object name before styling
+        # Styling
         self.title_label.setObjectName("title_label")
         self.title_tasks_label.setObjectName("title_tasks_label")
         self.status_label.setObjectName("status_label")
@@ -133,11 +135,8 @@ class MainWindow(QMainWindow):
                 padding: 15px;
             }
             QPushButton#add_task_plus_button {
-                width: 50px;
-                height: 50px;
                 background-color: rgb(246, 246, 246);
-                border: 3px solid rgb(222, 222, 222);
-                padding: 10px;       
+                border: 3px solid rgb(222, 222, 222);      
             }
             QMainWindow {
                 background-color: rgb(36, 36, 35);
@@ -268,8 +267,27 @@ class MainWindow(QMainWindow):
 
         del self.checkbox_dict[checkbox_sender]
 
-    def edit_task_checkbox_button(self):
-        pass
+    def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
+        edit_task_dialogbox = TaskDialogBox()
+
+        date_format = "dd.MM.yyyy HH:mm"
+        primary_user_task_deadline = QDateTime.fromString(primary_task_deadline, date_format)
+
+        # Set primary checkbox data
+        edit_task_dialogbox.user_input_task_name.setText(primary_task_name)
+        edit_task_dialogbox.user_input_task_deadline.setDateTime(primary_user_task_deadline)
+        edit_task_dialogbox.user_input_task_description.setText(primary_task_description)
+
+        if edit_task_dialogbox.exec_():
+            # Change to edited checkbox data
+            edited_task_name, edited_task_deadline, edited_task_description = edit_task_dialogbox.get_task_data()
+
+            self.checkbox_dict[sender_checkbox]["name"] = edited_task_name
+            self.checkbox_dict[sender_checkbox]["deadline"] = edited_task_deadline
+            self.checkbox_dict[sender_checkbox]["description"] = edited_task_description
+
+            sender_checkbox.setText(edited_task_name)
+            self.show_all_task_checkboxes()
 
     def show_all_task_checkboxes(self):
         checkbox_x, button_x = 75, 560
@@ -323,6 +341,33 @@ class MainWindow(QMainWindow):
                         """)
 
         return delete_confirmation_dialog
+
+    def start_track_realtime(self):
+        self.timer.start(1000)
+
+    def refresh_realtime(self):
+        current_time = QDateTime.currentDateTime()
+
+        # Status bar realtime
+        formatted_realtime = current_time.toString("MMMM dd, hh:mm")
+        self.status_label.setText(formatted_realtime)
+
+        # Deadline tracker
+        # formatted_deadline_realtime = current_time.toString("dd.MM.yyyy HH:mm")
+        # formatted_deadline_realtime = QDateTime.fromString(formatted_deadline_realtime, "dd.MM.yyyy HH:mm")
+        #
+        # for checkbox, task_data in self.checkbox_dict.items():
+        #     task_deadline = task_data["deadline"]
+        #
+        #                 if task_deadline > current_time:
+        #                 checkbox.setStyleSheet(
+        #                     "background-color: rgb(242, 155, 155);"
+        #                     "border: 3px solid rgb(130, 57, 57);")
+        #             else:
+        #                 checkbox.setStyleSheet(
+        #                     "background-color: rgb(246, 246, 246);"
+        #                     "border: 3px solid rgb(222, 222, 222);")
+
 
     # onclick methods
 
@@ -384,26 +429,8 @@ class MainWindow(QMainWindow):
         sender_checkbox_task_deadline = self.checkbox_dict[sender_checkbox]["deadline"]
         sender_checkbox_task_description = self.checkbox_dict[sender_checkbox]["description"]
 
-        edit_task_dialogbox = TaskDialogBox()
-
-        date_format = "dd.MM.yyyy HH:mm"
-        user_task_deadline = QDateTime.fromString(sender_checkbox_task_deadline, date_format)
-
-        # Set primary checkbox data
-        edit_task_dialogbox.user_input_task_name.setText(sender_checkbox_task_name)
-        edit_task_dialogbox.user_input_task_deadline.setDateTime(user_task_deadline)
-        edit_task_dialogbox.user_input_task_description.setText(sender_checkbox_task_description)
-
-        if edit_task_dialogbox.exec_():
-            # Change to edited checkbox data
-            edited_task_name, edited_task_deadline, edited_task_description = edit_task_dialogbox.get_task_data()
-
-            self.checkbox_dict[sender_checkbox]["name"] = edited_task_name
-            self.checkbox_dict[sender_checkbox]["deadline"] = edited_task_deadline
-            self.checkbox_dict[sender_checkbox]["description"] = edited_task_description
-
-            sender_checkbox.setText(edited_task_name)
-            self.show_all_task_checkboxes()
+        self.create_and_open_edit_task_dialog(sender_checkbox, sender_checkbox_task_name,
+                                              sender_checkbox_task_deadline, sender_checkbox_task_description)
 
     def on_click_delete_task_checkbox_button(self):
         sender = self.sender()
