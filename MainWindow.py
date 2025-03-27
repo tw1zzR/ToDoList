@@ -45,18 +45,15 @@ class MainWindow(QMainWindow):
 
         # Title Labels
         self.title_label.setAlignment(Qt.AlignCenter)
-        self.title_label.resize(800, 100)
-        self.title_label.move(0,0)
+        self.title_label.setGeometry(0,0,800,100)
 
         self.title_tasks_label.setAlignment(Qt.AlignCenter)
-        self.title_tasks_label.resize(200, 100)
-        self.title_tasks_label.move(300,100)
+        self.title_tasks_label.setGeometry(300,100,200,100)
 
         # Status Label
         self.set_statusbar_over_all_widgets()
         self.status_label.setAlignment(Qt.AlignCenter)
-        self.status_label.resize(800,25)
-        self.status_label.move(0, 675)
+        self.status_label.setGeometry(0,675,800,25)
 
         # PushButtons
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1.png"))
@@ -66,8 +63,7 @@ class MainWindow(QMainWindow):
         # Login
         self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
         self.user_login_button.setIconSize(QSize(50, 50))
-        self.user_login_button.resize(100,100)
-        self.user_login_button.move(700,0)
+        self.user_login_button.setGeometry(700,0,100,100)
 
         # PushButtons connections
         self.add_task_button.clicked.connect(self.on_click_task_button)
@@ -89,8 +85,7 @@ class MainWindow(QMainWindow):
         self.tool_button.setIconSize(QSize(50, 50))
         self.tool_button.setPopupMode(QToolButton.InstantPopup)
         self.tool_button.setMenu(self.menu)
-        self.tool_button.resize(100, 100)
-        self.tool_button.move(0,0)
+        self.tool_button.setGeometry(0,0,100,100)
 
         # Styling
         self.title_label.setObjectName("title_label")
@@ -101,7 +96,6 @@ class MainWindow(QMainWindow):
         self.add_task_plus_button.setObjectName("add_task_plus_button")
         self.add_task_button.setObjectName("add_task_button")
         self.del_tasks_button.setObjectName("del_tasks_button")
-        self.user_login_button.setObjectName("user_login_button")
 
         self.setStyleSheet("""
             QLabel {
