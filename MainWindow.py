@@ -426,7 +426,10 @@ class MainWindow(QMainWindow):
 
     def on_click_change_theme_button(self):
         print("CHANGE THEME")
-        pass
+
+        self.setStyleSheet("""
+        
+        """)
 
     def on_click_about_button(self):
         about_app_dialog = self.create_and_setup_about_app_dialog()
