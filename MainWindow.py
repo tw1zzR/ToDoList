@@ -31,7 +31,8 @@ class MainWindow(QMainWindow):
 
         self.tool_button = QToolButton(self)
 
-        self.timer = QTimer(self)
+        self.status_timer = QTimer(self)
+        self.refresh_task_timer = QTimer(self)
 
         self.initUI()
 
@@ -40,8 +41,11 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
 
-        self.start_track_realtime()
-        self.timer.timeout.connect(self.refresh_realtime)
+        self.start_track_status_realtime()
+        self.status_timer.timeout.connect(self.refresh_status_realtime)
+
+        self.start_track_task_deadline()
+        self.refresh_task_timer.timeout.connect(self.refresh_task_deadline)
 
         # Title Labels
         self.title_label.setAlignment(Qt.AlignCenter)
@@ -336,32 +340,39 @@ class MainWindow(QMainWindow):
 
         return delete_confirmation_dialog
 
-    def start_track_realtime(self):
-        self.timer.start(1000)
+    # Refresh realtime statusbar every 1 sec
+    def start_track_status_realtime(self):
+        self.status_timer.start(1000)
 
-    def refresh_realtime(self):
+    def refresh_status_realtime(self):
         current_time = QDateTime.currentDateTime()
 
         # Status bar realtime
         formatted_realtime = current_time.toString("MMMM dd, hh:mm")
         self.status_label.setText(formatted_realtime)
 
-        # Deadline tracker
-        # formatted_deadline_realtime = current_time.toString("dd.MM.yyyy HH:mm")
-        # formatted_deadline_realtime = QDateTime.fromString(formatted_deadline_realtime, "dd.MM.yyyy HH:mm")
-        #
-        # for checkbox, task_data in self.checkbox_dict.items():
-        #     task_deadline = task_data["deadline"]
-        #
-        #                 if task_deadline > current_time:
-        #                 checkbox.setStyleSheet(
-        #                     "background-color: rgb(242, 155, 155);"
-        #                     "border: 3px solid rgb(130, 57, 57);")
-        #             else:
-        #                 checkbox.setStyleSheet(
-        #                     "background-color: rgb(246, 246, 246);"
-        #                     "border: 3px solid rgb(222, 222, 222);")
+    # Refresh deadline every 5 min
+    def start_track_task_deadline(self):
+        self.refresh_task_timer.start(300000)
 
+    def refresh_task_deadline(self):
+        current_time = QDateTime.currentDateTime()
+
+        formatted_deadline_realtime = current_time.toString("dd.MM.yyyy HH:mm")
+        formatted_deadline_realtime = QDateTime.fromString(formatted_deadline_realtime, "dd.MM.yyyy HH:mm")
+
+        for checkbox, task_data in self.checkbox_dict.items():
+            task_deadline_str = task_data["deadline"]
+            task_deadline = QDateTime.fromString(task_deadline_str, "dd.MM.yyyy HH:mm")
+
+            if current_time > task_deadline and not checkbox.isChecked():
+                checkbox.setStyleSheet(
+                    "background-color: rgb(242, 155, 155);"
+                    "border: 3px solid rgb(130, 57, 57);")
+            elif not checkbox.isChecked():
+                checkbox.setStyleSheet(
+                    "background-color: rgb(246, 246, 246);"
+                    "border: 3px solid rgb(222, 222, 222);")
 
     # onclick methods
 
