@@ -321,6 +321,7 @@ class MainWindow(QMainWindow):
         delete_confirmation_dialog = QMessageBox()
 
         delete_confirmation_dialog.setWindowTitle("Delete All Tasks")
+        delete_confirmation_dialog.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         delete_confirmation_dialog.setText("Are you sure you want to delete all tasks?")
 
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
@@ -339,6 +340,29 @@ class MainWindow(QMainWindow):
                         """)
 
         return delete_confirmation_dialog
+
+    def create_and_setup_about_app_dialog(self):
+        about_app_dialog = QMessageBox()
+
+        about_app_dialog.setWindowTitle("About App")
+        about_app_dialog.setWindowIcon(QIcon("assets/AboutAppMessageBox/information_icon.png"))
+        about_app_dialog.setTextFormat(Qt.RichText)
+        about_app_dialog.setText("My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>")
+        about_app_dialog.setIcon(QMessageBox.Information)
+
+        about_app_dialog.setStyleSheet("""
+                                QMessageBox {
+                                    font-family: Helvetica;
+                                    color: rgb(0,0,0);
+                                    font-size: 16px;
+                                }
+                                QPushButton {
+                                    font-family: Helvetica;
+                                    font-size: 14px;
+                                }
+                                """)
+
+        return about_app_dialog
 
     # Refresh realtime statusbar every 1 sec
     def start_track_status_realtime(self):
@@ -405,8 +429,8 @@ class MainWindow(QMainWindow):
         pass
 
     def on_click_about_button(self):
-        print("ABOUT APP")
-        pass
+        about_app_dialog = self.create_and_setup_about_app_dialog()
+        about_app_dialog.exec_()
 
         # Set checkbox checked method
     def on_click_task_checkbox(self):
