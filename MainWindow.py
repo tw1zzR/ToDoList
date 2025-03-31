@@ -12,6 +12,8 @@ class MainWindow(QMainWindow):
         self.checkbox_dict = {}
         self.current_task_info_window = None
 
+        self.dark_theme = True
+
         self.title_label = QLabel("To Do List", self)
         self.title_tasks_label = QLabel("Tasks", self)
         self.status_label = QLabel(self)
@@ -60,12 +62,10 @@ class MainWindow(QMainWindow):
         self.status_label.setGeometry(0,675,800,25)
 
         # PushButtons
-        self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1.png"))
         self.add_task_plus_button.setIconSize(QSize(30, 30))
         self.add_task_plus_button.setGeometry(75,200,50,50)
 
         # Login
-        self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
         self.user_login_button.setIconSize(QSize(50, 50))
         self.user_login_button.setGeometry(700,0,100,100)
 
@@ -85,7 +85,6 @@ class MainWindow(QMainWindow):
             self.menu.addAction(action)
 
         # Tool Menu Button
-        self.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
         self.tool_button.setIconSize(QSize(50, 50))
         self.tool_button.setPopupMode(QToolButton.InstantPopup)
         self.tool_button.setMenu(self.menu)
@@ -101,74 +100,10 @@ class MainWindow(QMainWindow):
         self.add_task_button.setObjectName("add_task_button")
         self.del_tasks_button.setObjectName("del_tasks_button")
 
-        self.setStyleSheet("""
-            QLabel {
-                font-family: Helvetica;
-                color: white;
-            }
-            QLabel#title_label {
-                font-size: 40px;
-                font: bold;
-                background-color: rgb(18, 18, 17);
-                border-bottom: 2px solid rgb(41, 41, 39);
-            }
-            QLabel#title_tasks_label {
-                font-size: 36px;
-                font: bold;
-            }
-            QLabel#status_label {
-                font-size: 14px;
-                background-color: rgb(110, 110, 109); 
-            }
-            QLabel#user_login_button, QToolButton#tool_button, QPushButton#user_login_button {
-                background-color: transparent;
-                border-radius: 0px;
-            }
-            QPushButton {
-                font-family: Helvetica;
-                font-size: 18px;
-                font: bold;
-                color: white;
-                background-color: rgb(18, 18, 17);
-                padding: 15px;
-            }
-            QPushButton#add_task_plus_button {
-                background-color: rgb(246, 246, 246);
-                border: 3px solid rgb(222, 222, 222);      
-            }
-            QMainWindow {
-                background-color: rgb(36, 36, 35);
-            }
-            QMenu {
-                background-color: rgb(79, 79, 75);
-            }
-            QInputDialog {
-                font-family: Helvetica;
-                font-size: 16px;
-                background-color: rgb(36, 36, 35);
-            }
-            QCheckBox {
-                background-color: rgb(246, 246, 246);
-                font-family: Helvetica;
-                font-size: 18px;
-                border: 3px solid rgb(222, 222, 222);
-                color: rgb(0, 0, 0);
-                padding: 10px;       
-            }
-            QCheckBox::indicator {
-                border-image: url(assets/MainWindow/CheckBox/full_gray_checkbox_unchecked_icon.png);
-                width: 30px;
-                height: 30px;
-                margin-right: 5px;
-            }
-            QCheckBox::indicator::checked {
-                border-image: url(assets/MainWindow/CheckBox/full_gray_checkbox_checked_icon.png);
-            }
-            QToolTip {
-                font-family: Helvetica;
-                color: rgb(255, 255, 255);
-            }
-        """)
+        if self.dark_theme:
+            self.apply_dark_theme()
+        else:
+            self.apply_light_theme()
 
         self.show()
 
@@ -194,10 +129,6 @@ class MainWindow(QMainWindow):
         edit_task_button.setToolTip("Edit task")
         delete_task_button.setToolTip("Delete task")
 
-        task_info_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png"))
-        edit_task_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_edit_task_button_icon.png"))
-        delete_task_button.setIcon(QIcon("assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"))
-
         buttons = [task_info_button, edit_task_button, delete_task_button]
 
         for button in buttons:
@@ -207,7 +138,6 @@ class MainWindow(QMainWindow):
                 "background-color: transparent;"
                 "border-radius: 0px;")
 
-        # Add to data lists
         self.checkbox_dict[task_checkbox] = {
             "buttons": buttons,
             "name": user_task_name,
@@ -215,6 +145,7 @@ class MainWindow(QMainWindow):
             "description": user_task_description
         }
 
+        self.change_checkboxes_button_icons_theme()
         self.connect_checkbox_buttons()
 
     def find_checkbox_by_button(self, clicked_button):
@@ -257,13 +188,11 @@ class MainWindow(QMainWindow):
             for button in buttons[:]:
                 button.setParent(None)
                 button.deleteLater()
-        else:
-            return
 
-        checkbox_sender.setParent(None)
-        checkbox_sender.deleteLater()
+            checkbox_sender.setParent(None)
+            checkbox_sender.deleteLater()
 
-        del self.checkbox_dict[checkbox_sender]
+            del self.checkbox_dict[checkbox_sender]
 
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
         edit_task_dialogbox = TaskDialogBox()
@@ -313,9 +242,14 @@ class MainWindow(QMainWindow):
                 "background-color: rgb(93, 217, 110);"
                 "border-color: rgb(66, 135, 76);")
         else:
-            sender.setStyleSheet(
-                "background-color: rgb(246, 246, 246);"
-                "border-color: rgb(222, 222, 222);")
+            if self.dark_theme:
+                sender.setStyleSheet(
+                    "background-color: rgb(246, 246, 246);"
+                    "border: 3px solid rgb(222, 222, 222);")
+            else:
+                sender.setStyleSheet(
+                    "background-color: rgb(30, 30, 30);"
+                    "border: 3px solid rgb(60, 60, 60);")
 
     def create_and_setup_delete_confirmation_dialog(self):
         delete_confirmation_dialog = QMessageBox()
@@ -394,9 +328,213 @@ class MainWindow(QMainWindow):
                     "background-color: rgb(242, 155, 155);"
                     "border: 3px solid rgb(130, 57, 57);")
             elif not checkbox.isChecked():
-                checkbox.setStyleSheet(
-                    "background-color: rgb(246, 246, 246);"
-                    "border: 3px solid rgb(222, 222, 222);")
+                if self.dark_theme:
+                    checkbox.setStyleSheet(
+                        "background-color: rgb(246, 246, 246);"
+                        "border: 3px solid rgb(222, 222, 222);")
+                else:
+                    checkbox.setStyleSheet(
+                        "background-color: rgb(30, 30, 30);"
+                        "border: 3px solid rgb(60, 60, 60);")
+
+    def changeTheme(self):
+        print(self.dark_theme)
+
+        if self.dark_theme:
+            print("Changed to white theme")
+            self.apply_light_theme()
+        else:
+            print("Changed to dark theme")
+            self.apply_dark_theme()
+
+        print(self.dark_theme)
+
+    def change_checkboxes_button_icons_theme(self):
+        white_checkbox_buttons_path = ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
+                              "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
+                              "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"]
+
+        gray_checkbox_buttons_path = ["assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png",
+                             "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
+                             "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"]
+
+        if self.dark_theme:
+            for task_data in self.checkbox_dict.values():
+                i = 0
+                for button in task_data["buttons"]:
+                    button.setIcon(QIcon(gray_checkbox_buttons_path[i]))
+                    i += 1
+        else:
+            for task_data in self.checkbox_dict.values():
+                i = 0
+                for button in task_data["buttons"]:
+                    button.setIcon(QIcon(white_checkbox_buttons_path[i]))
+                    i += 1
+
+    def apply_light_theme(self):
+        self.dark_theme = False
+
+        # to White
+            # icons
+        self.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
+        self.user_login_button.setIcon(QIcon("assets/MainWindow/gray_user_icon.png"))
+        self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
+
+        self.change_checkboxes_button_icons_theme()
+
+            # widgets
+        self.setStyleSheet("""
+            QLabel {
+                font-family: Helvetica;
+                color: rgb(44,44,44)
+            }
+            QLabel#title_label {                                                     
+                font-size: 40px;
+                font: bold;
+                background-color: rgb(181, 181, 181);
+                border-bottom: 2px solid rgb(41, 41, 39);
+            }
+            QLabel#title_tasks_label {
+                font-size: 36px;
+                font: bold;
+            }
+            QLabel#status_label {
+                font-size: 14px;
+                color: rgb(235,235,235);
+                background-color: rgb(110, 110, 110); 
+            }
+            QToolButton#tool_button, QPushButton#user_login_button {
+                background-color: transparent;
+                border-radius: 0px;
+            }
+            QPushButton {
+                font-family: Helvetica;
+                font-size: 18px;
+                font: bold;
+                color: rgb(44,44,44);
+                background-color: rgb(235, 235, 235);
+                padding: 15px;
+            }
+            QPushButton#add_task_plus_button {
+                background-color: rgb(30, 30, 30);
+                border: 3px solid rgb(60, 60, 60);   
+            }
+            QMainWindow {
+                background-color: rgb(235, 235, 235);
+            }
+            QMenu {
+                background-color: rgb(79, 79, 75);
+            }
+            QInputDialog {
+                font-family: Helvetica;
+                font-size: 16px;
+                background-color: rgb(36, 36, 35);
+            }
+            QCheckBox {
+                background-color: rgb(30, 30, 30);
+                border: 3px solid rgb(60, 60, 60);  
+                font-family: Helvetica;
+                font-size: 18px;
+                color: rgb(235, 235, 235);
+                padding: 10px;       
+            }
+            QCheckBox::indicator {
+                border-image: url(assets/MainWindow/CheckBox/full_white_checkbox_unchecked_icon.png);
+                width: 30px;
+                height: 30px;
+                margin-right: 5px;
+            }
+            QCheckBox::indicator::checked {
+                border-image: url(assets/MainWindow/CheckBox/full_white_checkbox_checked_icon.png);
+            }
+            QToolTip {
+                font-family: Helvetica;
+                color: rgb(255, 255, 255);
+            }
+        """)
+
+
+    def apply_dark_theme(self):
+        self.dark_theme = True
+
+        # to Dark
+            # icons
+        self.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
+        self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
+        self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
+
+        self.change_checkboxes_button_icons_theme()
+
+            # widgets
+        self.setStyleSheet("""
+            QLabel {
+                font-family: Helvetica;
+                color: rgb(235,235,235);
+            }
+            QLabel#title_label {
+                font-size: 40px;
+                font: bold;
+                background-color: rgb(18, 18, 17);
+                border-bottom: 2px solid rgb(41, 41, 39);
+            }
+            QLabel#title_tasks_label {
+                font-size: 36px;
+                font: bold;
+            }
+            QLabel#status_label {
+                font-size: 14px;
+                color: rgb(235,235,235);
+                background-color: rgb(110, 110, 110); 
+            }
+            QToolButton#tool_button, QPushButton#user_login_button {
+                background-color: transparent;
+                border-radius: 0px;
+            }
+            QPushButton {
+                font-family: Helvetica;
+                font-size: 18px;
+                font: bold;
+                color: white;
+                background-color: rgb(18, 18, 17);
+                padding: 15px;
+            }
+            QPushButton#add_task_plus_button {
+                background-color: rgb(246, 246, 246);
+                border: 3px solid rgb(222, 222, 222);      
+            }
+            QMainWindow {
+                background-color: rgb(44, 44, 44);
+            }
+            QMenu {
+                background-color: rgb(79, 79, 75);
+            }
+            QInputDialog {
+                font-family: Helvetica;
+                font-size: 16px;
+                background-color: rgb(36, 36, 35);
+            }
+            QCheckBox {
+                background-color: rgb(246, 246, 246);
+                font-family: Helvetica;
+                font-size: 18px;
+                border: 3px solid rgb(222, 222, 222);
+                color: rgb(44, 44, 44);
+                padding: 10px;       
+            }
+            QCheckBox::indicator {
+                border-image: url(assets/MainWindow/CheckBox/full_gray_checkbox_unchecked_icon.png);
+                width: 30px;
+                height: 30px;
+                margin-right: 5px;
+            }
+            QCheckBox::indicator::checked {
+                border-image: url(assets/MainWindow/CheckBox/full_gray_checkbox_checked_icon.png);
+            }
+            QToolTip {
+                font-family: Helvetica;
+                color: rgb(255, 255, 255);
+            }
+        """)
 
     # onclick methods
 
@@ -425,11 +563,7 @@ class MainWindow(QMainWindow):
                     self.show_all_task_checkboxes()
 
     def on_click_change_theme_button(self):
-        print("CHANGE THEME")
-
-        self.setStyleSheet("""
-        
-        """)
+        self.changeTheme()
 
     def on_click_about_button(self):
         about_app_dialog = self.create_and_setup_about_app_dialog()
