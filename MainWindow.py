@@ -9,10 +9,25 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
         self.checkbox_dict = {}
         self.current_task_info_window = None
-
         self.dark_theme = True
+
+
+
+        self.central_widget = QWidget(self)
+        self.main_layout = QVBoxLayout()
+
+        self.header_layout = QHBoxLayout()
+        self.tasks_layout = QVBoxLayout()
+        self.statusbar_layout = QHBoxLayout()
+
+        # Scroll Tools
+        self.scroll_area = QScrollArea(self)
+        self.task_widget = QWidget(self)
+        self.main_window_task_layout = QVBoxLayout()
+        # ---
 
         self.title_label = QLabel("To Do List", self)
         self.title_tasks_label = QLabel("Tasks", self)
@@ -43,6 +58,55 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
 
+        # Setup scrolling task layout
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroll_area.setWidgetResizable(True)
+
+        self.task_widget.setLayout(self.tasks_layout)
+        self.scroll_area.setWidget(self.task_widget)
+        self.main_window_task_layout.addWidget(self.scroll_area)
+        # ---
+
+        self.setCentralWidget(self.central_widget)
+
+        self.central_widget.setLayout(self.main_layout)
+        self.main_layout.setAlignment(Qt.AlignTop)
+
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(0)
+
+        self.main_layout.addLayout(self.header_layout,1)
+        self.main_layout.addLayout(self.main_window_task_layout,4)
+        self.main_layout.addLayout(self.statusbar_layout,1)
+
+        # add to header layout
+        self.header_layout.addWidget(self.tool_button)
+        self.header_layout.addWidget(self.title_label)
+        self.header_layout.addWidget(self.user_login_button)
+
+        self.tool_button.setFixedSize(100,100)
+        self.title_label.setFixedHeight(100)
+        self.user_login_button.setFixedSize(100,100)
+
+        self.tool_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.user_login_button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+        # add to tasks layout widgets and show
+        self.tasks_layout.setAlignment(Qt.AlignTop)
+
+        self.tasks_layout.setContentsMargins(75, 25, 75, 25)
+        self.tasks_layout.setSpacing(30)
+
+        self.title_tasks_label.setFixedHeight(50)
+
+        self.show_all_task_checkboxes()
+
+        # add to statusbar layout
+        self.statusbar_layout.addWidget(self.status_label)
+        self.status_label.setFixedHeight(25)
+
         self.start_track_status_realtime()
         self.status_timer.timeout.connect(self.refresh_status_realtime)
 
@@ -51,23 +115,17 @@ class MainWindow(QMainWindow):
 
         # Title Labels
         self.title_label.setAlignment(Qt.AlignCenter)
-        self.title_label.setGeometry(0,0,800,100)
-
         self.title_tasks_label.setAlignment(Qt.AlignCenter)
-        self.title_tasks_label.setGeometry(300,100,200,100)
 
         # Status Label
         self.set_statusbar_over_all_widgets()
         self.status_label.setAlignment(Qt.AlignCenter)
-        self.status_label.setGeometry(0,675,800,25)
 
         # PushButtons
         self.add_task_plus_button.setIconSize(QSize(30, 30))
-        self.add_task_plus_button.setGeometry(75,200,50,50)
 
         # Login
         self.user_login_button.setIconSize(QSize(50, 50))
-        self.user_login_button.setGeometry(700,0,100,100)
 
         # PushButtons connections
         self.add_task_button.clicked.connect(self.on_click_task_button)
@@ -88,7 +146,6 @@ class MainWindow(QMainWindow):
         self.tool_button.setIconSize(QSize(50, 50))
         self.tool_button.setPopupMode(QToolButton.InstantPopup)
         self.tool_button.setMenu(self.menu)
-        self.tool_button.setGeometry(0,0,100,100)
 
         # Styling
         self.title_label.setObjectName("title_label")
@@ -119,7 +176,8 @@ class MainWindow(QMainWindow):
 
         task_checkbox = QCheckBox(user_task_name, self)
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
-        task_checkbox.setFixedSize(650, 50)
+        task_checkbox.setFixedHeight(50)
+        # task_checkbox.setFixedSize(650, 50)
 
         task_info_button = QPushButton(self)
         edit_task_button = QPushButton(self)
@@ -132,11 +190,20 @@ class MainWindow(QMainWindow):
         buttons = [task_info_button, edit_task_button, delete_task_button]
 
         for button in buttons:
-            button.resize(50, 50)
+            button.setFixedSize(50, 50)
             button.setIconSize(QSize(30, 30))
-            button.setStyleSheet(
-                "background-color: transparent;"
-                "border-radius: 0px;")
+            if self.dark_theme:
+                button.setStyleSheet(
+                    "background-color: rgb(246, 246, 246);"
+                    "border-top: 3px solid rgb(222, 222, 222);"
+                    "border-bottom: 3px solid rgb(222, 222, 222);"
+                    "border-right: 3px solid rgb(222, 222, 222);")
+            else:
+                button.setStyleSheet(
+                    "background-color: rgb(30, 30, 30);"
+                    "border-top: 3px solid rgb(60, 60, 60);"
+                    "border-bottom: 3px solid rgb(60, 60, 60);"
+                    "border-right: 3px solid rgb(60, 60, 60);")
 
         self.checkbox_dict[task_checkbox] = {
             "buttons": buttons,
@@ -216,23 +283,48 @@ class MainWindow(QMainWindow):
             sender_checkbox.setText(edited_task_name)
             self.show_all_task_checkboxes()
 
+    def clear_layout(self, layout):
+        reversed_layout = reversed(range(layout.count()))
+        for i in reversed_layout:
+            item = layout.itemAt(i).widget()
+            layout.removeItem(item)
+
     def show_all_task_checkboxes(self):
-        checkbox_x, button_x = 75, 560
-        y = 200
+        self.clear_layout(self.tasks_layout)
+
+        # title layout
+        title_tasks_layout = QHBoxLayout()
+
+        title_tasks_layout.addStretch()
+        title_tasks_layout.addWidget(self.title_tasks_label, alignment=Qt.AlignCenter)
+        title_tasks_layout.addStretch()
+
+        self.tasks_layout.addLayout(title_tasks_layout)
 
         for checkbox, data in self.checkbox_dict.items():
-            checkbox.move(checkbox_x, y)
-            checkbox.show()
+
+            checkbox_layout = QHBoxLayout()
+            checkbox_layout.setContentsMargins(0,0,0,0)
+            checkbox_layout.setSpacing(0)
+
+            checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+            checkbox_layout.addWidget(checkbox)
 
             for button in data["buttons"]:
-                button.move(button_x, y)
-                button_x += 50
+                button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
                 button.show()
+                checkbox_layout.addWidget(button)
 
-            y += 80
-            button_x = 560
+            self.tasks_layout.addLayout(checkbox_layout)
 
-        self.add_task_plus_button.move(checkbox_x, y)
+        # (+) button layout
+        plus_button_layout = QHBoxLayout()
+
+        plus_button_layout.addWidget(self.add_task_plus_button, alignment=Qt.AlignLeft)
+        plus_button_layout.addStretch()
+
+        self.add_task_plus_button.setFixedSize(50, 50)
+        self.tasks_layout.addLayout(plus_button_layout)
 
         self.set_statusbar_over_all_widgets()
 
@@ -338,16 +430,10 @@ class MainWindow(QMainWindow):
                         "border: 3px solid rgb(60, 60, 60);")
 
     def changeTheme(self):
-        print(self.dark_theme)
-
         if self.dark_theme:
-            print("Changed to white theme")
             self.apply_light_theme()
         else:
-            print("Changed to dark theme")
             self.apply_dark_theme()
-
-        print(self.dark_theme)
 
     def change_checkboxes_button_icons_theme(self):
         white_checkbox_buttons_path = ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
@@ -374,6 +460,9 @@ class MainWindow(QMainWindow):
     def apply_light_theme(self):
         self.dark_theme = False
 
+        for checkbox, task_data in self.checkbox_dict.items():
+            checkbox.setChecked(False)
+
         # to White
             # icons
         self.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
@@ -381,6 +470,14 @@ class MainWindow(QMainWindow):
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
 
         self.change_checkboxes_button_icons_theme()
+
+        for checkbox, data in self.checkbox_dict.items():
+            for button in data["buttons"]:
+                button.setStyleSheet(
+                    "background-color: rgb(30, 30, 30);"
+                    "border-top: 3px solid rgb(60, 60, 60);"
+                    "border-bottom: 3px solid rgb(60, 60, 60);"
+                    "border-right: 3px solid rgb(60, 60, 60);")
 
             # widgets
         self.setStyleSheet("""
@@ -404,8 +501,9 @@ class MainWindow(QMainWindow):
                 background-color: rgb(110, 110, 110); 
             }
             QToolButton#tool_button, QPushButton#user_login_button {
-                background-color: transparent;
+                background-color: rgb(181, 181, 181);
                 border-radius: 0px;
+                border-bottom: 2px solid rgb(41, 41, 39);
             }
             QPushButton {
                 font-family: Helvetica;
@@ -418,6 +516,32 @@ class MainWindow(QMainWindow):
             QPushButton#add_task_plus_button {
                 background-color: rgb(30, 30, 30);
                 border: 3px solid rgb(60, 60, 60);   
+            }
+            QWidget {
+                background-color: rgb(235, 235, 235);
+            }
+            QScrollArea {
+                background-color: rgb(235, 235, 235);
+                border: none;
+            }
+            QScrollBar:vertical {
+                background: rgb(181, 181, 181);
+                width: 15px;
+                margin: 15px 3px 15px 3px;
+                border: none;
+                border-radius: 4px;
+            }
+            QScrollBar::handle:vertical {
+                background: rgb(90, 90, 90);
+                min-height: 5px;
+                border-radius: 4px;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line,
+            QScrollBar::up-arrow, QScrollBar::down-arrow,
+            QScrollBar::add-page, QScrollBar::sub-page {
+                background: none;
+                border: none;
+                height: 0px;
             }
             QMainWindow {
                 background-color: rgb(235, 235, 235);
@@ -453,9 +577,11 @@ class MainWindow(QMainWindow):
             }
         """)
 
-
     def apply_dark_theme(self):
         self.dark_theme = True
+
+        for checkbox, task_data in self.checkbox_dict.items():
+            checkbox.setChecked(False)
 
         # to Dark
             # icons
@@ -464,6 +590,14 @@ class MainWindow(QMainWindow):
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
 
         self.change_checkboxes_button_icons_theme()
+
+        for checkbox, data in self.checkbox_dict.items():
+            for button in data["buttons"]:
+                button.setStyleSheet(
+                    "background-color: rgb(246, 246, 246);"
+                    "border-top: 3px solid rgb(222, 222, 222);"
+                    "border-bottom: 3px solid rgb(222, 222, 222);"
+                    "border-right: 3px solid rgb(222, 222, 222);")
 
             # widgets
         self.setStyleSheet("""
@@ -474,7 +608,7 @@ class MainWindow(QMainWindow):
             QLabel#title_label {
                 font-size: 40px;
                 font: bold;
-                background-color: rgb(18, 18, 17);
+                background-color: rgb(18, 18, 18);
                 border-bottom: 2px solid rgb(41, 41, 39);
             }
             QLabel#title_tasks_label {
@@ -487,20 +621,47 @@ class MainWindow(QMainWindow):
                 background-color: rgb(110, 110, 110); 
             }
             QToolButton#tool_button, QPushButton#user_login_button {
-                background-color: transparent;
+                background-color: rgb(18, 18, 18);
                 border-radius: 0px;
+                border-bottom: 2px solid rgb(41, 41, 39);
             }
             QPushButton {
                 font-family: Helvetica;
                 font-size: 18px;
                 font: bold;
                 color: white;
-                background-color: rgb(18, 18, 17);
+                background-color: rgb(18, 18, 18);
                 padding: 15px;
             }
             QPushButton#add_task_plus_button {
                 background-color: rgb(246, 246, 246);
                 border: 3px solid rgb(222, 222, 222);      
+            }
+            QWidget {
+                background-color: rgb(44, 44, 44);
+            }
+            QScrollArea {
+                background-color: rgb(44, 44, 44);
+                border: none;
+            }
+            QScrollBar:vertical {
+                background: rgb(18, 18, 18);
+                width: 15px;
+                margin: 15px 3px 15px 3px;
+                border: none;
+                border-radius: 4px;
+            }
+            QScrollBar::handle:vertical {
+                background: rgb(90, 90, 90);
+                min-height: 5px;
+                border-radius: 4px;
+            }
+            QScrollBar::add-line, QScrollBar::sub-line,
+            QScrollBar::up-arrow, QScrollBar::down-arrow,
+            QScrollBar::add-page, QScrollBar::sub-page {
+                background: none;
+                border: none;
+                height: 0px;
             }
             QMainWindow {
                 background-color: rgb(44, 44, 44);
@@ -515,9 +676,9 @@ class MainWindow(QMainWindow):
             }
             QCheckBox {
                 background-color: rgb(246, 246, 246);
+                border: 3px solid rgb(222, 222, 222);
                 font-family: Helvetica;
                 font-size: 18px;
-                border: 3px solid rgb(222, 222, 222);
                 color: rgb(44, 44, 44);
                 padding: 10px;       
             }
