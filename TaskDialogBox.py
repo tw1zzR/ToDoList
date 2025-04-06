@@ -6,6 +6,7 @@ from PyQt5.QtCore import *
 class TaskDialogBox(QDialog):
     def __init__(self):
         super().__init__()
+        self.dark_theme = True
 
         self.task_name_label = QLabel("Task name", self)
         self.task_deadline_label = QLabel("Deadline", self)
@@ -76,25 +77,40 @@ class TaskDialogBox(QDialog):
         self.send_button.setObjectName("send_button")
         self.cancel_button.setObjectName("cancel_button")
 
+        if self.dark_theme:
+            self.apply_dark_theme()
+        else:
+            self.apply_light_theme()
+
+        self.show()
+
+    def compare_with_main_win_theme(self, main_win_dark_theme):
+        if main_win_dark_theme:
+            self.apply_dark_theme()
+        else:
+            self.apply_light_theme()
+
+    def apply_light_theme(self):
         self.setStyleSheet("""
+            QDialog {
+                background-color: rgb(255, 255, 255);
+            }
             QLabel {            
                 font-family: Helvetica; 
-                color: rgb(0,0,0);       
+                color: rgb(44,44,44);       
             }
             QLabel#task_name_label, QLabel#task_deadline_label, QLabel#task_description_label {
                 background-color: transparent;
                 font-family: Helvetica;
                 font-size: 18px;
                 font: bold;
-                color: rgb(0,0,0);
             }
             QLineEdit#user_input_task_name, QDateTimeEdit#user_input_task_deadline, QTextEdit#user_input_task_description {
-                background-color: rgb(246, 246, 246);
+                background-color: rgb(60,60,60);
                 font-family: Helvetica;
                 font-size: 18px;
-                border: 3px solid;
-                border-color: rgb(222, 222, 222);
-                color: rgb(0,0,0);
+                border: 3px solid rgb(30,30,30);
+                color: rgb(235,235,235);
             }
             QTextEdit#user_input_task_description, QLineEdit#user_input_task_name, QDateTimeEdit#user_input_task_deadline {
                 padding-top: 5px;
@@ -106,7 +122,7 @@ class TaskDialogBox(QDialog):
                 font-size: 18px;
                 border: 3px solid;
                 font: bold;
-                color: rgb(0,0,0);
+                color: rgb(44, 44, 44);
                 width: 80px;
                 height: 50px;
             }
@@ -120,7 +136,51 @@ class TaskDialogBox(QDialog):
             }
         """)
 
-        self.show()
+    def apply_dark_theme(self):
+        self.setStyleSheet("""
+            QDialog {
+                background-color: rgb(44, 44, 44);
+            }
+            QLabel {            
+                font-family: Helvetica; 
+                color: rgb(235,235,235);       
+            }
+            QLabel#task_name_label, QLabel#task_deadline_label, QLabel#task_description_label {
+                background-color: transparent;
+                font-family: Helvetica;
+                font-size: 18px;
+                font: bold;
+            }
+            QLineEdit#user_input_task_name, QDateTimeEdit#user_input_task_deadline, QTextEdit#user_input_task_description {
+                background-color: rgb(246, 246, 246);
+                border: 3px solid rgb(222, 222, 222);
+                font-family: Helvetica;
+                font-size: 18px;
+                color: rgb(44, 44, 44);          
+            }
+            QTextEdit#user_input_task_description, QLineEdit#user_input_task_name, QDateTimeEdit#user_input_task_deadline {
+                padding-top: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            QPushButton {
+                font-family: Helvetica;
+                font-size: 18px;
+                border: 3px solid;
+                font: bold;
+                color: rgb(44, 44, 44);
+                width: 80px;
+                height: 50px;
+            }
+            QPushButton#send_button {
+                background-color: rgb(93, 217, 110);
+                border-color: rgb(66, 135, 76);
+            }
+            QPushButton#cancel_button {
+                background-color: rgb(242, 155, 155);
+                border-color: rgb(130, 57, 57);
+            }
+        """)
 
     def get_task_data(self):
         user_task_name = self.user_input_task_name.text()

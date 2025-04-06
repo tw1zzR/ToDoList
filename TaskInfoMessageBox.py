@@ -6,6 +6,7 @@ from PyQt5.QtCore import *
 class CustomTaskInfoMessageBox(QDialog):
     def __init__(self, task_name, task_deadline, task_description):
         super().__init__()
+        self.dark_theme = True
 
         self.task_name_label = QLabel("Name:", self)
         self.task_deadline_label = QLabel("Deadline:", self)
@@ -65,7 +66,66 @@ class CustomTaskInfoMessageBox(QDialog):
         self.user_task_description_textedit.setObjectName("user_task_description_textedit")
         self.OK_Button.setObjectName("OK_Button")
 
+        if self.dark_theme:
+            self.apply_dark_theme()
+        else:
+            self.apply_light_theme()
+
+        self.show()
+
+    def compare_with_main_win_theme(self, main_win_dark_theme):
+        if main_win_dark_theme:
+            self.apply_dark_theme()
+        else:
+            self.apply_light_theme()
+
+    def apply_light_theme(self):
+        self.dark_theme = False
+
         self.setStyleSheet("""
+            QDialog {
+                background-color: rgb(255, 255, 255);
+            }
+            QLabel {            
+                font-family: Helvetica; 
+                color: rgb(255, 255, 255);       
+            }
+            QLabel#task_name_label, QLabel#task_deadline_label, QLabel#task_description_label {
+                background-color: transparent;
+                font-family: Helvetica;
+                font-size: 18px;
+                font: bold;
+                color: rgb(44,44,44);
+            }
+            QLabel#user_task_name_label, QLabel#user_task_deadline_label, QTextEdit#user_task_description_textedit {
+                background-color: rgb(60, 60, 60);
+                border: 3px solid rgb(30, 30, 30);  
+                font-family: Helvetica;
+                font-size: 18px;
+                color: rgb(235,235,235);
+            }
+            QTextEdit#user_task_description_textedit {
+                padding-top: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            QPushButton#OK_Button {
+                background-color: rgb(93, 217, 110);
+                font-family: Helvetica;
+                font-size: 18px;
+                border: 3px solid rgb(66, 135, 76);
+                font: bold;
+                color: rgb(44, 44, 44);
+            }
+        """)
+
+    def apply_dark_theme(self):
+        self.dark_theme = True
+
+        self.setStyleSheet("""
+            QDialog {
+                background-color: rgb(44, 44, 44);
+            }
             QLabel {            
                 font-family: Helvetica; 
                 color: rgb(0,0,0);       
@@ -75,15 +135,14 @@ class CustomTaskInfoMessageBox(QDialog):
                 font-family: Helvetica;
                 font-size: 18px;
                 font: bold;
-                color: rgb(0,0,0);
+                color: rgb(235,235,235);
             }
             QLabel#user_task_name_label, QLabel#user_task_deadline_label, QTextEdit#user_task_description_textedit {
                 background-color: rgb(246, 246, 246);
                 font-family: Helvetica;
                 font-size: 18px;
-                border: 3px solid;
-                border-color: rgb(222, 222, 222);
-                color: rgb(0,0,0);
+                border: 3px solid rgb(222, 222, 222);
+                color: rgb(44, 44, 44);
             }
             QTextEdit#user_task_description_textedit {
                 padding-top: 5px;
@@ -97,11 +156,10 @@ class CustomTaskInfoMessageBox(QDialog):
                 border: 3px solid;
                 border-color: rgb(66, 135, 76);
                 font: bold;
-                color: rgb(0,0,0);
+                color: rgb(44, 44, 44);
             }
         """)
 
-        self.show()
 
     def set_task_info_msgbox_new_data(self, task_name, task_deadline, task_description):
         self.task_name = task_name

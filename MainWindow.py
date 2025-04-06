@@ -14,8 +14,6 @@ class MainWindow(QMainWindow):
         self.current_task_info_window = None
         self.dark_theme = True
 
-
-
         self.central_widget = QWidget(self)
         self.main_layout = QVBoxLayout()
 
@@ -57,6 +55,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("To Do List")
         self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
+        
 
         # Setup scrolling task layout
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -166,6 +165,7 @@ class MainWindow(QMainWindow):
 
     def print_buttons(self):
         print(self.checkbox_dict)
+        print(self.current_task_info_window)
 
     def set_statusbar_over_all_widgets(self):
         self.status_label.raise_()
@@ -200,10 +200,10 @@ class MainWindow(QMainWindow):
                     "border-right: 3px solid rgb(222, 222, 222);")
             else:
                 button.setStyleSheet(
-                    "background-color: rgb(30, 30, 30);"
-                    "border-top: 3px solid rgb(60, 60, 60);"
-                    "border-bottom: 3px solid rgb(60, 60, 60);"
-                    "border-right: 3px solid rgb(60, 60, 60);")
+                    "background-color: rgb(60, 60, 60);"
+                    "border-top: 3px solid rgb(30, 30, 30);"
+                    "border-bottom: 3px solid rgb(30, 30, 30);"
+                    "border-right: 3px solid rgb(30, 30, 30);")
 
         self.checkbox_dict[task_checkbox] = {
             "buttons": buttons,
@@ -247,6 +247,8 @@ class MainWindow(QMainWindow):
         else:
             self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
 
+        self.current_task_info_window.compare_with_main_win_theme(self.dark_theme)
+
         self.current_task_info_window.show()
 
     def delete_task_checkbox_with_buttons(self, checkbox_sender):
@@ -263,6 +265,8 @@ class MainWindow(QMainWindow):
 
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
         edit_task_dialogbox = TaskDialogBox()
+
+        edit_task_dialogbox.compare_with_main_win_theme(self.dark_theme)
 
         date_format = "dd.MM.yyyy HH:mm"
         primary_user_task_deadline = QDateTime.fromString(primary_task_deadline, date_format)
@@ -340,8 +344,8 @@ class MainWindow(QMainWindow):
                     "border: 3px solid rgb(222, 222, 222);")
             else:
                 sender.setStyleSheet(
-                    "background-color: rgb(30, 30, 30);"
-                    "border: 3px solid rgb(60, 60, 60);")
+                    "background-color: rgb(60, 60, 60);"
+                    "border: 3px solid rgb(30, 30, 30);")
 
     def create_and_setup_delete_confirmation_dialog(self):
         delete_confirmation_dialog = QMessageBox()
@@ -426,8 +430,8 @@ class MainWindow(QMainWindow):
                         "border: 3px solid rgb(222, 222, 222);")
                 else:
                     checkbox.setStyleSheet(
-                        "background-color: rgb(30, 30, 30);"
-                        "border: 3px solid rgb(60, 60, 60);")
+                        "background-color: rgb(60, 60, 60);"
+                        "border: 3px solid rgb(30, 30, 30);")
 
     def changeTheme(self):
         if self.dark_theme:
@@ -474,10 +478,10 @@ class MainWindow(QMainWindow):
         for checkbox, data in self.checkbox_dict.items():
             for button in data["buttons"]:
                 button.setStyleSheet(
-                    "background-color: rgb(30, 30, 30);"
-                    "border-top: 3px solid rgb(60, 60, 60);"
-                    "border-bottom: 3px solid rgb(60, 60, 60);"
-                    "border-right: 3px solid rgb(60, 60, 60);")
+                    "background-color: rgb(60, 60, 60);"
+                    "border-top: rgb(30, 30, 30);"
+                    "border-bottom: 3px solid rgb(30, 30, 30);"
+                    "border-right: 3px solid rgb(30, 30, 30);")
 
             # widgets
         self.setStyleSheet("""
@@ -514,8 +518,8 @@ class MainWindow(QMainWindow):
                 padding: 15px;
             }
             QPushButton#add_task_plus_button {
-                background-color: rgb(30, 30, 30);
-                border: 3px solid rgb(60, 60, 60);   
+                background-color: rgb(60, 60, 60);
+                border: 3px solid rgb(30, 30, 30);    
             }
             QWidget {
                 background-color: rgb(235, 235, 235);
@@ -555,8 +559,8 @@ class MainWindow(QMainWindow):
                 background-color: rgb(36, 36, 35);
             }
             QCheckBox {
-                background-color: rgb(30, 30, 30);
-                border: 3px solid rgb(60, 60, 60);  
+                background-color: rgb(60, 60, 60);
+                border: 3px solid rgb(30, 30, 30);   
                 font-family: Helvetica;
                 font-size: 18px;
                 color: rgb(235, 235, 235);
@@ -706,6 +710,8 @@ class MainWindow(QMainWindow):
         match sender.objectName():
             case "add_task_button" | "add_task_plus_button":
                 add_task_dialog_box = TaskDialogBox()
+
+                add_task_dialog_box.compare_with_main_win_theme(self.dark_theme)
 
                 if add_task_dialog_box.exec_():
                     self.create_task_checkbox_with_buttons(add_task_dialog_box)
