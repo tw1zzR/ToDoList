@@ -67,6 +67,7 @@ class TaskDialogBox(QDialog):
         self.button_layout.addWidget(self.send_button)
         self.button_layout.addWidget(self.cancel_button)
 
+
         # Styling
         self.task_name_label.setObjectName("task_name_label")
         self.task_deadline_label.setObjectName("task_deadline_label")
@@ -186,9 +187,11 @@ class TaskDialogBox(QDialog):
         user_task_name = self.user_input_task_name.text()
         user_task_deadline = self.user_input_task_deadline.text()
         user_task_description = self.user_input_task_description.toPlainText()
-        self.accept()
 
-        return user_task_name, user_task_deadline, user_task_description
+        if user_task_name.strip():
+            self.accept()
+
+            return user_task_name, user_task_deadline, user_task_description
 
     def limit_max_chars_in_textedit(self):
         text_chars = self.user_input_task_description.toPlainText()

@@ -179,9 +179,7 @@ class MainWindow(QMainWindow):
         self.status_label.raise_()
 
     # checkbox methods
-    def create_task_checkbox_with_buttons(self, task_dialog_box):
-        user_task_name, user_task_deadline, user_task_description = task_dialog_box.get_task_data()
-
+    def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):
         task_checkbox = QCheckBox(user_task_name, self)
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
         task_checkbox.setFixedHeight(50)
@@ -747,11 +745,13 @@ class MainWindow(QMainWindow):
         match sender.objectName():
             case "add_task_button" | "add_task_plus_button":
                 add_task_dialog_box = TaskDialogBox()
-
                 add_task_dialog_box.compare_with_main_win_theme(self.dark_theme)
 
                 if add_task_dialog_box.exec_():
-                    self.create_task_checkbox_with_buttons(add_task_dialog_box)
+                    user_task_name, user_task_deadline, user_task_description = add_task_dialog_box.get_task_data()
+
+                    self.create_task_checkbox_with_buttons(user_task_name, user_task_deadline, user_task_description)
+
                     self.show_all_task_checkboxes()
             case "del_tasks_button":
                 if self.checkbox_dict:
