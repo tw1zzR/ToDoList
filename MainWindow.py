@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
 
         self.checkbox_dict = {}
         self.current_task_info_window = None
-        self.dark_theme = True
+        self.dark_theme = False
 
         self.central_widget = QWidget(self)
         self.main_layout = QVBoxLayout()
@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         # ToolMenu PushButtons
         self.add_task_button = QPushButton("ADD TASK", self)
         self.del_tasks_button = QPushButton("DELETE ALL TASKS", self)
-        self.change_theme_button = QPushButton("CHANGE THEME", self)
+        self.change_theme_button = QPushButton("THEME", self)
         self.about_button = QPushButton("ABOUT APP", self)
 
         # Menu
@@ -55,7 +55,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("To Do List")
         self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
-        
+
+
+        #test
+
+        #---
 
         # Setup scrolling task layout
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -153,13 +157,13 @@ class MainWindow(QMainWindow):
         self.user_login_button.setObjectName("user_login_button")
         self.tool_button.setObjectName("tool_button")
         self.add_task_plus_button.setObjectName("add_task_plus_button")
+
         self.add_task_button.setObjectName("add_task_button")
         self.del_tasks_button.setObjectName("del_tasks_button")
+        self.change_theme_button.setObjectName("change_theme_button")
+        self.about_button.setObjectName("about_button")
 
-        if self.dark_theme:
-            self.apply_dark_theme()
-        else:
-            self.apply_light_theme()
+        self.changeTheme()
 
         self.show()
 
@@ -177,7 +181,6 @@ class MainWindow(QMainWindow):
         task_checkbox = QCheckBox(user_task_name, self)
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
         task_checkbox.setFixedHeight(50)
-        # task_checkbox.setFixedSize(650, 50)
 
         task_info_button = QPushButton(self)
         edit_task_button = QPushButton(self)
@@ -436,8 +439,10 @@ class MainWindow(QMainWindow):
     def changeTheme(self):
         if self.dark_theme:
             self.apply_light_theme()
+            self.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/light_theme_icon.png"))
         else:
             self.apply_dark_theme()
+            self.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
 
     def change_checkboxes_button_icons_theme(self):
         white_checkbox_buttons_path = ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
@@ -516,6 +521,11 @@ class MainWindow(QMainWindow):
                 color: rgb(44,44,44);
                 background-color: rgb(235, 235, 235);
                 padding: 15px;
+            }
+            QPushButton#add_task_button, QPushButton#del_tasks_button, 
+            QPushButton#change_theme_button, QPushButton#about_button {
+                color: rgb(225, 225, 220);
+                background-color: rgb(79, 79, 75);
             }
             QPushButton#add_task_plus_button {
                 background-color: rgb(60, 60, 60);
@@ -634,13 +644,28 @@ class MainWindow(QMainWindow):
                 font-size: 18px;
                 font: bold;
                 color: white;
-                background-color: rgb(18, 18, 18);
+                background-color: rgb(18, 18, 18) ;
                 padding: 15px;
+            }
+            QPushButton#add_task_button, QPushButton#del_tasks_button, 
+            QPushButton#change_theme_button, QPushButton#about_button {
+                color: rgb(225, 225, 220);
+                background-color: rgb(79, 79, 75);
+            }
+            QPushButton#add_task_button:hover, QPushButton#del_tasks_button:hover, 
+            QPushButton#change_theme_button:hover, QPushButton#about_button:hover {
+                border: 2px solid rgb(140, 140, 140);
             }
             QPushButton#add_task_plus_button {
                 background-color: rgb(246, 246, 246);
                 border: 3px solid rgb(222, 222, 222);      
             }
+            QPushButton:pressed {
+                padding-left: 13px;
+                padding-top: 7px;
+                padding-right: 11px;
+                padding-bottom: 5px;
+            }         
             QWidget {
                 background-color: rgb(44, 44, 44);
             }
