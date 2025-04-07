@@ -192,6 +192,10 @@ class TaskDialogBox(QDialog):
             self.accept()
 
             return user_task_name, user_task_deadline, user_task_description
+        else:
+            empty_task_name_msgbox = self.create_warning_messagebox()
+            empty_task_name_msgbox.exec_()
+
 
     def limit_max_chars_in_textedit(self):
         text_chars = self.user_input_task_description.toPlainText()
@@ -199,3 +203,26 @@ class TaskDialogBox(QDialog):
         if len(text_chars) > self.max_chars:
             self.user_input_task_description.setPlainText(text_chars[:self.max_chars])
             self.user_input_task_description.moveCursor(QTextCursor.End)
+
+    def create_warning_messagebox(self):
+        warning_msgbox = QMessageBox()
+
+        warning_msgbox.setWindowTitle("About App")
+        warning_msgbox.setWindowIcon(QIcon("assets/warning_icon_1.png"))
+        warning_msgbox.setTextFormat(Qt.RichText)
+        warning_msgbox.setText("Task name cannot be blank.")
+        warning_msgbox.setIcon(QMessageBox.Warning)
+
+        warning_msgbox.setStyleSheet("""
+            QMessageBox {
+                font-family: Helvetica;
+                color: rgb(0,0,0);
+                font-size: 16px;
+            }
+            QPushButton {
+                font-family: Helvetica;
+                font-size: 14px;
+            }
+            """)
+
+        return warning_msgbox
