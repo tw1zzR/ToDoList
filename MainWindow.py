@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         # ToolMenu PushButtons
         self.add_task_button = QPushButton("ADD TASK", self)
         self.del_tasks_button = QPushButton("DELETE ALL TASKS", self)
-        self.change_theme_button = QPushButton("THEME", self)
+        self.change_theme_button = QPushButton("CHANGE THEME  ", self)
         self.about_button = QPushButton("ABOUT APP", self)
 
         # Menu
@@ -58,7 +58,11 @@ class MainWindow(QMainWindow):
 
 
         #test
+        # self.change_theme_tool_button = QToolButton(self)
+        # self.change_theme_tool_button.setToolButtonStyle(Qt.ToolButtonT)
+        self.change_theme_button.setLayoutDirection(Qt.RightToLeft)
 
+        self.add_task_plus_button.setToolTip("Add new task")
         #---
 
         # Setup scrolling task layout
@@ -444,6 +448,8 @@ class MainWindow(QMainWindow):
             self.apply_dark_theme()
             self.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
 
+        self.change_theme_button.setIconSize(QSize(35, 20))
+
     def change_checkboxes_button_icons_theme(self):
         white_checkbox_buttons_path = ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
                               "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
@@ -527,6 +533,10 @@ class MainWindow(QMainWindow):
                 color: rgb(225, 225, 220);
                 background-color: rgb(79, 79, 75);
             }
+            QPushButton#add_task_button:hover, QPushButton#del_tasks_button:hover, 
+            QPushButton#change_theme_button:hover, QPushButton#about_button:hover {
+                border: 2px solid rgb(140, 140, 140);
+            }
             QPushButton#add_task_plus_button {
                 background-color: rgb(60, 60, 60);
                 border: 3px solid rgb(30, 30, 30);    
@@ -587,7 +597,8 @@ class MainWindow(QMainWindow):
             }
             QToolTip {
                 font-family: Helvetica;
-                color: rgb(255, 255, 255);
+                background-color: rgb(60, 60, 60);
+                color: rgb(235, 235, 235);
             }
         """)
 
@@ -722,7 +733,8 @@ class MainWindow(QMainWindow):
             }
             QToolTip {
                 font-family: Helvetica;
-                color: rgb(255, 255, 255);
+                background-color: rgb(246, 246, 246);
+                color: rgb(44, 44, 44);
             }
         """)
 
