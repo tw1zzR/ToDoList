@@ -58,12 +58,14 @@ class MainWindow(QMainWindow):
 
 
         #test
+        self.setAcceptDrops(True)
         # self.change_theme_tool_button = QToolButton(self)
         # self.change_theme_tool_button.setToolButtonStyle(Qt.ToolButtonT)
-        self.change_theme_button.setLayoutDirection(Qt.RightToLeft)
+        # ---
 
+
+        self.change_theme_button.setLayoutDirection(Qt.RightToLeft)
         self.add_task_plus_button.setToolTip("Add new task")
-        #---
 
         # Setup scrolling task layout
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
@@ -184,7 +186,16 @@ class MainWindow(QMainWindow):
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
         task_checkbox.setFixedHeight(50)
 
-        
+
+        # drag_drop_checkbox_button.setIconSize(QSize(30, 30))
+
+        checkbox_moveup_button = QPushButton(self)
+        checkbox_movedown_button = QPushButton(self)
+
+        checkbox_moveup_button.setFixedSize(50,25)
+        checkbox_movedown_button.setFixedSize(50,25)
+
+        checkbox_reorder_buttons = [checkbox_moveup_button, checkbox_movedown_button]
 
         task_info_button = QPushButton(self)
         edit_task_button = QPushButton(self)
@@ -194,9 +205,9 @@ class MainWindow(QMainWindow):
         edit_task_button.setToolTip("Edit task")
         delete_task_button.setToolTip("Delete task")
 
-        buttons = [task_info_button, edit_task_button, delete_task_button]
+        checkbox_buttons = [task_info_button, edit_task_button, delete_task_button]
 
-        for button in buttons:
+        for button in checkbox_buttons:
             button.setFixedSize(50, 50)
             button.setIconSize(QSize(30, 30))
             if self.dark_theme:
@@ -211,9 +222,12 @@ class MainWindow(QMainWindow):
                     "border-top: 3px solid rgb(30, 30, 30);"
                     "border-bottom: 3px solid rgb(30, 30, 30);"
                     "border-right: 3px solid rgb(30, 30, 30);")
+        for reorder_button in checkbox_reorder_buttons:
+            reorder_button.setStyleSheet("background-color: transparent;")
 
         self.checkbox_dict[task_checkbox] = {
-            "buttons": buttons,
+            "buttons": checkbox_buttons,
+            "reorder_buttons": checkbox_reorder_buttons,
             "name": user_task_name,
             "deadline": user_task_deadline,
             "description": user_task_description
@@ -222,10 +236,13 @@ class MainWindow(QMainWindow):
         self.change_checkboxes_button_icons_theme()
         self.connect_checkbox_buttons()
 
-    def find_checkbox_by_button(self, clicked_button):
+    def find_checkbox_by_checkbox_button(self, clicked_button):
         for checkbox, data in self.checkbox_dict.items():
             if clicked_button in data["buttons"]:
                 return checkbox
+
+    def find_checkbox_by_reorder_button(self):
+        pass
 
     def connect_checkbox_buttons(self):
         for checkbox, data in self.checkbox_dict.items():
@@ -318,6 +335,18 @@ class MainWindow(QMainWindow):
             checkbox_layout.setContentsMargins(0,0,0,0)
             checkbox_layout.setSpacing(0)
 
+            moveup_btn = data["reorder_buttons"][0]
+            movedown_btn = data["reorder_buttons"][1]
+
+            moveup_layout = QVBoxLayout()
+
+            for reorder_button in [moveup_btn, movedown_btn]:
+                reorder_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+                reorder_button.show()
+                moveup_layout.addWidget(reorder_button)
+
+            checkbox_layout.addLayout(moveup_layout)
+
             checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
             checkbox_layout.addWidget(checkbox)
 
@@ -330,6 +359,8 @@ class MainWindow(QMainWindow):
 
         # (+) button layout
         plus_button_layout = QHBoxLayout()
+
+        plus_button_layout.addSpacing(50)
 
         plus_button_layout.addWidget(self.add_task_plus_button, alignment=Qt.AlignLeft)
         plus_button_layout.addStretch()
@@ -451,6 +482,12 @@ class MainWindow(QMainWindow):
         self.change_theme_button.setIconSize(QSize(35, 20))
 
     def change_checkboxes_button_icons_theme(self):
+        white_reorder_buttons_path = ["assets/MainWindow/white_moveup_arrow_icon.png",
+                                      "assets/MainWindow/white_movedown_arrow_icon.png"]
+
+        gray_reorder_buttons_path = ["assets/MainWindow/gray_moveup_arrow_icon.png",
+                                     "assets/MainWindow/gray_movedown_arrow_icon.png"]
+
         white_checkbox_buttons_path = ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
                               "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
                               "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"]
@@ -462,14 +499,22 @@ class MainWindow(QMainWindow):
         if self.dark_theme:
             for task_data in self.checkbox_dict.values():
                 i = 0
-                for button in task_data["buttons"]:
-                    button.setIcon(QIcon(gray_checkbox_buttons_path[i]))
+                for reorder_button in task_data["reorder_buttons"]:
+                    reorder_button.setIcon(QIcon(white_reorder_buttons_path[i]))
+                    i += 1
+                i = 0
+                for checkbox_button in task_data["buttons"]:
+                    checkbox_button.setIcon(QIcon(gray_checkbox_buttons_path[i]))
                     i += 1
         else:
             for task_data in self.checkbox_dict.values():
                 i = 0
-                for button in task_data["buttons"]:
-                    button.setIcon(QIcon(white_checkbox_buttons_path[i]))
+                for reorder_button in task_data["reorder_buttons"]:
+                    reorder_button.setIcon(QIcon(gray_reorder_buttons_path[i]))
+                    i += 1
+                i = 0
+                for checkbox_button in task_data["buttons"]:
+                    checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
                     i += 1
 
     def apply_light_theme(self):
@@ -788,13 +833,13 @@ class MainWindow(QMainWindow):
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_button(sender)
+        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
 
         self.create_task_info_messagebox_checkbox_button(sender_checkbox)
 
     def on_click_edit_task_checkbox_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_button(sender)
+        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
 
         # Get primary checkbox data
         sender_checkbox_task_name = self.checkbox_dict[sender_checkbox]["name"]
@@ -806,7 +851,10 @@ class MainWindow(QMainWindow):
 
     def on_click_delete_task_checkbox_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_button(sender)
+        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
 
         self.delete_task_checkbox_with_buttons(sender_checkbox)
         self.show_all_task_checkboxes()
+
+    def on_click_reorder_button(self):
+        pass
