@@ -184,6 +184,8 @@ class MainWindow(QMainWindow):
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
         task_checkbox.setFixedHeight(50)
 
+        
+
         task_info_button = QPushButton(self)
         edit_task_button = QPushButton(self)
         delete_task_button = QPushButton(self)
