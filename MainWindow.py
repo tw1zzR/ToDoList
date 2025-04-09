@@ -12,13 +12,14 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.checkbox_dict = {}
+        self.completed_checkbox_dict = {}
 
         self.current_task_info_window = None
         self.dark_theme = False
 
         ####
         self.completed_task_opened = False
-        self.completed_task_button_created = False
+        self.completed_task_layout = QVBoxLayout()
         ####
 
         self.central_widget = QWidget(self)
@@ -31,10 +32,6 @@ class MainWindow(QMainWindow):
         self.scroll_area = QScrollArea(self)
         self.task_widget = QWidget(self)
         self.main_window_task_layout = QVBoxLayout()
-
-        ####
-        self.completed_task_layout = QVBoxLayout()
-        ####
 
         self.title_label = QLabel("To Do List", self)
         self.title_tasks_label = QLabel("Tasks", self)
@@ -191,6 +188,8 @@ class MainWindow(QMainWindow):
         print(self.checkbox_dict)
         print(self.current_task_info_window)
 
+        print(self.completed_checkbox_dict)
+
     def set_statusbar_over_all_widgets(self):
         self.status_label.raise_()
 
@@ -305,6 +304,9 @@ class MainWindow(QMainWindow):
 
             del self.checkbox_dict[checkbox_sender]
 
+        if checkbox_sender in self.completed_checkbox_dict:
+            del self.completed_checkbox_dict[checkbox_sender]
+
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
         edit_task_dialogbox = TaskDialogBox()
 
@@ -390,10 +392,10 @@ class MainWindow(QMainWindow):
         self.tasks_layout.addLayout(plus_button_layout)
 
         ####
-        for checkbox in self.checkbox_dict:
-            if checkbox.isChecked():
-                self.show_completed_tasks()
-                break
+        # for checkbox in self.checkbox_dict:
+        #     if checkbox.isChecked():
+        #         self.show_completed_tasks()
+        #         break
         ####
 
         self.set_statusbar_over_all_widgets()
@@ -521,59 +523,59 @@ class MainWindow(QMainWindow):
         self.show_all_task_checkboxes()
 
     ####
-    def create_completed_tasks_button(self):
-        completed_title_tasks_layout = QHBoxLayout()
-
-        completed_title_tasks_layout.addStretch()
-        completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
-        completed_title_tasks_layout.addStretch()
-
-        self.completed_task_layout.addLayout(completed_title_tasks_layout)
-        self.tasks_layout.addLayout(self.completed_task_layout)
-
-    def show_completed_tasks(self):
-        self.clear_layout(self.completed_task_layout)
-
-        completed_title_tasks_layout = QHBoxLayout()
-
-        completed_title_tasks_layout.addStretch()
-        completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
-        completed_title_tasks_layout.addStretch()
-
-        self.completed_task_layout.addLayout(completed_title_tasks_layout)
-
-        for checkbox, data in self.checkbox_dict.items():
-            if checkbox.isChecked():
-                checkbox_layout = QHBoxLayout()
-                checkbox_layout.setContentsMargins(0, 0, 0, 0)
-                checkbox_layout.setSpacing(0)
-
-                clone_checked_checkbox = QCheckBox(data["name"])
-                clone_checked_checkbox.setChecked(True)
-                clone_checked_checkbox.setStyleSheet(
-                    "background-color: rgb(93, 217, 110);"
-                    "border-color: rgb(66, 135, 76);")
-
-                checkbox_layout.addSpacing(50)
-                checkbox_layout.addWidget(clone_checked_checkbox)
-                checkbox_layout.addSpacing(50)
-
-                self.completed_task_layout.addSpacing(25)
-                self.completed_task_layout.addLayout(checkbox_layout)
-
-    def hide_completed_tasks(self):
-        self.hide_layout_widgets(self.completed_task_layout)
-
-    def hide_layout_widgets(self, layout):
-        if layout is None:
-            return
-
-        for i in range(layout.count()):
-            item = layout.itemAt(i)
-            if item.widget():
-                item.widget().setVisible(False)
-            elif item.layout():
-                self.hide_layout_widgets(item.layout())
+    # def create_completed_tasks_button(self):
+    #     completed_title_tasks_layout = QHBoxLayout()
+    #
+    #     completed_title_tasks_layout.addStretch()
+    #     completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+    #     completed_title_tasks_layout.addStretch()
+    #
+    #     self.completed_task_layout.addLayout(completed_title_tasks_layout)
+    #     self.tasks_layout.addLayout(self.completed_task_layout)
+    #
+    # def show_completed_tasks(self):
+    #     self.clear_layout(self.completed_task_layout)
+    #
+    #     completed_title_tasks_layout = QHBoxLayout()
+    #
+    #     completed_title_tasks_layout.addStretch()
+    #     completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+    #     completed_title_tasks_layout.addStretch()
+    #
+    #     self.completed_task_layout.addLayout(completed_title_tasks_layout)
+    #
+    #     for checkbox, data in self.checkbox_dict.items():
+    #         if checkbox.isChecked():
+    #             checkbox_layout = QHBoxLayout()
+    #             checkbox_layout.setContentsMargins(0, 0, 0, 0)
+    #             checkbox_layout.setSpacing(0)
+    #
+    #             clone_checked_checkbox = QCheckBox(data["name"])
+    #             clone_checked_checkbox.setChecked(True)
+    #             clone_checked_checkbox.setStyleSheet(
+    #                 "background-color: rgb(93, 217, 110);"
+    #                 "border-color: rgb(66, 135, 76);")
+    #
+    #             checkbox_layout.addSpacing(50)
+    #             checkbox_layout.addWidget(clone_checked_checkbox)
+    #             checkbox_layout.addSpacing(50)
+    #
+    #             self.completed_task_layout.addSpacing(25)
+    #             self.completed_task_layout.addLayout(checkbox_layout)
+    #
+    # def hide_completed_tasks(self):
+    #     self.hide_layout_widgets(self.completed_task_layout)
+    #
+    # def hide_layout_widgets(self, layout):
+    #     if layout is None:
+    #         return
+    #
+    #     for i in range(layout.count()):
+    #         item = layout.itemAt(i)
+    #         if item.widget():
+    #             item.widget().setVisible(False)
+    #         elif item.layout():
+    #             self.hide_layout_widgets(item.layout())
 
     # def hide_completed_tasks(self):
     #     # self.clear_completed_task_layout(self.completed_task_layout)
@@ -594,19 +596,23 @@ class MainWindow(QMainWindow):
     #     #
     #     # self.completed_task_layout.addLayout(completed_title_tasks_layout)
 
+        #
+        #     completed_title_tasks_layout.addStretch()
+        #     completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+        #     completed_title_tasks_layout.addStretch()
+        #
+        #     self.completed_task_layout.addLayout(completed_title_tasks_layout)
+
+
     ####
 
-    def clear_completed_task_layout(self, layout):
-        while layout.count():
-            item = layout.takeAt(0)
-            widget = item.widget()
-            if widget is not None:
-                widget.deleteLater()
-            else:
-                # If the item is a layout
-                child_layout = item.layout()
-                if child_layout is not None:
-                    self.clear_layout(child_layout)
+    # def clear_completed_task_layout(self, layout):
+    #     for i in range(layout.count()):  # Проходим по всем элементам макета
+    #         item = layout.itemAt(i)
+    #         widget = item.widget()  # Получаем виджет, если он есть
+    #         if widget:  # Если элемент является виджетом
+    #             layout.removeWidget(widget)  # Убираем виджет из макета
+    #             widget.deleteLater()
 
     # Change Theme and SetStyleSheet methods
     def changeTheme(self):
@@ -655,7 +661,6 @@ class MainWindow(QMainWindow):
                     checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
                     i += 1
 
-    ####
     def change_completed_task_button_icon(self):
         if self.dark_theme:
             if self.completed_task_opened:
@@ -669,7 +674,6 @@ class MainWindow(QMainWindow):
                 self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_open_completed_task_section_icon.png"))
             else:
                 self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_closed_completed_task_section_icon.png"))
-    ####
 
     def apply_light_theme(self):
         self.dark_theme = False
@@ -950,6 +954,73 @@ class MainWindow(QMainWindow):
             }
         """)
 
+    def is_completed_checkbox_dict_empty(self):
+        if not self.completed_checkbox_dict:
+            return True
+        else:
+            return False
+
+    def is_button_in_layout(self, layout, button):
+        for i in range(layout.count()):
+            item = layout.itemAt(i)
+            if isinstance(item.widget(), QPushButton) and item.widget() == button:
+                return True
+        return False
+
+    def add_completed_tasks_button_into_layout(self):
+        self.tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+        self.update()
+
+    def delete_completed_tasks_button(self):
+        self.tasks_layout.removeWidget(self.completed_task_open_button)
+        self.completed_task_open_button.setParent(None)
+        self.update()
+
+    def show_completed_tasks_checkboxes(self):
+        self.clear_layout(self.completed_task_layout)
+
+        for checkbox, data in self.completed_checkbox_dict.items():
+            checkbox_layout = QHBoxLayout()
+            checkbox_layout.setContentsMargins(0, 0, 0, 0)
+            checkbox_layout.setSpacing(0)
+
+            checked_checkbox_copy = QCheckBox(data["name"])
+            checked_checkbox_copy.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
+            checkbox_layout.addSpacing(50)
+            checkbox_layout.addWidget(checked_checkbox_copy)
+            checkbox_layout.addSpacing(50)
+
+            self.completed_task_layout.addLayout(checkbox_layout)
+            self.completed_task_layout.addSpacing(30)
+
+            self.tasks_layout.addLayout(self.completed_task_layout)
+            self.update()
+
+    # Methods written by AI for delete (hide) completed checkboxes
+    def delete_completed_tasks_checkboxes(self):
+        """Удаляет все элементы из макета completed_task_layout, отключая их от родительского виджета."""
+        while self.completed_task_layout.count():
+            item = self.completed_task_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                # Отключаем виджет от родителя, чтобы он исчез из UI
+                widget.setParent(None)
+            elif item.layout() is not None:
+                # Рекурсивно очищаем вложенные макеты
+                self._delete_layout_recursively(item.layout())
+
+    def _delete_layout_recursively(self, layout):
+        """Рекурсивно удаляет все элементы из вложенного макета, устанавливая родителя виджетов в None."""
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.setParent(None)
+            elif item.layout() is not None:
+                self._delete_layout_recursively(item.layout())
+    # ------------------------------------------------------------------
+
     # onclick methods
         # Tool menu button methods
     def on_click_task_button(self):
@@ -994,12 +1065,25 @@ class MainWindow(QMainWindow):
         match sender.isChecked():
             case True:
                 self.task_checkbox_set_style_sheet(sender, True)
+
+                for checkbox, data in self.checkbox_dict.items():
+                    if checkbox == sender:
+                        self.completed_checkbox_dict[checkbox] = data
+
+                is_completed_checkbox_button_in_layout = self.is_button_in_layout(self.tasks_layout, self.completed_task_open_button)
+                if not is_completed_checkbox_button_in_layout:
+                    self.add_completed_tasks_button_into_layout()
+
             case False:
                 self.task_checkbox_set_style_sheet(sender, False)
 
-        if not self.completed_task_button_created:
-            self.create_completed_tasks_button()
-            self.completed_task_button_created = True
+                for checkbox in list(self.completed_checkbox_dict.keys()):
+                    if checkbox == sender:
+                        del self.completed_checkbox_dict[checkbox]
+
+                is_empty = self.is_completed_checkbox_dict_empty()
+                if is_empty:
+                    self.delete_completed_tasks_button()
 
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
@@ -1041,9 +1125,9 @@ class MainWindow(QMainWindow):
 
         if self.completed_task_opened:
             self.completed_task_opened = False
-            self.hide_completed_tasks()
+            self.delete_completed_tasks_checkboxes()
         else:
             self.completed_task_opened = True
-            self.show_completed_tasks()
+            self.show_completed_tasks_checkboxes()
 
         self.change_completed_task_button_icon()
