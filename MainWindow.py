@@ -1,5 +1,5 @@
+import copy
 from collections import OrderedDict
-
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -15,7 +15,11 @@ class MainWindow(QMainWindow):
 
         self.current_task_info_window = None
         self.dark_theme = False
+
+        ####
         self.completed_task_opened = False
+        self.completed_task_button_created = False
+        ####
 
         self.central_widget = QWidget(self)
         self.main_layout = QVBoxLayout()
@@ -28,11 +32,17 @@ class MainWindow(QMainWindow):
         self.task_widget = QWidget(self)
         self.main_window_task_layout = QVBoxLayout()
 
+        ####
+        self.completed_task_layout = QVBoxLayout()
+        ####
+
         self.title_label = QLabel("To Do List", self)
         self.title_tasks_label = QLabel("Tasks", self)
         self.status_label = QLabel(self)
 
+        ####
         self.completed_task_open_button = QPushButton("Completed Task")
+        ####
         self.add_task_plus_button = QPushButton(self)
         self.user_login_button = QPushButton(self)
 
@@ -59,8 +69,15 @@ class MainWindow(QMainWindow):
         self.setGeometry(900, 400, 800, 700)
 
         #test
+        ####
+        self.completed_task_open_button.setLayoutDirection(Qt.RightToLeft)
+        self.completed_task_open_button.setIconSize(QSize(25,25))
 
+        self.completed_task_open_button.clicked.connect(self.on_click_completed_tasks_button)
 
+        self.completed_task_layout.setContentsMargins(0, 0, 0, 0)
+        self.completed_task_layout.setSpacing(0)
+        ####
         # ---
 
         self.change_theme_button.setLayoutDirection(Qt.RightToLeft)
@@ -164,6 +181,7 @@ class MainWindow(QMainWindow):
         self.del_tasks_button.setObjectName("del_tasks_button")
         self.change_theme_button.setObjectName("change_theme_button")
         self.about_button.setObjectName("about_button")
+        self.completed_task_open_button.setObjectName("completed_task_open_button")
 
         self.changeTheme()
 
@@ -320,6 +338,10 @@ class MainWindow(QMainWindow):
     def show_all_task_checkboxes(self):
         self.clear_layout(self.tasks_layout)
 
+        ####
+        self.clear_layout(self.completed_task_layout)
+        ####
+
         title_tasks_layout = QHBoxLayout()
 
         title_tasks_layout.addStretch()
@@ -366,6 +388,13 @@ class MainWindow(QMainWindow):
 
         self.add_task_plus_button.setFixedSize(50, 50)
         self.tasks_layout.addLayout(plus_button_layout)
+
+        ####
+        for checkbox in self.checkbox_dict:
+            if checkbox.isChecked():
+                self.show_completed_tasks()
+                break
+        ####
 
         self.set_statusbar_over_all_widgets()
 
@@ -491,20 +520,95 @@ class MainWindow(QMainWindow):
         self.checkbox_dict = OrderedDict(items)
         self.show_all_task_checkboxes()
 
-    def create_completed_task_layout(self):
-        completed_task_layout = QVBoxLayout()
-
+    ####
+    def create_completed_tasks_button(self):
         completed_title_tasks_layout = QHBoxLayout()
-
-        self.completed_task_open_button.setLayoutDirection(Qt.RightToLeft)
 
         completed_title_tasks_layout.addStretch()
         completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
         completed_title_tasks_layout.addStretch()
 
-        self.tasks_layout.addLayout(completed_title_tasks_layout)
+        self.completed_task_layout.addLayout(completed_title_tasks_layout)
+        self.tasks_layout.addLayout(self.completed_task_layout)
 
+    def show_completed_tasks(self):
+        self.clear_layout(self.completed_task_layout)
 
+        completed_title_tasks_layout = QHBoxLayout()
+
+        completed_title_tasks_layout.addStretch()
+        completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+        completed_title_tasks_layout.addStretch()
+
+        self.completed_task_layout.addLayout(completed_title_tasks_layout)
+
+        for checkbox, data in self.checkbox_dict.items():
+            if checkbox.isChecked():
+                checkbox_layout = QHBoxLayout()
+                checkbox_layout.setContentsMargins(0, 0, 0, 0)
+                checkbox_layout.setSpacing(0)
+
+                clone_checked_checkbox = QCheckBox(data["name"])
+                clone_checked_checkbox.setChecked(True)
+                clone_checked_checkbox.setStyleSheet(
+                    "background-color: rgb(93, 217, 110);"
+                    "border-color: rgb(66, 135, 76);")
+
+                checkbox_layout.addSpacing(50)
+                checkbox_layout.addWidget(clone_checked_checkbox)
+                checkbox_layout.addSpacing(50)
+
+                self.completed_task_layout.addSpacing(25)
+                self.completed_task_layout.addLayout(checkbox_layout)
+
+    def hide_completed_tasks(self):
+        self.hide_layout_widgets(self.completed_task_layout)
+
+    def hide_layout_widgets(self, layout):
+        if layout is None:
+            return
+
+        for i in range(layout.count()):
+            item = layout.itemAt(i)
+            if item.widget():
+                item.widget().setVisible(False)
+            elif item.layout():
+                self.hide_layout_widgets(item.layout())
+
+    # def hide_completed_tasks(self):
+    #     # self.clear_completed_task_layout(self.completed_task_layout)
+    #     layout = self.completed_task_layout
+    #
+    #     for i in range(layout.count()):
+    #         item = layout.itemAt(i)
+    #         if item.widget():
+    #             item.widget().setVisible(False)
+    #         elif item.layout():
+    #             self.hide_completed_tasks(item.layout())
+    #
+    #     # completed_title_tasks_layout = QHBoxLayout()
+    #     #
+    #     # completed_title_tasks_layout.addStretch()
+    #     # completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+    #     # completed_title_tasks_layout.addStretch()
+    #     #
+    #     # self.completed_task_layout.addLayout(completed_title_tasks_layout)
+
+    ####
+
+    def clear_completed_task_layout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                # If the item is a layout
+                child_layout = item.layout()
+                if child_layout is not None:
+                    self.clear_layout(child_layout)
+
+    # Change Theme and SetStyleSheet methods
     def changeTheme(self):
         if self.dark_theme:
             self.apply_light_theme()
@@ -551,6 +655,22 @@ class MainWindow(QMainWindow):
                     checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
                     i += 1
 
+    ####
+    def change_completed_task_button_icon(self):
+        if self.dark_theme:
+            if self.completed_task_opened:
+                self.completed_task_open_button.setIcon(
+                    QIcon("assets/MainWindow/white_open_completed_task_section_icon.png"))
+            else:
+                self.completed_task_open_button.setIcon(
+                    QIcon("assets/MainWindow/white_closed_completed_task_section_icon.png"))
+        else:
+            if self.completed_task_opened:
+                self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_open_completed_task_section_icon.png"))
+            else:
+                self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_closed_completed_task_section_icon.png"))
+    ####
+
     def apply_light_theme(self):
         self.dark_theme = False
 
@@ -562,12 +682,9 @@ class MainWindow(QMainWindow):
         self.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
         self.user_login_button.setIcon(QIcon("assets/MainWindow/gray_user_icon.png"))
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
-        self.change_checkboxes_button_icons_theme()
 
-        if self.completed_task_opened:
-            self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_open_completed_task_section_icon.png"))
-        else:
-            self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_closed_completed_task_section_icon.png"))
+        self.change_checkboxes_button_icons_theme()
+        self.change_completed_task_button_icon()
 
         for checkbox, data in self.checkbox_dict.items():
             for button in data["buttons"]:
@@ -623,6 +740,9 @@ class MainWindow(QMainWindow):
             QPushButton#add_task_plus_button {
                 background-color: rgb(60, 60, 60);
                 border: 3px solid rgb(30, 30, 30);    
+            }
+            QPushButton#completed_task_open_button {
+                background-color: transparent;
             }
             QWidget {
                 background-color: rgb(235, 235, 235);
@@ -696,7 +816,9 @@ class MainWindow(QMainWindow):
         self.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
         self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
+
         self.change_checkboxes_button_icons_theme()
+        self.change_completed_task_button_icon()
 
         if self.completed_task_opened:
             self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/white_open_completed_task_section_icon.png"))
@@ -757,6 +879,9 @@ class MainWindow(QMainWindow):
             QPushButton#add_task_plus_button {
                 background-color: rgb(246, 246, 246);
                 border: 3px solid rgb(222, 222, 222);      
+            }
+            QPushButton#completed_task_open_button {
+                background-color: transparent;
             }
             QPushButton:pressed {
                 padding-left: 13px;
@@ -861,6 +986,8 @@ class MainWindow(QMainWindow):
         about_app_dialog.exec_()
 
         # Set checkbox checked method
+
+    ####
     def on_click_task_checkbox(self):
         sender = self.sender()
 
@@ -869,6 +996,10 @@ class MainWindow(QMainWindow):
                 self.task_checkbox_set_style_sheet(sender, True)
             case False:
                 self.task_checkbox_set_style_sheet(sender, False)
+
+        if not self.completed_task_button_created:
+            self.create_completed_tasks_button()
+            self.completed_task_button_created = True
 
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
@@ -905,3 +1036,14 @@ class MainWindow(QMainWindow):
                 self.move_up_down_checkbox(sender_checkbox, "up")
             elif data["reorder_buttons"][1] is sender:
                 self.move_up_down_checkbox(sender_checkbox, "down")
+
+    def on_click_completed_tasks_button(self):
+
+        if self.completed_task_opened:
+            self.completed_task_opened = False
+            self.hide_completed_tasks()
+        else:
+            self.completed_task_opened = True
+            self.show_completed_tasks()
+
+        self.change_completed_task_button_icon()
