@@ -11,10 +11,11 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-
         self.checkbox_dict = {}
+
         self.current_task_info_window = None
         self.dark_theme = False
+        self.completed_task_opened = False
 
         self.central_widget = QWidget(self)
         self.main_layout = QVBoxLayout()
@@ -31,6 +32,7 @@ class MainWindow(QMainWindow):
         self.title_tasks_label = QLabel("Tasks", self)
         self.status_label = QLabel(self)
 
+        self.completed_task_open_button = QPushButton("Completed Task")
         self.add_task_plus_button = QPushButton(self)
         self.user_login_button = QPushButton(self)
 
@@ -489,6 +491,20 @@ class MainWindow(QMainWindow):
         self.checkbox_dict = OrderedDict(items)
         self.show_all_task_checkboxes()
 
+    def create_completed_task_layout(self):
+        completed_task_layout = QVBoxLayout()
+
+        completed_title_tasks_layout = QHBoxLayout()
+
+        self.completed_task_open_button.setLayoutDirection(Qt.RightToLeft)
+
+        completed_title_tasks_layout.addStretch()
+        completed_title_tasks_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
+        completed_title_tasks_layout.addStretch()
+
+        self.tasks_layout.addLayout(completed_title_tasks_layout)
+
+
     def changeTheme(self):
         if self.dark_theme:
             self.apply_light_theme()
@@ -546,8 +562,12 @@ class MainWindow(QMainWindow):
         self.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
         self.user_login_button.setIcon(QIcon("assets/MainWindow/gray_user_icon.png"))
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
-
         self.change_checkboxes_button_icons_theme()
+
+        if self.completed_task_opened:
+            self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_open_completed_task_section_icon.png"))
+        else:
+            self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_closed_completed_task_section_icon.png"))
 
         for checkbox, data in self.checkbox_dict.items():
             for button in data["buttons"]:
@@ -676,8 +696,12 @@ class MainWindow(QMainWindow):
         self.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
         self.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
         self.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
-
         self.change_checkboxes_button_icons_theme()
+
+        if self.completed_task_opened:
+            self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/white_open_completed_task_section_icon.png"))
+        else:
+            self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/white_closed_completed_task_section_icon.png"))
 
         for checkbox, data in self.checkbox_dict.items():
             for button in data["buttons"]:
