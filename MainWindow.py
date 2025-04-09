@@ -341,7 +341,7 @@ class MainWindow(QMainWindow):
         self.clear_layout(self.tasks_layout)
 
         ####
-        self.clear_layout(self.completed_task_layout)
+        #self.clear_layout(self.completed_task_layout)
         ####
 
         title_tasks_layout = QHBoxLayout()
@@ -1080,10 +1080,14 @@ class MainWindow(QMainWindow):
                 for checkbox in list(self.completed_checkbox_dict.keys()):
                     if checkbox == sender:
                         del self.completed_checkbox_dict[checkbox]
+                self.show_completed_tasks_checkboxes()
 
                 is_empty = self.is_completed_checkbox_dict_empty()
                 if is_empty:
                     self.delete_completed_tasks_button()
+                    self.delete_completed_tasks_checkboxes()
+                    self.completed_task_opened = False
+                    self.change_completed_task_button_icon()
 
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
