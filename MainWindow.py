@@ -1089,8 +1089,6 @@ class MainWindow(QMainWindow):
                     self.delete_completed_tasks_from_ui()
                     self.show_completed_tasks()
 
-        # self.show_all_task_checkboxes()
-
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
         sender = self.sender()
