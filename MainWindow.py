@@ -335,6 +335,7 @@ class MainWindow(QMainWindow):
                     break
 
             sender_checkbox.setText(edited_task_name)
+            self.refresh_task_deadline()
 
 
     def clear_layout(self, layout):
@@ -487,7 +488,7 @@ class MainWindow(QMainWindow):
 
     # Refresh deadline every 5 min
     def start_track_task_deadline(self):
-        self.refresh_task_timer.start(300000)
+        self.refresh_task_timer.start(30000)
 
     def refresh_task_deadline(self):
         current_time = QDateTime.currentDateTime()
@@ -1095,6 +1096,7 @@ class MainWindow(QMainWindow):
 
                 if self.completed_task_opened:
                     self.show_all_task_checkboxes()
+                    self.refresh_task_deadline()
 
                     self.delete_completed_tasks_from_ui()
                     self.show_completed_tasks()
