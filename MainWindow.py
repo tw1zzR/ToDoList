@@ -402,6 +402,11 @@ class MainWindow(QMainWindow):
         completed_tasks_button_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
         completed_tasks_button_layout.addSpacing(50)
 
+        self.completed_task_open_button.hide()
+
+        if self.completed_checkbox_dict:
+            self.completed_task_open_button.show()
+
         self.tasks_layout.addLayout(completed_tasks_button_layout)
         # ---
 
@@ -1063,6 +1068,11 @@ class MainWindow(QMainWindow):
     ####
     def on_click_task_checkbox(self):
         sender_checkbox = self.sender()
+
+        if self.completed_checkbox_dict:
+            self.completed_task_open_button.hide()
+        else:
+            self.completed_task_open_button.show()
 
         match sender_checkbox.isChecked():
             case True:
