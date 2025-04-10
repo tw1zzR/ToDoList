@@ -324,7 +324,6 @@ class MainWindow(QMainWindow):
                     break
 
             sender_checkbox.setText(edited_task_name)
-            self.refresh_task_deadline()
 
 
     def clear_layout(self, layout):
@@ -550,26 +549,27 @@ class MainWindow(QMainWindow):
                              "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
                              "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"]
 
-        if self.dark_theme:
-            for task_data in self.checkbox_dict.values():
-                i = 0
-                for reorder_button in task_data["reorder_buttons"]:
-                    reorder_button.setIcon(QIcon(white_reorder_buttons_path[i]))
-                    i += 1
-                i = 0
-                for checkbox_button in task_data["buttons"]:
-                    checkbox_button.setIcon(QIcon(gray_checkbox_buttons_path[i]))
-                    i += 1
-        else:
-            for task_data in self.checkbox_dict.values():
-                i = 0
-                for reorder_button in task_data["reorder_buttons"]:
-                    reorder_button.setIcon(QIcon(gray_reorder_buttons_path[i]))
-                    i += 1
-                i = 0
-                for checkbox_button in task_data["buttons"]:
-                    checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
-                    i += 1
+        for dictionary in self.dicts:
+            if self.dark_theme:
+                for task_data in dictionary.values():
+                    i = 0
+                    for reorder_button in task_data["reorder_buttons"]:
+                        reorder_button.setIcon(QIcon(white_reorder_buttons_path[i]))
+                        i += 1
+                    i = 0
+                    for checkbox_button in task_data["buttons"]:
+                        checkbox_button.setIcon(QIcon(gray_checkbox_buttons_path[i]))
+                        i += 1
+            else:
+                for task_data in dictionary.values():
+                    i = 0
+                    for reorder_button in task_data["reorder_buttons"]:
+                        reorder_button.setIcon(QIcon(gray_reorder_buttons_path[i]))
+                        i += 1
+                    i = 0
+                    for checkbox_button in task_data["buttons"]:
+                        checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
+                        i += 1
 
     def change_completed_task_button_icon(self):
         if self.dark_theme:
@@ -600,13 +600,14 @@ class MainWindow(QMainWindow):
         self.change_checkboxes_button_icons_theme()
         self.change_completed_task_button_icon()
 
-        for checkbox, data in self.checkbox_dict.items():
-            for button in data["buttons"]:
-                button.setStyleSheet(
-                    "background-color: rgb(60, 60, 60);"
-                    "border-top: rgb(30, 30, 30);"
-                    "border-bottom: 3px solid rgb(30, 30, 30);"
-                    "border-right: 3px solid rgb(30, 30, 30);")
+        for dictionary in self.dicts:
+            for data in dictionary.values():
+                for button in data["buttons"]:
+                    button.setStyleSheet(
+                        "background-color: rgb(60, 60, 60);"
+                        "border-top: rgb(30, 30, 30);"
+                        "border-bottom: 3px solid rgb(30, 30, 30);"
+                        "border-right: 3px solid rgb(30, 30, 30);")
 
             # widgets
         self.setStyleSheet("""
@@ -739,13 +740,14 @@ class MainWindow(QMainWindow):
         else:
             self.completed_task_open_button.setIcon(QIcon("assets/MainWindow/white_closed_completed_task_section_icon.png"))
 
-        for checkbox, data in self.checkbox_dict.items():
-            for button in data["buttons"]:
-                button.setStyleSheet(
-                    "background-color: rgb(246, 246, 246);"
-                    "border-top: 3px solid rgb(222, 222, 222);"
-                    "border-bottom: 3px solid rgb(222, 222, 222);"
-                    "border-right: 3px solid rgb(222, 222, 222);")
+        for dictionary in self.dicts:
+            for data in dictionary.values():
+                for button in data["buttons"]:
+                    button.setStyleSheet(
+                        "background-color: rgb(246, 246, 246);"
+                        "border-top: 3px solid rgb(222, 222, 222);"
+                        "border-bottom: 3px solid rgb(222, 222, 222);"
+                        "border-right: 3px solid rgb(222, 222, 222);")
 
             # widgets
         self.setStyleSheet("""
