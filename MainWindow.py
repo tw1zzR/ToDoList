@@ -15,17 +15,11 @@ class MainWindow(QMainWindow):
         self.completed_checkbox_dict = {}
         self.dicts = [self.checkbox_dict, self.completed_checkbox_dict]
 
-
         self.current_task_info_window = None
         self.dark_theme = False
 
-        ####
         self.completed_task_opened = False
-        self.completed_task_layout = QVBoxLayout()
         self.completed_task_open_button = QPushButton("Completed Task")
-
-        self.completed_checkbox_layouts_created = False
-        ####
 
         self.central_widget = QWidget(self)
         self.main_layout = QVBoxLayout()
@@ -67,14 +61,11 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
         self.setGeometry(900, 400, 800, 700)
 
-        #test
+        # completed tasks properties
         self.completed_task_open_button.setLayoutDirection(Qt.RightToLeft)
         self.completed_task_open_button.setIconSize(QSize(25,25))
 
         self.completed_task_open_button.clicked.connect(self.on_click_completed_tasks_button)
-
-        self.completed_task_layout.setContentsMargins(0, 0, 0, 0)
-        self.completed_task_layout.setSpacing(0)
         # ---
 
         self.change_theme_button.setLayoutDirection(Qt.RightToLeft)
@@ -181,7 +172,6 @@ class MainWindow(QMainWindow):
         self.completed_task_open_button.setObjectName("completed_task_open_button")
 
         self.changeTheme()
-
         self.show()
 
     def print_buttons(self):
@@ -191,7 +181,6 @@ class MainWindow(QMainWindow):
     def set_statusbar_over_all_widgets(self):
         self.status_label.raise_()
 
-    # checkbox methods
     def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):
         task_checkbox = QCheckBox(user_task_name, self)
         task_checkbox.stateChanged.connect(self.on_click_task_checkbox)
@@ -927,75 +916,6 @@ class MainWindow(QMainWindow):
                 self.tasks_layout.removeItem(layout)
                 del  data["checkbox_layout"]
 
-
-            # checkbox.setParent(None)
-            # checkbox.deleteLater()
-            #
-            # for button in data["buttons"]:
-            #     button.setParent(None)
-            #     button.deleteLater()
-
-    # def remove_checkbox_from_ui(self, checkbox):
-    #     data = self.checkbox_dict.get(checkbox) or self.completed_checkbox_dict.get(checkbox)
-    #
-    #     layout = data.get("checkbox_layout")
-    #
-    #     if layout:
-    #         while layout.count():
-    #             item = layout.takeAt(0)
-    #             widget = item.widget()
-    #             if widget:
-    #                 widget.hide()
-    #         self.tasks_layout.removeItem(layout)
-    #         data.pop("checkbox_layout", None)
-    #
-    # def show_checkbox_in_completed(self, checkbox):
-    #     data = self.completed_checkbox_dict.get(checkbox)
-    #
-    #     if "checkbox_layout" in data:
-    #         return
-    #
-    #     layout = QHBoxLayout()
-    #     layout.setContentsMargins(0, 0, 0, 0)
-    #     layout.setSpacing(0)
-    #     layout.addSpacing(50)
-    #
-    #     checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-    #     checkbox.show()
-    #     layout.addWidget(checkbox)
-    #
-    #     for button in data["buttons"]:
-    #         button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-    #         button.show()
-    #         layout.addWidget(button)
-    #
-    #     layout.addSpacing(50)
-    #
-    #     data["checkbox_layout"] = layout
-    #     self.tasks_layout.addLayout(layout)
-    #
-    # def show_checkbox_in_uncompleted(self, checkbox):
-    #     data = self.checkbox_dict[checkbox]
-    #
-    #     layout = QHBoxLayout()
-    #     layout.setContentsMargins(0, 0, 0, 0)
-    #     layout.setSpacing(0)
-    #     layout.addSpacing(50)
-    #
-    #     checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-    #     checkbox.show()
-    #     layout.addWidget(checkbox)
-    #
-    #     for button in data["buttons"]:
-    #         button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-    #         button.show()
-    #         layout.addWidget(button)
-    #
-    #     layout.addSpacing(50)
-    #
-    #     data["checkbox_layout"] = layout
-    #     self.tasks_layout.addLayout(layout)
-
     def remove_completed_task_from_ui(self, sender_checkbox):
         for checkbox, data in self.completed_checkbox_dict.items():
             if checkbox is sender_checkbox:
@@ -1012,9 +932,6 @@ class MainWindow(QMainWindow):
 
                 for reorder_button in data["reorder_buttons"]:
                     reorder_button.hide()
-
-
-
 
     # onclick methods
         # Tool menu button methods
@@ -1065,8 +982,6 @@ class MainWindow(QMainWindow):
         about_app_dialog.exec_()
 
         # Set checkbox checked method
-
-    ####
     def on_click_task_checkbox(self):
         sender_checkbox = self.sender()
 
