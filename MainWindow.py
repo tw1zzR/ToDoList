@@ -318,7 +318,7 @@ class MainWindow(QMainWindow):
         self.set_statusbar_over_all_widgets()
 
 
-    # Refresh realtime statusbar every 1 sec
+    # Refresh realtime statusbar every sec
     def start_track_status_realtime(self):
         self.status_timer.start(1000)
 
@@ -331,7 +331,7 @@ class MainWindow(QMainWindow):
         self.status_label.setText(formatted_realtime)
 
 
-    # Refresh deadline every 5 min
+    # Refresh deadline every min
     def start_track_task_deadline(self):
         self.refresh_task_timer.start(60000)
 
@@ -449,8 +449,8 @@ class MainWindow(QMainWindow):
                 self.tasks_layout.removeItem(checkbox_layout)
                 del data["checkbox_layout"]
 
-
     # onclick methods
+
     def on_click_task_button(self):
         sender = self.sender()
 
