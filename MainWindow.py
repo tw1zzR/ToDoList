@@ -238,7 +238,7 @@ class MainWindow(QMainWindow):
                 checkbox_sender.deleteLater()
 
                 del dictionary[checkbox_sender]
-                # break
+                break
 
 
     def clear_layout(self, layout):
@@ -443,11 +443,11 @@ class MainWindow(QMainWindow):
                         if widget:
                             widget.hide()
 
-                self.tasks_layout.removeItem(checkbox_layout)
-                del data["checkbox_layout"]
-
                 for reorder_button in data["reorder_buttons"]:
                     reorder_button.hide()
+
+                self.tasks_layout.removeItem(checkbox_layout)
+                del data["checkbox_layout"]
 
 
     # onclick methods
@@ -585,6 +585,9 @@ class MainWindow(QMainWindow):
                 self.move_up_down_checkbox(sender_checkbox, "up")
             elif data["reorder_buttons"][1] is sender:
                 self.move_up_down_checkbox(sender_checkbox, "down")
+            else:
+                continue
+            break
 
 
     def on_click_completed_tasks_button(self):
