@@ -129,8 +129,9 @@ class TaskCheckboxManager:
             case "down":
                 items[i+1], items[i] = items[i], items[i+1]
 
-        self.main_window.checkbox_dict = OrderedDict(items)
+        # self.main_window.checkbox_dict = OrderedDict(items)
         self.show_all_task_checkboxes()
+
 
 
     def delete_task_checkbox_with_buttons(self, checkbox_sender, *dicts):

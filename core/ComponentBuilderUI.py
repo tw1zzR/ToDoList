@@ -14,7 +14,7 @@ class ComponentBuilderUI:
 
     def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):
         task_checkbox = QCheckBox(user_task_name, self.main_window)
-        task_checkbox.stateChanged.connect(self.main_window.on_click_task_checkbox)
+        task_checkbox.stateChanged.connect(self.main_window.on_click_controller.on_click_task_checkbox)
         task_checkbox.setFixedHeight(50)
 
         checkbox_moveup_button = QPushButton(self.main_window)
