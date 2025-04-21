@@ -77,8 +77,6 @@ class TaskCheckboxManager:
         self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
         # ---
 
-        # self.main_window.set_statusbar_over_all_widgets(self.main_window.status_label)
-
 
     def show_completed_tasks(self):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
@@ -129,7 +127,7 @@ class TaskCheckboxManager:
             case "down":
                 items[i+1], items[i] = items[i], items[i+1]
 
-        # self.main_window.checkbox_dict = OrderedDict(items)
+        self.main_window.checkbox_dict = dict(items)
         self.show_all_task_checkboxes()
 
 
