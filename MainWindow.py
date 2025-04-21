@@ -1,6 +1,7 @@
 from ComponentBuilderUI import ComponentBuilderUI
 from ChangeVisualUI import ChangeVisualUI
 from TaskDialogBox import TaskDialogBox
+from TimeTracker import TimeTracker
 from collections import OrderedDict
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -13,6 +14,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.visual_changer = ChangeVisualUI(self)
         self.component_builder = ComponentBuilderUI(self)
+        self.time_tracker = TimeTracker(self)
 
         self.checkbox_dict = {}
         self.completed_checkbox_dict = {}
@@ -53,9 +55,6 @@ class MainWindow(QMainWindow):
         self.menu_buttons = [self.add_task_button, self.del_tasks_button, self.change_theme_button, self.about_button]
 
         self.tool_button = QToolButton(self)
-
-        self.status_timer = QTimer(self)
-        self.refresh_task_timer = QTimer(self)
 
         self.init_UI()
 
@@ -123,12 +122,6 @@ class MainWindow(QMainWindow):
         # add to statusbar layout
         self.statusbar_layout.addWidget(self.status_label)
         self.status_label.setFixedHeight(25)
-
-        self.start_track_status_realtime()
-        self.status_timer.timeout.connect(self.refresh_status_realtime)
-
-        self.start_track_task_deadline()
-        self.refresh_task_timer.timeout.connect(self.refresh_task_deadline)
 
         # Title Labels
         self.title_label.setAlignment(Qt.AlignCenter)
@@ -316,42 +309,6 @@ class MainWindow(QMainWindow):
         # ---
 
         self.set_statusbar_over_all_widgets()
-
-
-    # Refresh realtime statusbar every sec
-    def start_track_status_realtime(self):
-        self.status_timer.start(1000)
-
-
-    def refresh_status_realtime(self):
-        current_time = QDateTime.currentDateTime()
-
-        # Status bar realtime
-        formatted_realtime = current_time.toString("MMMM dd, hh:mm")
-        self.status_label.setText(formatted_realtime)
-
-
-    # Refresh deadline every min
-    def start_track_task_deadline(self):
-        self.refresh_task_timer.start(60000)
-
-
-    def refresh_task_deadline(self):
-        current_time = QDateTime.currentDateTime()
-
-        formatted_deadline_realtime = current_time.toString("dd.MM.yyyy HH:mm")
-        formatted_deadline_realtime = QDateTime.fromString(formatted_deadline_realtime, "dd.MM.yyyy HH:mm")
-
-        for checkbox, task_data in self.checkbox_dict.items():
-            task_deadline_str = task_data["deadline"]
-            task_deadline = QDateTime.fromString(task_deadline_str, "dd.MM.yyyy HH:mm")
-
-            if current_time > task_deadline and not checkbox.isChecked():
-                checkbox.setStyleSheet(
-                    "background-color: rgb(242, 155, 155);"
-                    "border: 3px solid rgb(130, 57, 57);")
-            elif not checkbox.isChecked():
-                self.visual_changer.set_default_widget_style(checkbox)
 
 
     def move_up_down_checkbox(self, target_checkbox, up_down):
