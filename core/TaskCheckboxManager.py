@@ -1,3 +1,4 @@
+from modules import layout_tools
 from collections import OrderedDict
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -10,7 +11,7 @@ class TaskCheckboxManager:
 
 
     def show_all_task_checkboxes(self):
-        self.main_window.clear_layout(self.main_window.tasks_layout)
+        layout_tools.clear_layout(self.main_window.tasks_layout)
 
         title_tasks_layout = QHBoxLayout()
 
@@ -76,7 +77,7 @@ class TaskCheckboxManager:
         self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
         # ---
 
-        self.main_window.set_statusbar_over_all_widgets()
+        # self.main_window.set_statusbar_over_all_widgets(self.main_window.status_label)
 
 
     def show_completed_tasks(self):

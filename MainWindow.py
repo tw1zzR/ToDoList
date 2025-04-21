@@ -1,5 +1,6 @@
 from core.ComponentBuilderUI import ComponentBuilderUI
 from core.ChangeVisualUI import ChangeVisualUI
+from core.TaskButtonManager import TaskButtonManager
 from core.TaskCheckboxManager import TaskCheckboxManager
 from windows.TaskDialogBox import TaskDialogBox
 from core.TimeTracker import TimeTracker
@@ -16,11 +17,12 @@ class MainWindow(QMainWindow):
         self.component_builder = ComponentBuilderUI(self)
         self.time_tracker = TimeTracker(self)
         self.task_checkbox_manager = TaskCheckboxManager(self)
+        self.task_button_manager = TaskButtonManager(self)
+
 
         self.checkbox_dict = {}
         self.completed_checkbox_dict = {}
         self.dicts = [self.checkbox_dict, self.completed_checkbox_dict]
-
 
         self.dark_theme = False
 
@@ -129,7 +131,7 @@ class MainWindow(QMainWindow):
         self.title_tasks_label.setAlignment(Qt.AlignCenter)
 
         # Status Label
-        self.set_statusbar_over_all_widgets()
+        # self.set_statusbar_over_all_widgets()
         self.status_label.setAlignment(Qt.AlignCenter)
 
         # PushButtons
@@ -180,46 +182,6 @@ class MainWindow(QMainWindow):
         print(f"Checked: {self.completed_checkbox_dict}")
 
 
-    def set_statusbar_over_all_widgets(self):
-        self.status_label.raise_()
-
-
-    def find_checkbox_by_checkbox_button(self, clicked_button):
-        for dictionary in self.dicts:
-            for checkbox, data in dictionary.items():
-                if clicked_button in data["buttons"] or clicked_button in data["reorder_buttons"]:
-                    return checkbox
-
-
-    def connect_checkbox_buttons(self):
-        for dictionary in self.dicts:
-            for checkbox, data in dictionary.items():
-                task_info_button  = data["buttons"][0]
-                edit_task_button  = data["buttons"][1]
-                delete_task_button = data["buttons"][2]
-
-                if not hasattr(task_info_button, "_clicked_connected"):
-                    task_info_button.clicked.connect(self.on_click_task_info_checkbox_button)
-                    task_info_button._clicked_connected = True
-                if not hasattr(edit_task_button, "_clicked_connected"):
-                    edit_task_button.clicked.connect(self.on_click_edit_task_checkbox_button)
-                    edit_task_button._clicked_connected = True
-                if not hasattr(delete_task_button, "_clicked_connected"):
-                    delete_task_button.clicked.connect(self.on_click_delete_task_checkbox_button)
-                    delete_task_button._clicked_connected = True
-                for reorder_button in data["reorder_buttons"]:
-                    if not hasattr(reorder_button, "_clicked_connected"):
-                        reorder_button.clicked.connect(self.on_click_reorder_button)
-                        reorder_button._clicked_connected = True
-
-
-    def clear_layout(self, layout):
-        reversed_layout = reversed(range(layout.count()))
-        for i in reversed_layout:
-            item = layout.itemAt(i).widget()
-            layout.removeItem(item)
-
-
     # onclick methods
 
     def on_click_task_button(self):
@@ -264,7 +226,7 @@ class MainWindow(QMainWindow):
                 else:
                     delete_tasks_error = self.component_builder.create_warning_messagebox("Delete all tasks","Task list is empty.")
                     delete_tasks_error.exec_()
-                
+
 
     def on_click_change_theme_button(self):
         self.visual_changer.change_UI_theme()
@@ -314,14 +276,14 @@ class MainWindow(QMainWindow):
         # Set checkbox buttons methods
     def on_click_task_info_checkbox_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.task_button_manager.find_checkbox_by_checkbox_button(sender)
 
         self.component_builder.create_task_info_messagebox_checkbox_button(sender_checkbox)
 
 
     def on_click_edit_task_checkbox_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.task_button_manager.find_checkbox_by_checkbox_button(sender)
 
         # Get primary checkbox data
         for dictionary in self.dicts:
@@ -339,7 +301,7 @@ class MainWindow(QMainWindow):
 
     def on_click_delete_task_checkbox_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.task_button_manager.find_checkbox_by_checkbox_button(sender)
 
         self.task_checkbox_manager.delete_task_checkbox_with_buttons(sender_checkbox, self.checkbox_dict, self.completed_checkbox_dict)
 
@@ -352,7 +314,7 @@ class MainWindow(QMainWindow):
 
     def on_click_reorder_button(self):
         sender = self.sender()
-        sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.task_button_manager.find_checkbox_by_checkbox_button(sender)
 
         for data in self.checkbox_dict.values():
             if data["reorder_buttons"][0] is sender:

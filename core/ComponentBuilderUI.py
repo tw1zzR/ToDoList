@@ -52,7 +52,7 @@ class ComponentBuilderUI:
         }
 
         self.main_window.visual_changer.change_checkboxes_button_icons_theme()
-        self.main_window.connect_checkbox_buttons()
+        self.main_window.task_button_manager.connect_checkbox_buttons()
 
 
     def create_task_info_messagebox_checkbox_button(self, checkbox_sender):
