@@ -154,6 +154,8 @@ class TaskCheckboxManager:
                 del dictionary[checkbox_sender]
                 break
 
+        self.delete_completed_tasks_button()
+
 
     def delete_completed_tasks_from_ui(self):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():

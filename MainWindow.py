@@ -242,9 +242,9 @@ class MainWindow(QMainWindow):
         sender_checkbox = self.sender()
 
         if self.completed_checkbox_dict:
-            self.completed_task_open_button.hide()
-        else:
             self.completed_task_open_button.show()
+        else:
+            self.completed_task_open_button.hide()
 
         match sender_checkbox.isChecked():
             case True:
@@ -253,6 +253,8 @@ class MainWindow(QMainWindow):
                 self.task_checkbox_manager.move_task_to_another_dict(sender_checkbox, self.checkbox_dict, self.completed_checkbox_dict)
 
                 self.task_checkbox_manager.remove_completed_task_from_ui(sender_checkbox)
+
+                self.completed_task_open_button.show()
 
                 if self.completed_task_opened:
                     self.task_checkbox_manager.show_all_task_checkboxes()
