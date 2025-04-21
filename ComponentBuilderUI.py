@@ -9,6 +9,7 @@ class ComponentBuilderUI:
 
     def __init__(self, main_window):
         self.main_window = main_window
+        self.current_task_info_window = None
 
 
     def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):
@@ -61,15 +62,15 @@ class ComponentBuilderUI:
                 task_deadline = dictionary[checkbox_sender]["deadline"]
                 task_description = dictionary[checkbox_sender]["description"]
 
-        if self.main_window.current_task_info_window:
-            self.main_window.current_task_info_window.close()
-            self.main_window.current_task_info_window.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
+        if self.current_task_info_window:
+            self.current_task_info_window.close()
+            self.current_task_info_window.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
         else:
-            self.main_window.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
+            self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
 
-        self.main_window.current_task_info_window.compare_with_main_win_theme(self.main_window.dark_theme)
+        self.current_task_info_window.compare_with_main_win_theme(self.main_window.dark_theme)
 
-        self.main_window.current_task_info_window.show()
+        self.current_task_info_window.show()
 
 
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):

@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
         self.completed_checkbox_dict = {}
         self.dicts = [self.checkbox_dict, self.completed_checkbox_dict]
 
-        self.current_task_info_window = None
+
         self.dark_theme = False
 
         self.completed_task_opened = False
@@ -440,7 +440,7 @@ class MainWindow(QMainWindow):
                                 list_of_checkboxes = list(dictionary.keys())
                                 for checkbox in list_of_checkboxes:
                                     self.delete_task_checkbox_with_buttons(checkbox,*self.dicts)
-                        self.current_task_info_window = None
+                        self.component_builder.current_task_info_window = None
 
                     self.show_all_task_checkboxes()
 
