@@ -73,26 +73,29 @@ class ChangeVisualUI:
         if self.main_window.dark_theme:
             if self.main_window.completed_task_opened:
                 self.main_window.completed_task_open_button.setIcon(
-                    QIcon("assets/MainWindow/white_open_completed_task_section_icon.png"))
+                    QIcon("../assets/MainWindow/white_open_completed_task_section_icon.png"))
             else:
                 self.main_window.completed_task_open_button.setIcon(
-                    QIcon("assets/MainWindow/white_closed_completed_task_section_icon.png"))
+                    QIcon("../assets/MainWindow/white_closed_completed_task_section_icon.png"))
         else:
             if self.main_window.completed_task_opened:
-                self.main_window.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_open_completed_task_section_icon.png"))
+                self.main_window.completed_task_open_button.setIcon(QIcon(
+                    "../assets/MainWindow/gray_open_completed_task_section_icon.png"))
             else:
-                self.main_window.completed_task_open_button.setIcon(QIcon("assets/MainWindow/gray_closed_completed_task_section_icon.png"))
+                self.main_window.completed_task_open_button.setIcon(QIcon(
+                    "../assets/MainWindow/gray_closed_completed_task_section_icon.png"))
 
 
     def apply_light_theme(self):
         self.main_window.dark_theme = False
-        self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/light_theme_icon.png"))
+        self.main_window.change_theme_button.setIcon(QIcon("../assets/MainWindow/ToolMenu/light_theme_icon.png"))
 
         # to White
             # icons
-        self.main_window.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
-        self.main_window.user_login_button.setIcon(QIcon("assets/MainWindow/gray_user_icon.png"))
-        self.main_window.add_task_plus_button.setIcon(QIcon("assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
+        self.main_window.tool_button.setIcon(QIcon("../assets/MainWindow/gray_menu_icon.png"))
+        self.main_window.user_login_button.setIcon(QIcon("../assets/MainWindow/gray_user_icon.png"))
+        self.main_window.add_task_plus_button.setIcon(QIcon(
+            "../assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
 
         self.change_checkboxes_button_icons_theme()
         self.change_completed_task_button_icon()
@@ -223,21 +226,24 @@ class ChangeVisualUI:
 
     def apply_dark_theme(self):
         self.main_window.dark_theme = True
-        self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
+        self.main_window.change_theme_button.setIcon(QIcon("../assets/MainWindow/ToolMenu/dark_theme_icon.png"))
 
         # to Dark
             # icons
-        self.main_window.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
-        self.main_window.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
-        self.main_window.add_task_plus_button.setIcon(QIcon("assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
+        self.main_window.tool_button.setIcon(QIcon("../assets/MainWindow/white_menu_icon.png"))
+        self.main_window.user_login_button.setIcon(QIcon("../assets/MainWindow/white_user_icon.png"))
+        self.main_window.add_task_plus_button.setIcon(QIcon(
+            "../assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
 
         self.change_checkboxes_button_icons_theme()
         self.change_completed_task_button_icon()
 
         if self.main_window.completed_task_opened:
-            self.main_window.completed_task_open_button.setIcon(QIcon("assets/MainWindow/white_open_completed_task_section_icon.png"))
+            self.main_window.completed_task_open_button.setIcon(QIcon(
+                "../assets/MainWindow/white_open_completed_task_section_icon.png"))
         else:
-            self.main_window.completed_task_open_button.setIcon(QIcon("assets/MainWindow/white_closed_completed_task_section_icon.png"))
+            self.main_window.completed_task_open_button.setIcon(QIcon(
+                "../assets/MainWindow/white_closed_completed_task_section_icon.png"))
 
         for dictionary in self.main_window.dicts:
             for data in dictionary.values():

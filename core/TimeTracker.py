@@ -11,6 +11,7 @@ class TimeTracker:
 
         self.init_timer()
 
+
     def init_timer(self):
         self.start_track_status_realtime()
         self.status_timer.timeout.connect(self.refresh_status_realtime)

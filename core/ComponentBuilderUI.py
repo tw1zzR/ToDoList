@@ -1,5 +1,5 @@
-from TaskInfoMessageBox import CustomTaskInfoMessageBox
-from TaskDialogBox import TaskDialogBox
+from windows.TaskInfoMessageBox import CustomTaskInfoMessageBox
+from windows.TaskDialogBox import TaskDialogBox
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -104,7 +104,7 @@ class ComponentBuilderUI:
         delete_confirmation_dialog = QMessageBox()
 
         delete_confirmation_dialog.setWindowTitle("Delete All Tasks")
-        delete_confirmation_dialog.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
+        delete_confirmation_dialog.setWindowIcon(QIcon("../assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         delete_confirmation_dialog.setText("Are you sure you want to delete all tasks?")
 
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
@@ -119,7 +119,7 @@ class ComponentBuilderUI:
         about_app_dialog = QMessageBox()
 
         about_app_dialog.setWindowTitle("About App")
-        about_app_dialog.setWindowIcon(QIcon("assets/AboutAppMessageBox/information_icon.png"))
+        about_app_dialog.setWindowIcon(QIcon("../assets/AboutAppMessageBox/information_icon.png"))
         about_app_dialog.setTextFormat(Qt.RichText)
         about_app_dialog.setText("My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>")
         about_app_dialog.setIcon(QMessageBox.Information)

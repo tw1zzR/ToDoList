@@ -29,7 +29,7 @@ class TaskDialogBox(QDialog):
 
     def initUI(self):
         self.setWindowTitle("Add Task")
-        self.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
+        self.setWindowIcon(QIcon("../assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         self.resize(520, 600)
 
         self.setWhatsThis("It's a dialog box that allows you to enter data for your task.")
@@ -208,7 +208,7 @@ class TaskDialogBox(QDialog):
         warning_msgbox = QMessageBox()
 
         warning_msgbox.setWindowTitle("About App")
-        warning_msgbox.setWindowIcon(QIcon("assets/warning_icon_1.png"))
+        warning_msgbox.setWindowIcon(QIcon("../assets/warning_icon_1.png"))
         warning_msgbox.setTextFormat(Qt.RichText)
         warning_msgbox.setText("Task name cannot be blank.")
         warning_msgbox.setIcon(QMessageBox.Warning)
