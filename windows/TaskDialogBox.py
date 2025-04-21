@@ -29,7 +29,7 @@ class TaskDialogBox(QDialog):
 
     def initUI(self):
         self.setWindowTitle("Add Task")
-        self.setWindowIcon(QIcon("../assets/TaskDialogBox/addtask_dialogbox_icon.png"))
+        self.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         self.resize(520, 600)
 
         self.setWhatsThis("It's a dialog box that allows you to enter data for your task.")
@@ -193,7 +193,7 @@ class TaskDialogBox(QDialog):
 
             return user_task_name, user_task_deadline, user_task_description
         else:
-            empty_task_name_msgbox = self.create_warning_messagebox()
+            empty_task_name_msgbox = self.create_warning_messagebox("About App","Task name cannot be blank.")
             empty_task_name_msgbox.exec_()
 
 
@@ -204,13 +204,13 @@ class TaskDialogBox(QDialog):
             self.user_input_task_description.setPlainText(text_chars[:self.max_chars])
             self.user_input_task_description.moveCursor(QTextCursor.End)
 
-    def create_warning_messagebox(self):
+    def create_warning_messagebox(self, title, message):
         warning_msgbox = QMessageBox()
 
-        warning_msgbox.setWindowTitle("About App")
-        warning_msgbox.setWindowIcon(QIcon("../assets/warning_icon_1.png"))
+        warning_msgbox.setWindowTitle(title)
+        warning_msgbox.setWindowIcon(QIcon("assets/warning_icon_1.png"))
         warning_msgbox.setTextFormat(Qt.RichText)
-        warning_msgbox.setText("Task name cannot be blank.")
+        warning_msgbox.setText(message)
         warning_msgbox.setIcon(QMessageBox.Warning)
 
         warning_msgbox.setStyleSheet("""

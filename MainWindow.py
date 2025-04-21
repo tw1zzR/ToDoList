@@ -1,8 +1,8 @@
 from core.ComponentBuilderUI import ComponentBuilderUI
 from core.ChangeVisualUI import ChangeVisualUI
+from core.TaskCheckboxManager import TaskCheckboxManager
 from windows.TaskDialogBox import TaskDialogBox
 from core.TimeTracker import TimeTracker
-from collections import OrderedDict
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -15,6 +15,7 @@ class MainWindow(QMainWindow):
         self.visual_changer = ChangeVisualUI(self)
         self.component_builder = ComponentBuilderUI(self)
         self.time_tracker = TimeTracker(self)
+        self.task_checkbox_manager = TaskCheckboxManager(self)
 
         self.checkbox_dict = {}
         self.completed_checkbox_dict = {}
@@ -117,7 +118,7 @@ class MainWindow(QMainWindow):
 
         self.title_tasks_label.setFixedHeight(50)
 
-        self.show_all_task_checkboxes()
+        self.task_checkbox_manager.show_all_task_checkboxes()
 
         # add to statusbar layout
         self.statusbar_layout.addWidget(self.status_label)
@@ -144,7 +145,7 @@ class MainWindow(QMainWindow):
         self.about_button.clicked.connect(self.on_click_about_button)
         self.add_task_plus_button.clicked.connect(self.on_click_task_button)
 
-        self.user_login_button.clicked.connect(self.print_buttons) # test column (delete)
+        self.user_login_button.clicked.connect(self.print_dicts) # test column (delete)
 
         # Add action widgets into menu
         for button in self.menu_buttons:
@@ -174,7 +175,7 @@ class MainWindow(QMainWindow):
         self.show()
 
 
-    def print_buttons(self):
+    def print_dicts(self):
         print(f"Unchecked: {self.checkbox_dict}")
         print(f"Checked: {self.completed_checkbox_dict}")
 
@@ -212,199 +213,12 @@ class MainWindow(QMainWindow):
                         reorder_button._clicked_connected = True
 
 
-    def delete_task_checkbox_with_buttons(self, checkbox_sender, *dicts):
-        for dictionary in dicts:
-            if checkbox_sender in dictionary:
-                checkbox_data = dictionary[checkbox_sender]
-
-                checkbox_buttons = checkbox_data["buttons"]
-                reorder_buttons = checkbox_data["reorder_buttons"]
-
-                for button in checkbox_buttons[:]:
-                    button.setParent(None)
-                    button.deleteLater()
-                for reorder_button in reorder_buttons[:]:
-                    reorder_button.setParent(None)
-                    reorder_button.deleteLater()
-
-                checkbox_sender.setParent(None)
-                checkbox_sender.deleteLater()
-
-                del dictionary[checkbox_sender]
-                break
-
-
     def clear_layout(self, layout):
         reversed_layout = reversed(range(layout.count()))
         for i in reversed_layout:
             item = layout.itemAt(i).widget()
             layout.removeItem(item)
 
-
-    def show_all_task_checkboxes(self):
-        self.clear_layout(self.tasks_layout)
-
-        title_tasks_layout = QHBoxLayout()
-
-        title_tasks_layout.addStretch()
-        title_tasks_layout.addWidget(self.title_tasks_label, alignment=Qt.AlignCenter)
-        title_tasks_layout.addStretch()
-
-        self.tasks_layout.addLayout(title_tasks_layout)
-
-        for checkbox, data in self.checkbox_dict.items():
-
-            checkbox_layout = QHBoxLayout()
-            checkbox_layout.setContentsMargins(0,0,0,0)
-            checkbox_layout.setSpacing(0)
-
-            moveup_btn = data["reorder_buttons"][0]
-            movedown_btn = data["reorder_buttons"][1]
-
-            reorder_layout = QVBoxLayout()
-
-            for reorder_button in [moveup_btn, movedown_btn]:
-                reorder_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                reorder_button.show()
-                reorder_layout.addWidget(reorder_button)
-
-            checkbox_layout.addLayout(reorder_layout)
-
-            checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            checkbox_layout.addWidget(checkbox)
-
-            for button in data["buttons"]:
-                button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                button.show()
-                checkbox_layout.addWidget(button)
-            checkbox_layout.addSpacing(50)
-
-            data["checkbox_layout"] = checkbox_layout
-
-            self.tasks_layout.addLayout(checkbox_layout)
-
-        # (+) button layout
-        plus_button_layout = QHBoxLayout()
-
-        plus_button_layout.addSpacing(50)
-        plus_button_layout.addWidget(self.add_task_plus_button, alignment=Qt.AlignLeft)
-        plus_button_layout.addStretch()
-
-        self.add_task_plus_button.setFixedSize(50, 50)
-        self.tasks_layout.addLayout(plus_button_layout)
-
-        # test
-        completed_tasks_button_layout = QHBoxLayout()
-
-        completed_tasks_button_layout.addSpacing(50)
-        completed_tasks_button_layout.addWidget(self.completed_task_open_button, alignment=Qt.AlignCenter)
-        completed_tasks_button_layout.addSpacing(50)
-
-        self.completed_task_open_button.hide()
-
-        if self.completed_checkbox_dict:
-            self.completed_task_open_button.show()
-
-        self.tasks_layout.addLayout(completed_tasks_button_layout)
-        # ---
-
-        self.set_statusbar_over_all_widgets()
-
-
-    def move_up_down_checkbox(self, target_checkbox, up_down):
-        items = list(self.checkbox_dict.items())
-
-        for i, (checkbox, _) in enumerate(items):
-            if checkbox is target_checkbox:
-                break
-
-        if i == 0 and up_down == "up":
-            return
-        elif i == len(items) - 1 and up_down == "down":
-            return
-
-        match up_down:
-            case "up":
-                items[i-1], items[i] = items[i], items[i-1]
-            case "down":
-                items[i+1], items[i] = items[i], items[i+1]
-
-        self.checkbox_dict = OrderedDict(items)
-        self.show_all_task_checkboxes()
-
-
-    def delete_completed_tasks_button(self):
-        self.tasks_layout.removeWidget(self.completed_task_open_button)
-        self.completed_task_open_button.setParent(None)
-        self.update()
-
-
-    def move_task_to_another_dict(self, completed_task_checkbox, from_dict, to_dict):
-        completed_task_checkbox_data = from_dict.pop(completed_task_checkbox)
-        to_dict[completed_task_checkbox] = completed_task_checkbox_data
-
-
-    def show_completed_tasks(self):
-        for checkbox, data in self.completed_checkbox_dict.items():
-
-            if "checkbox_layout" in data:
-                continue
-
-            checkbox_layout = QHBoxLayout()
-            checkbox_layout.setContentsMargins(0, 0, 0, 0)
-            checkbox_layout.setSpacing(0)
-
-            checkbox_layout.addSpacing(50)
-
-            checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            checkbox.show()
-            checkbox_layout.addWidget(checkbox)
-
-            for reorder_button in data["reorder_buttons"]:
-                reorder_button.hide()
-
-            for button in data["buttons"]:
-                button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                button.show()
-                checkbox_layout.addWidget(button)
-
-            checkbox_layout.addSpacing(50)
-
-            data["checkbox_layout"] = checkbox_layout
-
-            self.tasks_layout.addLayout(checkbox_layout)
-
-
-    def delete_completed_tasks_from_ui(self):
-        for checkbox, data in self.completed_checkbox_dict.items():
-            layout = data.get("checkbox_layout")
-            if layout:
-                while layout.count():
-                    item = layout.takeAt(0)
-                    widget = item.widget()
-                    if widget:
-                        widget.hide()
-
-                self.tasks_layout.removeItem(layout)
-                del  data["checkbox_layout"]
-
-
-    def remove_completed_task_from_ui(self, sender_checkbox):
-        for checkbox, data in self.completed_checkbox_dict.items():
-            if checkbox is sender_checkbox:
-                checkbox_layout = data.get("checkbox_layout")
-                if checkbox_layout:
-                    while checkbox_layout.count():
-                        item = checkbox_layout.takeAt(0)
-                        widget = item.widget()
-                        if widget:
-                            widget.hide()
-
-                for reorder_button in data["reorder_buttons"]:
-                    reorder_button.hide()
-
-                self.tasks_layout.removeItem(checkbox_layout)
-                del data["checkbox_layout"]
 
     # onclick methods
 
@@ -422,11 +236,11 @@ class MainWindow(QMainWindow):
                     self.component_builder.create_task_checkbox_with_buttons(user_task_name,
                                                                              user_task_deadline,
                                                                              user_task_description)
-                    self.show_all_task_checkboxes()
+                    self.task_checkbox_manager.show_all_task_checkboxes()
 
                     if self.completed_task_opened:
-                        self.delete_completed_tasks_from_ui()
-                        self.show_completed_tasks()
+                        self.task_checkbox_manager.delete_completed_tasks_from_ui()
+                        self.task_checkbox_manager.show_completed_tasks()
 
             case "del_tasks_button":
                 if self.checkbox_dict or self.completed_checkbox_dict:
@@ -439,15 +253,18 @@ class MainWindow(QMainWindow):
                             if dictionary:
                                 list_of_checkboxes = list(dictionary.keys())
                                 for checkbox in list_of_checkboxes:
-                                    self.delete_task_checkbox_with_buttons(checkbox,*self.dicts)
+                                    self.task_checkbox_manager.delete_task_checkbox_with_buttons(checkbox,*self.dicts)
                         self.component_builder.current_task_info_window = None
 
-                    self.show_all_task_checkboxes()
+                    self.task_checkbox_manager.show_all_task_checkboxes()
 
                     if self.completed_task_opened:
-                        self.delete_completed_tasks_from_ui()
-                        self.show_completed_tasks()
-
+                        self.task_checkbox_manager.delete_completed_tasks_from_ui()
+                        self.task_checkbox_manager.show_completed_tasks()
+                else:
+                    delete_tasks_error = self.component_builder.create_warning_messagebox("Delete all tasks","Task list is empty.")
+                    delete_tasks_error.exec_()
+                
 
     def on_click_change_theme_button(self):
         self.visual_changer.change_UI_theme()
@@ -471,27 +288,27 @@ class MainWindow(QMainWindow):
             case True:
                 self.visual_changer.task_checkbox_set_style_sheet(sender_checkbox, True)
 
-                self.move_task_to_another_dict(sender_checkbox, self.checkbox_dict, self.completed_checkbox_dict)
+                self.task_checkbox_manager.move_task_to_another_dict(sender_checkbox, self.checkbox_dict, self.completed_checkbox_dict)
 
-                self.remove_completed_task_from_ui(sender_checkbox)
+                self.task_checkbox_manager.remove_completed_task_from_ui(sender_checkbox)
 
                 if self.completed_task_opened:
-                    self.show_all_task_checkboxes()
+                    self.task_checkbox_manager.show_all_task_checkboxes()
 
-                    self.delete_completed_tasks_from_ui()
-                    self.show_completed_tasks()
+                    self.task_checkbox_manager.delete_completed_tasks_from_ui()
+                    self.task_checkbox_manager.show_completed_tasks()
 
             case False:
                 self.visual_changer.task_checkbox_set_style_sheet(sender_checkbox, False)
 
-                self.move_task_to_another_dict(sender_checkbox, self.completed_checkbox_dict, self.checkbox_dict)
+                self.task_checkbox_manager.move_task_to_another_dict(sender_checkbox, self.completed_checkbox_dict, self.checkbox_dict)
 
                 if self.completed_task_opened:
-                    self.show_all_task_checkboxes()
+                    self.task_checkbox_manager.show_all_task_checkboxes()
                     self.visual_changer.task_checkbox_set_style_sheet(sender_checkbox, False)
 
-                    self.delete_completed_tasks_from_ui()
-                    self.show_completed_tasks()
+                    self.task_checkbox_manager.delete_completed_tasks_from_ui()
+                    self.task_checkbox_manager.show_completed_tasks()
 
 
         # Set checkbox buttons methods
@@ -524,13 +341,13 @@ class MainWindow(QMainWindow):
         sender = self.sender()
         sender_checkbox = self.find_checkbox_by_checkbox_button(sender)
 
-        self.delete_task_checkbox_with_buttons(sender_checkbox, self.checkbox_dict, self.completed_checkbox_dict)
+        self.task_checkbox_manager.delete_task_checkbox_with_buttons(sender_checkbox, self.checkbox_dict, self.completed_checkbox_dict)
 
-        self.show_all_task_checkboxes()
+        self.task_checkbox_manager.show_all_task_checkboxes()
 
         if self.completed_task_opened:
-            self.delete_completed_tasks_from_ui()
-            self.show_completed_tasks()
+            self.task_checkbox_manager.delete_completed_tasks_from_ui()
+            self.task_checkbox_manager.show_completed_tasks()
 
 
     def on_click_reorder_button(self):
@@ -539,22 +356,22 @@ class MainWindow(QMainWindow):
 
         for data in self.checkbox_dict.values():
             if data["reorder_buttons"][0] is sender:
-                self.move_up_down_checkbox(sender_checkbox, "up")
+                self.task_checkbox_manager.move_up_down_checkbox(sender_checkbox, "up")
             elif data["reorder_buttons"][1] is sender:
-                self.move_up_down_checkbox(sender_checkbox, "down")
+                self.task_checkbox_manager.move_up_down_checkbox(sender_checkbox, "down")
             else:
                 continue
             break
 
 
     def on_click_completed_tasks_button(self):
-        self.show_all_task_checkboxes()
+        self.task_checkbox_manager.show_all_task_checkboxes()
 
         if self.completed_task_opened:
             self.completed_task_opened = False
-            self.delete_completed_tasks_from_ui()
+            self.task_checkbox_manager.delete_completed_tasks_from_ui()
         else:
             self.completed_task_opened = True
-            self.show_completed_tasks()
+            self.task_checkbox_manager.show_completed_tasks()
 
         self.visual_changer.change_completed_task_button_icon()

@@ -24,7 +24,7 @@ class CustomTaskInfoMessageBox(QDialog):
 
     def initUI(self):
         self.setWindowTitle("Task Info")
-        self.setWindowIcon(QIcon("../assets/TaskInfoMessageBox/gray_task_info_button_V2_icon.png"))
+        self.setWindowIcon(QIcon("assets/TaskInfoMessageBox/gray_task_info_button_V2_icon.png"))
         self.setFixedSize(520,600)
 
         self.user_task_description_textedit.setReadOnly(True)

@@ -104,7 +104,7 @@ class ComponentBuilderUI:
         delete_confirmation_dialog = QMessageBox()
 
         delete_confirmation_dialog.setWindowTitle("Delete All Tasks")
-        delete_confirmation_dialog.setWindowIcon(QIcon("../assets/TaskDialogBox/addtask_dialogbox_icon.png"))
+        delete_confirmation_dialog.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         delete_confirmation_dialog.setText("Are you sure you want to delete all tasks?")
 
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
@@ -119,7 +119,7 @@ class ComponentBuilderUI:
         about_app_dialog = QMessageBox()
 
         about_app_dialog.setWindowTitle("About App")
-        about_app_dialog.setWindowIcon(QIcon("../assets/AboutAppMessageBox/information_icon.png"))
+        about_app_dialog.setWindowIcon(QIcon("assets/AboutAppMessageBox/information_icon.png"))
         about_app_dialog.setTextFormat(Qt.RichText)
         about_app_dialog.setText("My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>")
         about_app_dialog.setIcon(QMessageBox.Information)
@@ -127,3 +127,26 @@ class ComponentBuilderUI:
         self.main_window.visual_changer.set_default_widget_style(about_app_dialog)
 
         return about_app_dialog
+
+    def create_warning_messagebox(self, title, message):
+        warning_msgbox = QMessageBox()
+
+        warning_msgbox.setWindowTitle(title)
+        warning_msgbox.setWindowIcon(QIcon("assets/warning_icon_1.png"))
+        warning_msgbox.setTextFormat(Qt.RichText)
+        warning_msgbox.setText(message)
+        warning_msgbox.setIcon(QMessageBox.Warning)
+
+        warning_msgbox.setStyleSheet("""
+            QMessageBox {
+                font-family: Helvetica;
+                color: rgb(0,0,0);
+                font-size: 16px;
+            }
+            QPushButton {
+                font-family: Helvetica;
+                font-size: 14px;
+            }
+            """)
+
+        return warning_msgbox
