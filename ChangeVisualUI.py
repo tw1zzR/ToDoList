@@ -88,9 +88,6 @@ class ChangeVisualUI:
         self.main_window.dark_theme = False
         self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/light_theme_icon.png"))
 
-        for checkbox, task_data in self.main_window.checkbox_dict.items():
-            checkbox.setChecked(False)
-
         # to White
             # icons
         self.main_window.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
@@ -198,11 +195,11 @@ class ChangeVisualUI:
             }
             QCheckBox {
                 background-color: rgb(60, 60, 60);
-                border: 3px solid rgb(30, 30, 30);   
+                border: 3px solid rgb(30, 30, 30);
                 font-family: Helvetica;
                 font-size: 18px;
                 color: rgb(235, 235, 235);
-                padding: 10px;       
+                padding: 10px;
             }
             QCheckBox::indicator {
                 border-image: url(assets/MainWindow/CheckBox/full_white_checkbox_unchecked_icon.png);
@@ -220,13 +217,13 @@ class ChangeVisualUI:
             }
         """)
 
+        for checkbox in self.main_window.checkbox_dict.keys():
+            self.task_checkbox_set_style_sheet(checkbox, False)
+
 
     def apply_dark_theme(self):
         self.main_window.dark_theme = True
         self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
-
-        for checkbox, task_data in self.main_window.checkbox_dict.items():
-            checkbox.setChecked(False)
 
         # to Dark
             # icons
@@ -367,6 +364,9 @@ class ChangeVisualUI:
                 color: rgb(44, 44, 44);
             }
         """)
+
+        for checkbox in self.main_window.checkbox_dict.keys():
+            self.task_checkbox_set_style_sheet(checkbox, False)
 
 
     def set_default_widget_style(self, widget):

@@ -182,8 +182,8 @@ class MainWindow(QMainWindow):
 
 
     def print_buttons(self):
-        print(self.checkbox_dict)
-        print(self.completed_checkbox_dict)
+        print(f"Unchecked: {self.checkbox_dict}")
+        print(f"Checked: {self.completed_checkbox_dict}")
 
 
     def set_statusbar_over_all_widgets(self):
