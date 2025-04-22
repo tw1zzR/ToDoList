@@ -60,15 +60,9 @@ class TaskCheckboxManager:
             if checkbox_sender in dictionary:
                 checkbox_data = dictionary[checkbox_sender]
 
-                checkbox_buttons = checkbox_data["buttons"]
-                reorder_buttons = checkbox_data["reorder_buttons"]
-
-                for button in checkbox_buttons[:]:
+                for button in checkbox_data["buttons"] + checkbox_data["reorder_buttons"]:
                     button.setParent(None)
                     button.deleteLater()
-                for reorder_button in reorder_buttons[:]:
-                    reorder_button.setParent(None)
-                    reorder_button.deleteLater()
 
                 checkbox_sender.setParent(None)
                 checkbox_sender.deleteLater()
