@@ -11,6 +11,12 @@ class TaskCheckboxManager:
         self.main_window.component_builder.create_title_and_task_layouts()
         self.main_window.component_builder.create_plus_button_layout()
         self.main_window.component_builder.create_completed_task_button_layout()
+
+        if self.main_window.completed_checkbox_dict:
+            self.main_window.completed_task_open_button.show()
+        else:
+            self.main_window.completed_task_open_button.hide()
+
         self.main_window.show()
 
 
@@ -42,8 +48,11 @@ class TaskCheckboxManager:
         elif up_down == "down":
             self.main_window.checkbox_order[i+1], self.main_window.checkbox_order[i] = self.main_window.checkbox_order[i], self.main_window.checkbox_order[i+1]
 
+        self.delete_completed_tasks_from_ui()
+
         self.show_all_task_checkboxes()
-        self.show_completed_tasks()
+        if self.main_window.completed_task_opened:
+            self.show_completed_tasks()
 
 
     def delete_task_checkbox_with_buttons(self, checkbox_sender, *dicts):

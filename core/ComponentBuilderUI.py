@@ -208,9 +208,6 @@ class ComponentBuilderUI:
         completed_tasks_button_layout.addSpacing(50)
 
         self.main_window.completed_task_open_button.hide()
-        if self.main_window.completed_checkbox_dict:
-            self.main_window.completed_task_open_button.show()
-
         self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
 
     # Show completed tasks methods
