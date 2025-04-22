@@ -43,6 +43,8 @@ class ComponentBuilderUI:
         for reorder_button in checkbox_reorder_buttons:
             reorder_button.setStyleSheet("background-color: transparent;")
 
+        self.main_window.checkbox_order.append(task_checkbox)
+
         self.main_window.checkbox_dict[task_checkbox] = {
             "buttons": checkbox_buttons,
             "reorder_buttons": checkbox_reorder_buttons,
@@ -137,16 +139,6 @@ class ComponentBuilderUI:
         warning_msgbox.setText(message)
         warning_msgbox.setIcon(QMessageBox.Warning)
 
-        warning_msgbox.setStyleSheet("""
-            QMessageBox {
-                font-family: Helvetica;
-                color: rgb(0,0,0);
-                font-size: 16px;
-            }
-            QPushButton {
-                font-family: Helvetica;
-                font-size: 14px;
-            }
-            """)
+        self.main_window.visual_changer.set_default_widget_style(warning_msgbox)
 
         return warning_msgbox

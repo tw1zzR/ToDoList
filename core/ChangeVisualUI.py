@@ -1,19 +1,16 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-
 class ChangeVisualUI:
 
     def __init__(self, main_window):
         self.main_window = main_window
-
 
     def change_UI_theme(self):
         if self.main_window.dark_theme:
             self.apply_light_theme()
         else:
             self.apply_dark_theme()
-
 
     def task_checkbox_set_style_sheet(self, sender, checked):
         if checked:
@@ -29,7 +26,6 @@ class ChangeVisualUI:
                 sender.setStyleSheet(
                     "background-color: rgb(60, 60, 60);"
                     "border: 3px solid rgb(30, 30, 30);")
-
 
     def change_checkboxes_button_icons_theme(self):
         white_reorder_buttons_path = ["assets/MainWindow/white_moveup_arrow_icon.png",
@@ -68,7 +64,6 @@ class ChangeVisualUI:
                         checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
                         i += 1
 
-
     def change_completed_task_button_icon(self):
         if self.main_window.dark_theme:
             if self.main_window.completed_task_opened:
@@ -84,7 +79,6 @@ class ChangeVisualUI:
             else:
                 self.main_window.completed_task_open_button.setIcon(QIcon(
                     "assets/MainWindow/gray_closed_completed_task_section_icon.png"))
-
 
     def apply_light_theme(self):
         self.main_window.dark_theme = False
@@ -222,7 +216,6 @@ class ChangeVisualUI:
 
         for checkbox in self.main_window.checkbox_dict.keys():
             self.task_checkbox_set_style_sheet(checkbox, False)
-
 
     def apply_dark_theme(self):
         self.main_window.dark_theme = True
@@ -374,7 +367,6 @@ class ChangeVisualUI:
         for checkbox in self.main_window.checkbox_dict.keys():
             self.task_checkbox_set_style_sheet(checkbox, False)
 
-
     def set_default_widget_style(self, widget):
         if isinstance(widget, QCheckBox):
             if self.main_window.dark_theme:
@@ -408,5 +400,4 @@ class ChangeVisualUI:
                     QPushButton {
                         font-family: Helvetica;
                         font-size: 14px;
-                    }
-                    """)
+                    }""")

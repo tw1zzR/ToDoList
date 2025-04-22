@@ -1,6 +1,5 @@
 from PyQt5.QtCore import *
 
-
 class TimeTracker:
 
     def __init__(self, main_window):
@@ -11,7 +10,6 @@ class TimeTracker:
 
         self.init_timer()
 
-
     def init_timer(self):
         self.start_track_status_realtime()
         self.status_timer.timeout.connect(self.refresh_status_realtime)
@@ -19,14 +17,11 @@ class TimeTracker:
         self.start_track_task_deadline()
         self.refresh_task_timer.timeout.connect(self.refresh_task_deadline)
 
-
     def start_track_status_realtime(self):
         self.status_timer.start(1000) # 1 sec
 
-
     def start_track_task_deadline(self):
         self.refresh_task_timer.start(60000) # 60 sec
-
 
     def refresh_status_realtime(self):
         current_time = QDateTime.currentDateTime()
@@ -34,7 +29,6 @@ class TimeTracker:
         # Status bar realtime
         formatted_realtime = current_time.toString("MMMM dd, hh:mm")
         self.main_window.status_label.setText(formatted_realtime)
-
 
     def refresh_task_deadline(self):
         current_time = QDateTime.currentDateTime()
