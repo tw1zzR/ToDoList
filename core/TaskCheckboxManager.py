@@ -79,7 +79,6 @@ class TaskCheckboxManager:
 
         self.delete_completed_tasks_button()
 
-
     def delete_completed_tasks_from_ui(self):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
             layout = data.get("checkbox_layout")
@@ -92,7 +91,6 @@ class TaskCheckboxManager:
 
                 self.main_window.tasks_layout.removeItem(layout)
                 del  data["checkbox_layout"]
-
 
     def remove_completed_task_from_ui(self, sender_checkbox):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
@@ -110,7 +108,6 @@ class TaskCheckboxManager:
 
                 self.main_window.tasks_layout.removeItem(checkbox_layout)
                 del data["checkbox_layout"]
-
 
     def delete_completed_tasks_button(self):
         self.main_window.tasks_layout.removeWidget(self.main_window.completed_task_open_button)
