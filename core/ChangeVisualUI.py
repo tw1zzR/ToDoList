@@ -36,12 +36,12 @@ class ChangeVisualUI:
         }
 
         checkbox_icons = {
-            True: ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
-                   "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
-                   "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"],
-            False: ["assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png",
-                    "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
-                    "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"]
+            True: ["assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png",
+                   "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
+                   "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"],
+            False: ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
+                    "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
+                    "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"]
         }
 
         theme = self.main_window.dark_theme
@@ -49,37 +49,29 @@ class ChangeVisualUI:
         for dictionary in self.main_window.dicts:
             for task_data in dictionary.values():
                 for btn, icon_path in zip(task_data["reorder_buttons"], reorder_icons[theme]):
-                    btn.setIcon(QIcon(icon_path))
+                    self.set_widget_icon(btn, icon_path)
                 for btn, icon_path in zip(task_data["buttons"], checkbox_icons[theme]):
-                    btn.setIcon(QIcon(icon_path))
+                    self.set_widget_icon(btn, icon_path)
 
 
     def change_completed_task_button_icon(self):
-        if self.main_window.dark_theme:
-            if self.main_window.completed_task_opened:
-                self.main_window.completed_task_open_button.setIcon(
-                    QIcon("assets/MainWindow/white_open_completed_task_section_icon.png"))
-            else:
-                self.main_window.completed_task_open_button.setIcon(
-                    QIcon("assets/MainWindow/white_closed_completed_task_section_icon.png"))
-        else:
-            if self.main_window.completed_task_opened:
-                self.main_window.completed_task_open_button.setIcon(QIcon(
-                    "assets/MainWindow/gray_open_completed_task_section_icon.png"))
-            else:
-                self.main_window.completed_task_open_button.setIcon(QIcon(
-                    "assets/MainWindow/gray_closed_completed_task_section_icon.png"))
+        theme_color = "white" if self.main_window.dark_theme else "gray"
+        state = "open" if self.main_window.completed_task_opened else "closed"
+
+        icon_path = f"assets/MainWindow/{theme_color}_{state}_completed_task_section_icon.png"
+        self.set_widget_icon(self.main_window.completed_task_open_button, icon_path)
+
+    def set_widget_icon(self, widget, icon_path):
+        widget.setIcon(QIcon(icon_path))
 
     def apply_light_theme(self):
         self.main_window.dark_theme = False
-        self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/light_theme_icon.png"))
 
         # to White
-            # icons
-        self.main_window.tool_button.setIcon(QIcon("assets/MainWindow/gray_menu_icon.png"))
-        self.main_window.user_login_button.setIcon(QIcon("assets/MainWindow/gray_user_icon.png"))
-        self.main_window.add_task_plus_button.setIcon(QIcon(
-            "assets/MainWindow/white_add_task_plus_button_v1_icon.png"))
+        self.set_widget_icon(self.main_window.change_theme_button, "assets/MainWindow/ToolMenu/light_theme_icon.png")
+        self.set_widget_icon(self.main_window.tool_button, "assets/MainWindow/gray_menu_icon.png")
+        self.set_widget_icon(self.main_window.user_login_button, "assets/MainWindow/gray_user_icon.png")
+        self.set_widget_icon(self.main_window.add_task_plus_button, "assets/MainWindow/white_add_task_plus_button_v1_icon.png")
 
         self.change_checkboxes_button_icons_theme()
         self.change_completed_task_button_icon()
@@ -93,7 +85,6 @@ class ChangeVisualUI:
                         "border-bottom: 3px solid rgb(30, 30, 30);"
                         "border-right: 3px solid rgb(30, 30, 30);")
 
-            # widgets
         self.main_window.setStyleSheet("""
             QLabel {
                 font-family: Helvetica;
@@ -209,24 +200,16 @@ class ChangeVisualUI:
 
     def apply_dark_theme(self):
         self.main_window.dark_theme = True
-        self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
 
         # to Dark
-            # icons
-        self.main_window.tool_button.setIcon(QIcon("assets/MainWindow/white_menu_icon.png"))
-        self.main_window.user_login_button.setIcon(QIcon("assets/MainWindow/white_user_icon.png"))
-        self.main_window.add_task_plus_button.setIcon(QIcon(
-            "assets/MainWindow/gray_add_task_plus_button_v1_icon.png"))
+        self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
+        self.set_widget_icon(self.main_window.change_theme_button, "assets/MainWindow/ToolMenu/light_theme_icon.png")
+        self.set_widget_icon(self.main_window.tool_button, "assets/MainWindow/white_menu_icon.png")
+        self.set_widget_icon(self.main_window.user_login_button, "assets/MainWindow/white_user_icon.png")
+        self.set_widget_icon(self.main_window.add_task_plus_button, "assets/MainWindow/gray_add_task_plus_button_v1_icon.png")
 
         self.change_checkboxes_button_icons_theme()
         self.change_completed_task_button_icon()
-
-        if self.main_window.completed_task_opened:
-            self.main_window.completed_task_open_button.setIcon(QIcon(
-                "assets/MainWindow/white_open_completed_task_section_icon.png"))
-        else:
-            self.main_window.completed_task_open_button.setIcon(QIcon(
-                "assets/MainWindow/white_closed_completed_task_section_icon.png"))
 
         for dictionary in self.main_window.dicts:
             for data in dictionary.values():
@@ -237,7 +220,6 @@ class ChangeVisualUI:
                         "border-bottom: 3px solid rgb(222, 222, 222);"
                         "border-right: 3px solid rgb(222, 222, 222);")
 
-            # widgets
         self.main_window.setStyleSheet("""
             QLabel {
                 font-family: Helvetica;
@@ -390,4 +372,5 @@ class ChangeVisualUI:
                     QPushButton {
                         font-family: Helvetica;
                         font-size: 14px;
-                    }""")
+                    }
+                """)
