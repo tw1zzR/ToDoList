@@ -1,7 +1,6 @@
 from windows.TaskDialogBox import TaskDialogBox
 from PyQt5.QtWidgets import *
 
-
 class OnClickController:
 
     def __init__(self, main_window):
@@ -51,7 +50,7 @@ class OnClickController:
         about_app_dialog = self.main_window.component_builder.create_and_setup_about_app_dialog()
         about_app_dialog.exec_()
 
-        # Set checkbox checked method
+
     def on_click_task_checkbox(self):
         sender_checkbox = self.main_window.sender()
 
@@ -89,47 +88,47 @@ class OnClickController:
 
 
     def on_click_completed_tasks_button(self):
+        self.main_window.completed_task_opened = not self.main_window.completed_task_opened
+
         self.main_window.task_checkbox_manager.show_all_task_checkboxes()
 
         if self.main_window.completed_task_opened:
-            self.main_window.completed_task_opened = False
-            self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
-        else:
-            self.main_window.completed_task_opened = True
             self.main_window.task_checkbox_manager.show_completed_tasks()
+        else:
+            self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
 
         self.main_window.visual_changer.change_completed_task_button_icon()
 
     # Checkbox buttons
     def on_click_task_info_checkbox_button(self):
-        sender = self.main_window.sender()
-        sender_checkbox = self.main_window.task_button_manager.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.main_window.task_button_manager.find_checkbox_by_checkbox_button(
+            self.main_window.sender()
+        )
 
         self.main_window.component_builder.create_task_info_messagebox_checkbox_button(sender_checkbox)
 
     def on_click_edit_task_checkbox_button(self):
-        sender = self.main_window.sender()
-        sender_checkbox = self.main_window.task_button_manager.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.main_window.task_button_manager.find_checkbox_by_checkbox_button(
+            self.main_window.sender()
+        )
 
         # Get primary checkbox data
-        for dictionary in self.main_window.dicts:
-            if sender_checkbox in dictionary:
-                task_data = dictionary[sender_checkbox]
-                task_name = task_data["name"]
-                task_deadline = task_data["deadline"]
-                task_description = task_data["description"]
-                break
+        data = next(dictionary[sender_checkbox]
+                    for dictionary in self.main_window.dicts
+                    if sender_checkbox in dictionary
+        )
 
         self.main_window.component_builder.create_and_open_edit_task_dialog(
             sender_checkbox,
-            task_name,
-            task_deadline,
-            task_description
+            data["name"],
+            data["deadline"],
+            data["description"]
         )
 
     def on_click_delete_task_checkbox_button(self):
-        sender = self.main_window.sender()
-        sender_checkbox = self.main_window.task_button_manager.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = self.main_window.task_button_manager.find_checkbox_by_checkbox_button(
+            self.main_window.sender()
+        )
 
         self.main_window.task_checkbox_manager.delete_task_checkbox_with_buttons(
             sender_checkbox,
@@ -150,8 +149,7 @@ class OnClickController:
         for data in self.main_window.checkbox_dict.values():
             if data["reorder_buttons"][0] is sender:
                 self.main_window.task_checkbox_manager.move_up_down_checkbox(sender_checkbox, "up")
+                break
             elif data["reorder_buttons"][1] is sender:
                 self.main_window.task_checkbox_manager.move_up_down_checkbox(sender_checkbox, "down")
-            else:
-                continue
-            break
+                break
