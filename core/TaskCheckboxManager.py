@@ -75,16 +75,16 @@ class TaskCheckboxManager:
 
     def delete_completed_tasks_from_ui(self):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
-            layout = data.get("checkbox_layout")
-            if layout:
-                while layout.count():
-                    item = layout.takeAt(0)
+            checkbox_layout = data.get("checkbox_layout")
+            if checkbox_layout:
+                while checkbox_layout.count():
+                    item = checkbox_layout.takeAt(0)
                     widget = item.widget()
                     if widget:
                         widget.hide()
 
-                self.main_window.tasks_layout.removeItem(layout)
-                del  data["checkbox_layout"]
+                self.main_window.tasks_layout.removeItem(checkbox_layout)
+                del data["checkbox_layout"]
 
     def remove_completed_task_from_ui(self, sender_checkbox):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
@@ -108,13 +108,10 @@ class TaskCheckboxManager:
         self.main_window.completed_task_open_button.setParent(None)
         self.main_window.update()
 
-
     def move_task_to_another_dict(self, completed_task_checkbox, from_dict, to_dict):
         if completed_task_checkbox in self.main_window.checkbox_order:
             checkbox_index  = self.main_window.checkbox_order.index(completed_task_checkbox)
-
             checkbox_key = self.main_window.checkbox_order[checkbox_index]
 
             completed_task_checkbox_data = from_dict.pop(checkbox_key)
-
             to_dict[completed_task_checkbox] = completed_task_checkbox_data
