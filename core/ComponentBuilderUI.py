@@ -17,37 +17,13 @@ class ComponentBuilderUI:
         task_checkbox.stateChanged.connect(self.main_window.on_click_controller.on_click_task_checkbox)
         task_checkbox.setFixedHeight(50)
 
-        checkbox_moveup_button = QPushButton(self.main_window)
-        checkbox_movedown_button = QPushButton(self.main_window)
-
-        checkbox_moveup_button.setFixedSize(50,25)
-        checkbox_movedown_button.setFixedSize(50,25)
-
-        checkbox_reorder_buttons = [checkbox_moveup_button, checkbox_movedown_button]
-
-        task_info_button = QPushButton(self.main_window)
-        edit_task_button = QPushButton(self.main_window)
-        delete_task_button = QPushButton(self.main_window)
-
-        task_info_button.setToolTip("View task details")
-        edit_task_button.setToolTip("Edit task")
-        delete_task_button.setToolTip("Delete task")
-
-        checkbox_buttons = [task_info_button, edit_task_button, delete_task_button]
-
-        for button in checkbox_buttons:
-            button.setFixedSize(50, 50)
-            button.setIconSize(QSize(30, 30))
-            self.main_window.visual_changer.set_default_widget_style(button)
-
-        for reorder_button in checkbox_reorder_buttons:
-            reorder_button.setStyleSheet("background-color: transparent;")
+        reorder_buttons = self.create_reorder_buttons()
+        checkbox_buttons = self.create_checkbox_buttons()
 
         self.main_window.checkbox_order.append(task_checkbox)
-
         self.main_window.checkbox_dict[task_checkbox] = {
             "buttons": checkbox_buttons,
-            "reorder_buttons": checkbox_reorder_buttons,
+            "reorder_buttons": reorder_buttons,
             "name": user_task_name,
             "deadline": user_task_deadline,
             "description": user_task_description
@@ -57,22 +33,53 @@ class ComponentBuilderUI:
         self.main_window.task_button_manager.connect_checkbox_buttons()
 
 
+    def create_reorder_buttons(self):
+        moveup_button = QPushButton(self.main_window)
+        movedown_button = QPushButton(self.main_window)
+        for button in [moveup_button, movedown_button]:
+            button.setFixedSize(50, 25)
+            button.setStyleSheet("background-color: transparent;")
+        return [moveup_button, movedown_button]
+
+
+    def create_checkbox_buttons(self):
+        task_info_button = QPushButton(self.main_window)
+        edit_task_button = QPushButton(self.main_window)
+        delete_task_button = QPushButton(self.main_window)
+
+        for button in [task_info_button, edit_task_button, delete_task_button]:
+            button.setFixedSize(50, 50)
+            button.setIconSize(QSize(30, 30))
+            self.main_window.visual_changer.set_default_widget_style(button)
+
+        task_info_button.setToolTip("View task details")
+        edit_task_button.setToolTip("Edit task")
+        delete_task_button.setToolTip("Delete task")
+
+        return [task_info_button, edit_task_button, delete_task_button]
+
+
     def create_task_info_messagebox_checkbox_button(self, checkbox_sender):
+        task_info = None
+
         for dictionary in self.main_window.dicts:
             if checkbox_sender in dictionary:
-                task_name = dictionary[checkbox_sender]["name"]
-                task_deadline = dictionary[checkbox_sender]["deadline"]
-                task_description = dictionary[checkbox_sender]["description"]
+                task_info = dictionary[checkbox_sender]
+                break
 
-        if self.current_task_info_window:
-            self.current_task_info_window.close()
-            self.current_task_info_window.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
-        else:
-            self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
+        if task_info:
+            task_name = task_info["name"]
+            task_deadline = task_info["deadline"]
+            task_description = task_info["description"]
 
-        self.current_task_info_window.compare_with_main_win_theme(self.main_window.dark_theme)
+            if self.current_task_info_window:
+                self.current_task_info_window.close()
+                self.current_task_info_window.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
+            else:
+                self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
 
-        self.current_task_info_window.show()
+            self.current_task_info_window.compare_with_main_win_theme(self.main_window.dark_theme)
+            self.current_task_info_window.show()
 
 
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
@@ -94,9 +101,11 @@ class ComponentBuilderUI:
 
             for dictionary in self.main_window.dicts:
                 if sender_checkbox in dictionary:
-                    dictionary[sender_checkbox]["name"] = edited_task_name
-                    dictionary[sender_checkbox]["deadline"] = edited_task_deadline
-                    dictionary[sender_checkbox]["description"] = edited_task_description
+                    dictionary[sender_checkbox].update({
+                        "name": edited_task_name,
+                        "deadline": edited_task_deadline,
+                        "description": edited_task_description
+                    })
                     break
 
             sender_checkbox.setText(edited_task_name)
@@ -108,7 +117,6 @@ class ComponentBuilderUI:
         delete_confirmation_dialog.setWindowTitle("Delete All Tasks")
         delete_confirmation_dialog.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
         delete_confirmation_dialog.setText("Are you sure you want to delete all tasks?")
-
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
         delete_confirmation_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
 
