@@ -6,6 +6,7 @@ class OnClickController:
     def __init__(self, main_window):
         self.main_window = main_window
 
+
     def on_click_task_button(self):
         sender = self.main_window.sender()
 
@@ -42,6 +43,7 @@ class OnClickController:
         if self.main_window.completed_task_opened:
             self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
             self.main_window.task_checkbox_manager.show_completed_tasks()
+
 
     def on_click_change_theme_button(self):
         self.main_window.visual_changer.change_UI_theme()
