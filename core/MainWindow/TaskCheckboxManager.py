@@ -1,4 +1,5 @@
-from modules import layout_tools
+from modules.MainWindow import layout_tools
+
 
 class TaskCheckboxManager:
 

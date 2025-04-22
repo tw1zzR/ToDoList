@@ -1,11 +1,11 @@
-from core.ComponentBuilderUI import ComponentBuilderUI
-from core.ChangeVisualUI import ChangeVisualUI
-from core.OnClickController import OnClickController
-from core.TaskButtonManager import TaskButtonManager
-from core.TaskCheckboxManager import TaskCheckboxManager
-from core.TimeTracker import TimeTracker
+from core.MainWindow.ComponentBuilderUI import ComponentBuilderUI
+from core.MainWindow.ChangeVisualUI import ChangeVisualUI
+from core.MainWindow.OnClickController import OnClickController
+from core.MainWindow.TaskButtonManager import TaskButtonManager
+from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
+from core.MainWindow.TimeTracker import TimeTracker
 from PyQt5.QtWidgets import *
-from modules import window_builder
+from modules.MainWindow import window_builder
 
 
 class MainWindow(QMainWindow):
