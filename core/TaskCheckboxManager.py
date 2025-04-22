@@ -1,76 +1,17 @@
 from modules import layout_tools
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-
 
 class TaskCheckboxManager:
 
     def __init__(self, main_window):
         self.main_window = main_window
 
-
     def show_all_task_checkboxes(self):
         layout_tools.clear_layout(self.main_window.tasks_layout)
 
-        title_tasks_layout = QHBoxLayout()
-        title_tasks_layout.addStretch()
-        title_tasks_layout.addWidget(self.main_window.title_tasks_label, alignment=Qt.AlignCenter)
-        title_tasks_layout.addStretch()
-
-        self.main_window.tasks_layout.addLayout(title_tasks_layout)
-
-        for checkbox in self.main_window.checkbox_order:
-            if checkbox in self.main_window.checkbox_dict:
-                data = self.main_window.checkbox_dict[checkbox]
-
-                checkbox_layout = QHBoxLayout()
-                checkbox_layout.setContentsMargins(0,0,0,0)
-                checkbox_layout.setSpacing(0)
-
-                moveup_btn, movedown_btn = data["reorder_buttons"]
-
-                reorder_layout = QVBoxLayout()
-
-                for reorder_button in [moveup_btn, movedown_btn]:
-                    reorder_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                    reorder_button.show()
-                    reorder_layout.addWidget(reorder_button)
-
-                checkbox_layout.addLayout(reorder_layout)
-
-                checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-                checkbox_layout.addWidget(checkbox)
-
-                for button in data["buttons"]:
-                    button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                    button.show()
-                    checkbox_layout.addWidget(button)
-                checkbox_layout.addSpacing(50)
-
-                data["checkbox_layout"] = checkbox_layout
-
-                self.main_window.tasks_layout.addLayout(checkbox_layout)
-
-        # (+) button layout
-        plus_button_layout = QHBoxLayout()
-        plus_button_layout.addSpacing(50)
-        plus_button_layout.addWidget(self.main_window.add_task_plus_button, alignment=Qt.AlignLeft)
-        plus_button_layout.addStretch()
-
-        self.main_window.add_task_plus_button.setFixedSize(50, 50)
-        self.main_window.tasks_layout.addLayout(plus_button_layout)
-
-        # Completed task button
-        completed_tasks_button_layout = QHBoxLayout()
-        completed_tasks_button_layout.addSpacing(50)
-        completed_tasks_button_layout.addWidget(self.main_window.completed_task_open_button, alignment=Qt.AlignCenter)
-        completed_tasks_button_layout.addSpacing(50)
-
-        self.main_window.completed_task_open_button.hide()
-        if self.main_window.completed_checkbox_dict:
-            self.main_window.completed_task_open_button.show()
-
-        self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
+        self.main_window.component_builder.create_title_and_task_layouts()
+        self.main_window.component_builder.create_plus_button_layout()
+        self.main_window.component_builder.create_completed_task_button_layout()
+        self.main_window.show()
 
 
     def show_completed_tasks(self):
@@ -79,28 +20,10 @@ class TaskCheckboxManager:
             if "checkbox_layout" in data:
                 continue
 
-            checkbox_layout = QHBoxLayout()
-            checkbox_layout.setContentsMargins(0, 0, 0, 0)
-            checkbox_layout.setSpacing(0)
-            checkbox_layout.addSpacing(50)
-
-            checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-            checkbox.show()
-
-            checkbox_layout.addWidget(checkbox)
-
-            for reorder_button in data["reorder_buttons"]:
-                reorder_button.hide()
-            for button in data["buttons"]:
-                button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-                button.show()
-                checkbox_layout.addWidget(button)
-
-            checkbox_layout.addSpacing(50)
-
+            checkbox_layout = self.main_window.component_builder.create_completed_task_layout(checkbox, data)
             data["checkbox_layout"] = checkbox_layout
-
             self.main_window.tasks_layout.addLayout(checkbox_layout)
+            self.main_window.show()
 
 
     def move_up_down_checkbox(self, target_checkbox, up_down):
@@ -120,6 +43,7 @@ class TaskCheckboxManager:
             self.main_window.checkbox_order[i+1], self.main_window.checkbox_order[i] = self.main_window.checkbox_order[i], self.main_window.checkbox_order[i+1]
 
         self.show_all_task_checkboxes()
+        self.show_completed_tasks()
 
 
     def delete_task_checkbox_with_buttons(self, checkbox_sender, *dicts):
