@@ -28,41 +28,31 @@ class ChangeVisualUI:
                     "border: 3px solid rgb(30, 30, 30);")
 
     def change_checkboxes_button_icons_theme(self):
-        white_reorder_buttons_path = ["assets/MainWindow/white_moveup_arrow_icon.png",
-                                      "assets/MainWindow/white_movedown_arrow_icon.png"]
+        reorder_icons = {
+            True: ["assets/MainWindow/white_moveup_arrow_icon.png",
+                   "assets/MainWindow/white_movedown_arrow_icon.png"],
+            False: ["assets/MainWindow/gray_moveup_arrow_icon.png",
+                    "assets/MainWindow/gray_movedown_arrow_icon.png"]
+        }
 
-        gray_reorder_buttons_path = ["assets/MainWindow/gray_moveup_arrow_icon.png",
-                                     "assets/MainWindow/gray_movedown_arrow_icon.png"]
+        checkbox_icons = {
+            True: ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
+                   "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
+                   "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"],
+            False: ["assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png",
+                    "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
+                    "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"]
+        }
 
-        white_checkbox_buttons_path = ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
-                              "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
-                              "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"]
-
-        gray_checkbox_buttons_path = ["assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png",
-                             "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
-                             "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"]
+        theme = self.main_window.dark_theme
 
         for dictionary in self.main_window.dicts:
-            if self.main_window.dark_theme:
-                for task_data in dictionary.values():
-                    i = 0
-                    for reorder_button in task_data["reorder_buttons"]:
-                        reorder_button.setIcon(QIcon(white_reorder_buttons_path[i]))
-                        i += 1
-                    i = 0
-                    for checkbox_button in task_data["buttons"]:
-                        checkbox_button.setIcon(QIcon(gray_checkbox_buttons_path[i]))
-                        i += 1
-            else:
-                for task_data in dictionary.values():
-                    i = 0
-                    for reorder_button in task_data["reorder_buttons"]:
-                        reorder_button.setIcon(QIcon(gray_reorder_buttons_path[i]))
-                        i += 1
-                    i = 0
-                    for checkbox_button in task_data["buttons"]:
-                        checkbox_button.setIcon(QIcon(white_checkbox_buttons_path[i]))
-                        i += 1
+            for task_data in dictionary.values():
+                for btn, icon_path in zip(task_data["reorder_buttons"], reorder_icons[theme]):
+                    btn.setIcon(QIcon(icon_path))
+                for btn, icon_path in zip(task_data["buttons"], checkbox_icons[theme]):
+                    btn.setIcon(QIcon(icon_path))
+
 
     def change_completed_task_button_icon(self):
         if self.main_window.dark_theme:
