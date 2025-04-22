@@ -13,20 +13,17 @@ class TaskButtonManager:
     def connect_checkbox_buttons(self):
         for dictionary in self.main_window.dicts:
             for checkbox, data in dictionary.items():
-                task_info_button  = data["buttons"][0]
-                edit_task_button  = data["buttons"][1]
-                delete_task_button = data["buttons"][2]
+                task_info_button, edit_task_button, delete_task_button  = data["buttons"]
+                reorder_buttons = data["reorder_buttons"]
 
-                if not hasattr(task_info_button, "_clicked_connected"):
-                    task_info_button.clicked.connect(self.main_window.on_click_controller.on_click_task_info_checkbox_button)
-                    task_info_button._clicked_connected = True
-                if not hasattr(edit_task_button, "_clicked_connected"):
-                    edit_task_button.clicked.connect(self.main_window.on_click_controller.on_click_edit_task_checkbox_button)
-                    edit_task_button._clicked_connected = True
-                if not hasattr(delete_task_button, "_clicked_connected"):
-                    delete_task_button.clicked.connect(self.main_window.on_click_controller.on_click_delete_task_checkbox_button)
-                    delete_task_button._clicked_connected = True
-                for reorder_button in data["reorder_buttons"]:
-                    if not hasattr(reorder_button, "_clicked_connected"):
-                        reorder_button.clicked.connect(self.main_window.on_click_controller.on_click_reorder_button)
-                        reorder_button._clicked_connected = True
+                self.connect_button(task_info_button, self.main_window.on_click_controller.on_click_task_info_checkbox_button)
+                self.connect_button(edit_task_button, self.main_window.on_click_controller.on_click_edit_task_checkbox_button)
+                self.connect_button(delete_task_button, self.main_window.on_click_controller.on_click_delete_task_checkbox_button)
+
+                for button in reorder_buttons:
+                    self.connect_button(button, self.main_window.on_click_controller.on_click_reorder_button)
+
+    def connect_button(self, button, handler):
+        if not hasattr(button, "_clicked_connected"):
+            button.clicked.connect(handler)
+            button._clicked_connected = True
