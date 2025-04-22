@@ -66,9 +66,7 @@ class MainWindow(QMainWindow):
 
     def init_UI(self):
         window_builder.setup_UI(self)
-
         self.task_checkbox_manager.show_all_task_checkboxes()
-
         self.visual_changer.change_UI_theme()
         self.show()
 

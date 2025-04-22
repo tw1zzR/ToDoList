@@ -19,7 +19,6 @@ class TaskCheckboxManager:
 
         self.main_window.show()
 
-
     def show_completed_tasks(self):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
 
@@ -30,7 +29,6 @@ class TaskCheckboxManager:
             data["checkbox_layout"] = checkbox_layout
             self.main_window.tasks_layout.addLayout(checkbox_layout)
             self.main_window.show()
-
 
     def move_up_down_checkbox(self, target_checkbox, up_down):
         try:
@@ -53,7 +51,6 @@ class TaskCheckboxManager:
         self.show_all_task_checkboxes()
         if self.main_window.completed_task_opened:
             self.show_completed_tasks()
-
 
     def delete_task_checkbox_with_buttons(self, checkbox_sender, *dicts):
         for dictionary in dicts:

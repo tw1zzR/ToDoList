@@ -53,7 +53,6 @@ class ChangeVisualUI:
                 for btn, icon_path in zip(task_data["buttons"], checkbox_icons[theme]):
                     self.set_widget_icon(btn, icon_path)
 
-
     def change_completed_task_button_icon(self):
         theme_color = "white" if self.main_window.dark_theme else "gray"
         state = "open" if self.main_window.completed_task_opened else "closed"

@@ -16,7 +16,6 @@ def setup_UI(main_window):
     setup_object_sizes(main_window)
     setup_object_names(main_window)
 
-
 def setup_main_window(main_window):
     main_window.setWindowTitle("To Do List")
     main_window.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
