@@ -63,7 +63,6 @@ def setup_main_layout(task_dialog):
 
     task_dialog.setLayout(task_dialog.main_layout)
 
-
 def setup_what_this_button(task_dialog):
     task_dialog.setWhatsThis("It's a dialog box that allows you to enter data for your task.")
     task_dialog.user_input_task_name.setWhatsThis("It's an input field for the task name.")

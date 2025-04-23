@@ -1,5 +1,6 @@
 from modules.TaskDialogBox.dialog_tools import get_task_data
 from modules import global_tools
+from modules.TaskInfoMessageBox import task_display_tools
 from windows.TaskInfoMessageBox import CustomTaskInfoMessageBox
 from windows.TaskDialogBox import TaskDialogBox
 from PyQt5.QtGui import *
@@ -78,11 +79,12 @@ class ComponentBuilderUI:
 
             if self.current_task_info_window:
                 self.current_task_info_window.close()
-                self.current_task_info_window.set_task_info_msgbox_new_data(task_name, task_deadline, task_description)
+
+                task_display_tools.set_task_info_msgbox_new_data(self.current_task_info_window, task_name, task_deadline, task_description)
             else:
                 self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
 
-            self.current_task_info_window.compare_with_main_win_theme(self.main_window.dark_theme)
+            global_tools.compare_with_main_window_theme(self.current_task_info_window, self.main_window.dark_theme)
             self.current_task_info_window.show()
 
 

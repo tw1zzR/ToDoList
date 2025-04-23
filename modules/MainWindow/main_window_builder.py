@@ -19,7 +19,7 @@ def setup_UI(main_window):
 def setup_main_window(main_window):
     main_window.setWindowTitle("To Do List")
     main_window.setWindowIcon(QIcon("assets/MainWindow/todolist_icon.png"))
-    main_window.setGeometry(900, 400, 800, 700)
+    main_window.resize(800, 700)
 
 def setup_buttons(main_window):
     main_window.completed_task_open_button.setLayoutDirection(Qt.RightToLeft)

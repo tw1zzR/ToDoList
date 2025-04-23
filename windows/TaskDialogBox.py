@@ -1,8 +1,7 @@
-from PyQt5.QtGui import *
+from core.TaskDialogBox.change_visual_ui import ChangeVisualUI
+from modules.TaskDialogBox import task_dialog_builder
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from modules.TaskDialogBox import dialog_tools, task_dialog_builder
-from core.TaskDialogBox.change_visual_ui import ChangeVisualUI
 
 
 class TaskDialogBox(QDialog):
