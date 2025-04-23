@@ -1,5 +1,4 @@
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 
 class ChangeVisualUI:
 
@@ -339,37 +338,4 @@ class ChangeVisualUI:
             self.task_checkbox_set_style_sheet(checkbox, False)
 
     def set_default_widget_style(self, widget):
-        if isinstance(widget, QCheckBox):
-            if self.main_window.dark_theme:
-                widget.setStyleSheet(
-                    "background-color: rgb(246, 246, 246);"
-                    "border: 3px solid rgb(222, 222, 222);")
-            else:
-                widget.setStyleSheet(
-                    "background-color: rgb(60, 60, 60);"
-                    "border: 3px solid rgb(30, 30, 30);")
-        elif isinstance(widget, QPushButton):
-            if self.main_window.dark_theme:
-                widget.setStyleSheet(
-                    "background-color: rgb(246, 246, 246);"
-                    "border-top: 3px solid rgb(222, 222, 222);"
-                    "border-bottom: 3px solid rgb(222, 222, 222);"
-                    "border-right: 3px solid rgb(222, 222, 222);")
-            else:
-                widget.setStyleSheet(
-                    "background-color: rgb(60, 60, 60);"
-                    "border-top: 3px solid rgb(30, 30, 30);"
-                    "border-bottom: 3px solid rgb(30, 30, 30);"
-                    "border-right: 3px solid rgb(30, 30, 30);")
-        elif isinstance(widget, QMessageBox):
-            widget.setStyleSheet("""
-                    QMessageBox {
-                        font-family: Helvetica;
-                        color: rgb(0,0,0);
-                        font-size: 16px;
-                    }
-                    QPushButton {
-                        font-family: Helvetica;
-                        font-size: 14px;
-                    }
-                """)
+        pass

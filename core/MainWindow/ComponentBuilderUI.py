@@ -1,3 +1,5 @@
+from modules.TaskDialogBox.dialog_tools import get_task_data
+from modules import global_tools
 from windows.TaskInfoMessageBox import CustomTaskInfoMessageBox
 from windows.TaskDialogBox import TaskDialogBox
 from PyQt5.QtGui import *
@@ -52,7 +54,7 @@ class ComponentBuilderUI:
         for button in [task_info_button, edit_task_button, delete_task_button]:
             button.setFixedSize(50, 50)
             button.setIconSize(QSize(30, 30))
-            self.visual_mgr.set_default_widget_style(button)
+            global_tools.set_default_widget_style(self.main_window, button)
 
         task_info_button.setToolTip("View task details")
         edit_task_button.setToolTip("Edit task")
@@ -87,7 +89,7 @@ class ComponentBuilderUI:
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
         edit_task_dialog = TaskDialogBox()
 
-        edit_task_dialog.compare_with_main_win_theme(self.main_window.dark_theme)
+        global_tools.compare_with_main_window_theme(edit_task_dialog, self.main_window.dark_theme)
 
         date_format = "dd.MM.yyyy HH:mm"
 
@@ -100,7 +102,7 @@ class ComponentBuilderUI:
 
         if edit_task_dialog.exec_():
             # Change to edited checkbox data
-            edited_task_name, edited_task_deadline, edited_task_description = edit_task_dialog.get_task_data()
+            edited_task_name, edited_task_deadline, edited_task_description = get_task_data(edit_task_dialog)
 
             for dictionary in self.main_window.dicts:
                 if sender_checkbox in dictionary:
@@ -123,7 +125,7 @@ class ComponentBuilderUI:
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
         delete_confirmation_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
 
-        self.visual_mgr.set_default_widget_style(delete_confirmation_dialog)
+        global_tools.set_default_widget_style(self.main_window, delete_confirmation_dialog)
 
         return delete_confirmation_dialog
 
@@ -137,22 +139,10 @@ class ComponentBuilderUI:
         about_app_dialog.setText("My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>")
         about_app_dialog.setIcon(QMessageBox.Information)
 
-        self.visual_mgr.set_default_widget_style(about_app_dialog)
+        global_tools.set_default_widget_style(self.main_window, about_app_dialog)
 
         return about_app_dialog
 
-    def create_warning_messagebox(self, title, message):
-        warning_msgbox = QMessageBox()
-
-        warning_msgbox.setWindowTitle(title)
-        warning_msgbox.setWindowIcon(QIcon("assets/warning_icon_1.png"))
-        warning_msgbox.setTextFormat(Qt.RichText)
-        warning_msgbox.setText(message)
-        warning_msgbox.setIcon(QMessageBox.Warning)
-
-        self.visual_mgr.set_default_widget_style(warning_msgbox)
-
-        return warning_msgbox
 
     # Show all task checkboxes methods
     def create_title_and_task_layouts(self):

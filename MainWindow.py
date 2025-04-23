@@ -5,7 +5,7 @@ from core.MainWindow.TaskButtonManager import TaskButtonManager
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.TimeTracker import TimeTracker
 from PyQt5.QtWidgets import *
-from modules.MainWindow import window_builder
+from modules.MainWindow import main_window_builder
 
 
 class MainWindow(QMainWindow):
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         self.init_UI()
 
     def init_UI(self):
-        window_builder.setup_UI(self)
+        main_window_builder.setup_UI(self)
         self.task_checkbox_manager.show_all_task_checkboxes()
         self.visual_changer.change_UI_theme()
         self.show()

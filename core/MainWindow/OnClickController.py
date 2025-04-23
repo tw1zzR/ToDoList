@@ -1,3 +1,5 @@
+from modules.TaskDialogBox.dialog_tools import get_task_data
+from modules import global_tools
 from windows.TaskDialogBox import TaskDialogBox
 from PyQt5.QtWidgets import *
 
@@ -17,16 +19,16 @@ class OnClickController:
         match object_name:
             case "add_task_button" | "add_task_plus_button":
                 task_dialog = TaskDialogBox()
-                task_dialog.compare_with_main_win_theme(self.main_window.dark_theme)
+                global_tools.compare_with_main_window_theme(task_dialog, self.main_window.dark_theme)
 
                 if task_dialog.exec_():
-                    task_name, task_deadline, task_description = task_dialog.get_task_data()
+                    task_name, task_deadline, task_description = get_task_data(task_dialog)
                     self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
                     self.checkbox_mgr.show_all_task_checkboxes()
 
             case "del_tasks_button":
                 if not any(self.main_window.dicts):
-                    error_messagebox = self.comp_mgr.create_warning_messagebox("Delete all tasks", "Task list is empty.")
+                    error_messagebox = global_tools.create_warning_messagebox(self.main_window, "Delete all tasks", "Task list is empty.")
                     error_messagebox.exec_()
                     return
 

@@ -1,3 +1,4 @@
+from modules import global_tools
 from PyQt5.QtCore import *
 
 class TimeTracker:
@@ -45,4 +46,4 @@ class TimeTracker:
                     "background-color: rgb(242, 155, 155);"
                     "border: 3px solid rgb(130, 57, 57);")
             elif not checkbox.isChecked():
-                self.main_window.visual_changer.set_default_widget_style(checkbox)
+                global_tools.set_default_widget_style(self.main_window, checkbox)
