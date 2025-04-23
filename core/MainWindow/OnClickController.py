@@ -18,7 +18,7 @@ class OnClickController:
 
         match object_name:
             case "add_task_button" | "add_task_plus_button":
-                add_task_input_dialog = TaskInputDialog()
+                add_task_input_dialog = TaskInputDialog("Add Task")
                 global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
 
                 if add_task_input_dialog.exec_():

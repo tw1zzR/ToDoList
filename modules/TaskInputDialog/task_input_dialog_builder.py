@@ -1,8 +1,8 @@
 from modules.TaskInputDialog import dialog_tools
 from PyQt5.QtGui import *
 
-def setup_UI(task_input_dialog):
-    setup_task_input_dialog(task_input_dialog)
+def setup_UI(task_input_dialog, title):
+    setup_task_input_dialog(task_input_dialog, title)
     setup_input_fields(task_input_dialog)
     setup_connections(task_input_dialog)
     setup_button_layout(task_input_dialog)
@@ -10,8 +10,8 @@ def setup_UI(task_input_dialog):
     setup_what_this_button(task_input_dialog)
     setup_object_names(task_input_dialog)
 
-def setup_task_input_dialog(task_input_dialog):
-    task_input_dialog.setWindowTitle("Add Task")
+def setup_task_input_dialog(task_input_dialog, title):
+    task_input_dialog.setWindowTitle(title)
     task_input_dialog.setWindowIcon(QIcon("assets/TaskInputDialog/addtask_dialogbox_icon.png"))
     task_input_dialog.resize(520, 600)
 

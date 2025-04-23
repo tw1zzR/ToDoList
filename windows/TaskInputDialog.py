@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 
 class TaskInputDialog(QDialog):
 
-    def __init__(self):
+    def __init__(self, title):
         super().__init__()
         self.visual_changer = ChangeVisualUI(self)
 
@@ -29,9 +29,7 @@ class TaskInputDialog(QDialog):
         self.send_button = QPushButton("SEND")
         self.cancel_button = QPushButton("CANCEL")
 
-        self.init_UI()
-
-    def init_UI(self):
-        task_input_dialog_builder.setup_UI(self)
+        # Init UI
+        task_input_dialog_builder.setup_UI(self, title)
         self.visual_changer.change_UI_theme()
         self.show()

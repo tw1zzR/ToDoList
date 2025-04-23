@@ -23,9 +23,7 @@ class TaskInfoDialog(QDialog):
 
         task_display_tools.set_task_info_msgbox_new_data(self, task_name, task_deadline, task_description)
 
-        self.initUI()
-
-    def initUI(self):
+        # Init UI
         task_info_dialog_builder.setup_UI(self)
         self.visual_changer.change_UI_theme()
         self.show()

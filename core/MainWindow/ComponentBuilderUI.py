@@ -89,7 +89,7 @@ class ComponentBuilderUI:
 
 
     def create_and_open_edit_task_input_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
-        edit_task_input_dialog = TaskInputDialog()
+        edit_task_input_dialog = TaskInputDialog("Edit Task")
 
         global_tools.compare_with_main_window_theme(edit_task_input_dialog, self.main_window.dark_theme)
 
