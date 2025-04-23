@@ -9,6 +9,8 @@ class ComponentBuilderUI:
 
     def __init__(self, main_window):
         self.main_window = main_window
+        self.visual_mgr = self.main_window.visual_changer
+
         self.current_task_info_window = None
 
 
@@ -29,7 +31,7 @@ class ComponentBuilderUI:
             "description": user_task_description
         }
 
-        self.main_window.visual_changer.change_checkboxes_button_icons_theme()
+        self.visual_mgr.change_checkboxes_button_icons_theme()
         self.main_window.task_button_manager.connect_checkbox_buttons()
 
 
@@ -50,7 +52,7 @@ class ComponentBuilderUI:
         for button in [task_info_button, edit_task_button, delete_task_button]:
             button.setFixedSize(50, 50)
             button.setIconSize(QSize(30, 30))
-            self.main_window.visual_changer.set_default_widget_style(button)
+            self.visual_mgr.set_default_widget_style(button)
 
         task_info_button.setToolTip("View task details")
         edit_task_button.setToolTip("Edit task")
@@ -120,7 +122,7 @@ class ComponentBuilderUI:
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
         delete_confirmation_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
 
-        self.main_window.visual_changer.set_default_widget_style(delete_confirmation_dialog)
+        self.visual_mgr.set_default_widget_style(delete_confirmation_dialog)
 
         return delete_confirmation_dialog
 
@@ -134,7 +136,7 @@ class ComponentBuilderUI:
         about_app_dialog.setText("My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>")
         about_app_dialog.setIcon(QMessageBox.Information)
 
-        self.main_window.visual_changer.set_default_widget_style(about_app_dialog)
+        self.visual_mgr.set_default_widget_style(about_app_dialog)
 
         return about_app_dialog
 
@@ -147,7 +149,7 @@ class ComponentBuilderUI:
         warning_msgbox.setText(message)
         warning_msgbox.setIcon(QMessageBox.Warning)
 
-        self.main_window.visual_changer.set_default_widget_style(warning_msgbox)
+        self.visual_mgr.set_default_widget_style(warning_msgbox)
 
         return warning_msgbox
 
