@@ -1,17 +1,17 @@
 
 class ChangeVisualUI:
 
-    def __init__(self, task_dialog):
-        self.task_dialog = task_dialog
+    def __init__(self, task_input_dialog):
+        self.task_input_dialog = task_input_dialog
 
     def change_UI_theme(self):
-        if self.task_dialog.dark_theme:
+        if self.task_input_dialog.dark_theme:
             self.apply_light_theme()
         else:
             self.apply_dark_theme()
 
     def apply_light_theme(self):
-        self.task_dialog.setStyleSheet("""
+        self.task_input_dialog.setStyleSheet("""
             QDialog {
                 background-color: rgb(255, 255, 255);
             }
@@ -57,7 +57,7 @@ class ChangeVisualUI:
         """)
 
     def apply_dark_theme(self):
-        self.task_dialog.setStyleSheet("""
+        self.task_input_dialog.setStyleSheet("""
             QDialog {
                 background-color: rgb(44, 44, 44);
             }

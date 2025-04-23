@@ -1,8 +1,8 @@
-from modules.TaskDialogBox.dialog_tools import get_task_data
+from modules.TaskInputDialog.dialog_tools import get_task_data
 from modules import global_tools
-from modules.TaskInfoMessageBox import task_display_tools
-from windows.TaskInfoMessageBox import CustomTaskInfoMessageBox
-from windows.TaskDialogBox import TaskDialogBox
+from modules.TaskInfoDialog import task_display_tools
+from windows.TaskInfoDialog import TaskInfoDialog
+from windows.TaskInputDialog import TaskInputDialog
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -64,7 +64,7 @@ class ComponentBuilderUI:
         return [task_info_button, edit_task_button, delete_task_button]
 
 
-    def create_task_info_messagebox_checkbox_button(self, checkbox_sender):
+    def create_task_info_dialog_checkbox_button(self, checkbox_sender):
         task_info = None
 
         for dictionary in self.main_window.dicts:
@@ -82,29 +82,29 @@ class ComponentBuilderUI:
 
                 task_display_tools.set_task_info_msgbox_new_data(self.current_task_info_window, task_name, task_deadline, task_description)
             else:
-                self.current_task_info_window = CustomTaskInfoMessageBox(task_name, task_deadline, task_description)
+                self.current_task_info_window = TaskInfoDialog(task_name, task_deadline, task_description)
 
             global_tools.compare_with_main_window_theme(self.current_task_info_window, self.main_window.dark_theme)
             self.current_task_info_window.show()
 
 
-    def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
-        edit_task_dialog = TaskDialogBox()
+    def create_and_open_edit_task_input_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
+        edit_task_input_dialog = TaskInputDialog()
 
-        global_tools.compare_with_main_window_theme(edit_task_dialog, self.main_window.dark_theme)
+        global_tools.compare_with_main_window_theme(edit_task_input_dialog, self.main_window.dark_theme)
 
         date_format = "dd.MM.yyyy HH:mm"
 
         # Set primary checkbox data
-        edit_task_dialog.user_input_task_name.setText(primary_task_name)
-        edit_task_dialog.user_input_task_deadline.setDateTime(
+        edit_task_input_dialog.user_input_task_name.setText(primary_task_name)
+        edit_task_input_dialog.user_input_task_deadline.setDateTime(
             QDateTime.fromString(primary_task_deadline, date_format)
         )
-        edit_task_dialog.user_input_task_description.setText(primary_task_description)
+        edit_task_input_dialog.user_input_task_description.setText(primary_task_description)
 
-        if edit_task_dialog.exec_():
+        if edit_task_input_dialog.exec_():
             # Change to edited checkbox data
-            edited_task_name, edited_task_deadline, edited_task_description = get_task_data(edit_task_dialog)
+            edited_task_name, edited_task_deadline, edited_task_description = get_task_data(edit_task_input_dialog)
 
             for dictionary in self.main_window.dicts:
                 if sender_checkbox in dictionary:
@@ -122,7 +122,7 @@ class ComponentBuilderUI:
         delete_confirmation_dialog = QMessageBox()
 
         delete_confirmation_dialog.setWindowTitle("Delete All Tasks")
-        delete_confirmation_dialog.setWindowIcon(QIcon("assets/TaskDialogBox/addtask_dialogbox_icon.png"))
+        delete_confirmation_dialog.setWindowIcon(QIcon("assets/TaskInputDialog/addtask_dialogbox_icon.png"))
         delete_confirmation_dialog.setText("Are you sure you want to delete all tasks?")
         delete_confirmation_dialog.setIcon(QMessageBox.Warning)
         delete_confirmation_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)

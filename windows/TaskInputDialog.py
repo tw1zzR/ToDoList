@@ -1,10 +1,10 @@
-from core.TaskDialogBox.change_visual_ui import ChangeVisualUI
-from modules.TaskDialogBox import task_dialog_builder
+from core.TaskInputDialog.change_visual_ui import ChangeVisualUI
+from modules.TaskInputDialog import task_input_dialog_builder
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 
-class TaskDialogBox(QDialog):
+class TaskInputDialog(QDialog):
 
     def __init__(self):
         super().__init__()
@@ -32,6 +32,6 @@ class TaskDialogBox(QDialog):
         self.init_UI()
 
     def init_UI(self):
-        task_dialog_builder.setup_UI(self)
+        task_input_dialog_builder.setup_UI(self)
         self.visual_changer.change_UI_theme()
         self.show()

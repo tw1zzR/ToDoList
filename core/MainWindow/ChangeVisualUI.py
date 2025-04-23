@@ -336,6 +336,3 @@ class ChangeVisualUI:
 
         for checkbox in self.main_window.checkbox_dict.keys():
             self.task_checkbox_set_style_sheet(checkbox, False)
-
-    def set_default_widget_style(self, widget):
-        pass

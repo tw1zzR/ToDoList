@@ -1,11 +1,9 @@
-from core.TaskInfoMessageBox.change_visual_ui import ChangeVisualUI
-from modules.TaskInfoMessageBox import task_display_tools, task_info_dialog_builder
-from PyQt5.QtGui import *
+from core.TaskInfoDialog.change_visual_ui import ChangeVisualUI
+from modules.TaskInfoDialog import task_display_tools, task_info_dialog_builder
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 
 
-class CustomTaskInfoMessageBox(QDialog):
+class TaskInfoDialog(QDialog):
     def __init__(self, task_name, task_deadline, task_description):
         super().__init__()
         self.visual_changer = ChangeVisualUI(self)

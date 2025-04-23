@@ -11,7 +11,7 @@ def setup_UI(task_info_dialog):
 
 def setup_task_info_dialog(task_info_dialog):
     task_info_dialog.setWindowTitle("Task Info")
-    task_info_dialog.setWindowIcon(QIcon("assets/TaskInfoMessageBox/gray_task_info_button_V2_icon.png"))
+    task_info_dialog.setWindowIcon(QIcon("assets/TaskInfoDialog/gray_task_info_button_V2_icon.png"))
     task_info_dialog.resize(520, 600)
 
 def setup_main_layout(task_info_dialog):

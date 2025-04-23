@@ -1,6 +1,6 @@
-from modules.TaskDialogBox.dialog_tools import get_task_data
+from modules.TaskInputDialog.dialog_tools import get_task_data
 from modules import global_tools
-from windows.TaskDialogBox import TaskDialogBox
+from windows.TaskInputDialog import TaskInputDialog
 from PyQt5.QtWidgets import *
 
 class OnClickController:
@@ -18,11 +18,11 @@ class OnClickController:
 
         match object_name:
             case "add_task_button" | "add_task_plus_button":
-                task_dialog = TaskDialogBox()
-                global_tools.compare_with_main_window_theme(task_dialog, self.main_window.dark_theme)
+                add_task_input_dialog = TaskInputDialog()
+                global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
 
-                if task_dialog.exec_():
-                    task_name, task_deadline, task_description = get_task_data(task_dialog)
+                if add_task_input_dialog.exec_():
+                    task_name, task_deadline, task_description = get_task_data(add_task_input_dialog)
                     self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
                     self.checkbox_mgr.show_all_task_checkboxes()
 
@@ -102,7 +102,7 @@ class OnClickController:
             self.main_window.sender()
         )
 
-        self.comp_mgr.create_task_info_messagebox_checkbox_button(sender_checkbox)
+        self.comp_mgr.create_task_info_dialog_checkbox_button(sender_checkbox)
 
     def on_click_edit_task_checkbox_button(self):
         sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
@@ -115,7 +115,7 @@ class OnClickController:
                     if sender_checkbox in dictionary
         )
 
-        self.comp_mgr.create_and_open_edit_task_dialog(
+        self.comp_mgr.create_and_open_edit_task_input_dialog(
             sender_checkbox,
             data["name"],
             data["deadline"],
