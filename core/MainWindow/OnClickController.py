@@ -12,36 +12,34 @@ class OnClickController:
 
     def on_click_task_button(self):
         sender = self.main_window.sender()
+        object_name = sender.objectName()
 
-        match sender.objectName():
+        match object_name:
             case "add_task_button" | "add_task_plus_button":
-                add_task_dialog_box = TaskDialogBox()
-                add_task_dialog_box.compare_with_main_win_theme(self.main_window.dark_theme)
+                task_dialog = TaskDialogBox()
+                task_dialog.compare_with_main_win_theme(self.main_window.dark_theme)
 
-                if add_task_dialog_box.exec_():
-                    user_task_name, user_task_deadline, user_task_description = add_task_dialog_box.get_task_data()
-                    self.comp_mgr.create_task_checkbox_with_buttons(user_task_name,
-                                                                                         user_task_deadline,
-                                                                                         user_task_description)
+                if task_dialog.exec_():
+                    task_name, task_deadline, task_description = task_dialog.get_task_data()
+                    self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
                     self.checkbox_mgr.show_all_task_checkboxes()
 
             case "del_tasks_button":
-                if any(self.main_window.dicts):
-                    delete_confirmation_dialog = self.comp_mgr.create_and_setup_delete_confirmation_dialog()
+                if not any(self.main_window.dicts):
+                    error_messagebox = self.comp_mgr.create_warning_messagebox("Delete all tasks", "Task list is empty.")
+                    error_messagebox.exec_()
+                    return
 
-                    user_reply = delete_confirmation_dialog.exec_()
-                    if user_reply == QMessageBox.Yes:
-                        for dictionary in self.main_window.dicts:
-                            list_of_checkboxes = list(dictionary.keys())
-                            for checkbox in list_of_checkboxes:
-                                self.checkbox_mgr.delete_task_checkbox_with_buttons(checkbox, *self.main_window.dicts)
-                        self.comp_mgr.current_task_info_window = None
+                confirmation_dialog = self.comp_mgr.create_and_setup_delete_confirmation_dialog()
+                user_reply = confirmation_dialog.exec_()
 
-                    self.checkbox_mgr.show_all_task_checkboxes()
-                else:
-                    delete_tasks_error = self.comp_mgr.create_warning_messagebox("Delete all tasks",
-                                                                                 "Task list is empty.")
-                    delete_tasks_error.exec_()
+                if user_reply == QMessageBox.Yes:
+                    for dictionary in self.main_window.dicts:
+                        for checkbox in list(dictionary.keys()):
+                            self.checkbox_mgr.delete_task_checkbox_with_buttons(checkbox, *self.main_window.dicts)
+                    self.comp_mgr.current_task_info_window = None
+
+                self.checkbox_mgr.show_all_task_checkboxes()
 
         if self.main_window.completed_task_opened:
             self.checkbox_mgr.delete_completed_tasks_from_ui()
