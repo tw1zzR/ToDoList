@@ -85,21 +85,22 @@ class ComponentBuilderUI:
 
 
     def create_and_open_edit_task_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline, primary_task_description):
-        edit_task_dialogbox = TaskDialogBox()
+        edit_task_dialog = TaskDialogBox()
 
-        edit_task_dialogbox.compare_with_main_win_theme(self.main_window.dark_theme)
+        edit_task_dialog.compare_with_main_win_theme(self.main_window.dark_theme)
 
         date_format = "dd.MM.yyyy HH:mm"
-        primary_user_task_deadline = QDateTime.fromString(primary_task_deadline, date_format)
 
         # Set primary checkbox data
-        edit_task_dialogbox.user_input_task_name.setText(primary_task_name)
-        edit_task_dialogbox.user_input_task_deadline.setDateTime(primary_user_task_deadline)
-        edit_task_dialogbox.user_input_task_description.setText(primary_task_description)
+        edit_task_dialog.user_input_task_name.setText(primary_task_name)
+        edit_task_dialog.user_input_task_deadline.setDateTime(
+            QDateTime.fromString(primary_task_deadline, date_format)
+        )
+        edit_task_dialog.user_input_task_description.setText(primary_task_description)
 
-        if edit_task_dialogbox.exec_():
+        if edit_task_dialog.exec_():
             # Change to edited checkbox data
-            edited_task_name, edited_task_deadline, edited_task_description = edit_task_dialogbox.get_task_data()
+            edited_task_name, edited_task_deadline, edited_task_description = edit_task_dialog.get_task_data()
 
             for dictionary in self.main_window.dicts:
                 if sender_checkbox in dictionary:
