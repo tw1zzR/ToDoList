@@ -6,6 +6,8 @@ from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.TimeTracker import TimeTracker
 from PyQt5.QtWidgets import *
 from modules.MainWindow import main_window_builder
+from windows.TaskInfoDialog import TaskInfoDialog
+from windows.TaskInputDialog import TaskInputDialog
 
 
 class MainWindow(QMainWindow):
@@ -20,6 +22,12 @@ class MainWindow(QMainWindow):
         self.task_checkbox_manager = TaskCheckboxManager(self)
         self.task_button_manager = TaskButtonManager(self)
         self.on_click_controller = OnClickController(self)
+
+        # -- Windows
+        self.task_info_window = TaskInfoDialog()
+        self.task_input_window = TaskInputDialog()
+        self.task_info_window.hide()
+        self.task_input_window.hide()
 
         # -- Data Structures
         self.checkbox_order = []

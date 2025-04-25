@@ -28,14 +28,14 @@ class ChangeVisualUI:
                 font: bold;
                 color: rgb(44,44,44);
             }
-            QLabel#user_task_name_label, QLabel#user_task_deadline_label, QTextEdit#user_task_description_textedit {
+            QLabel#user_input_task_name, QLabel#user_input_task_deadline, QTextEdit#user_input_task_description {
                 background-color: rgb(60, 60, 60);
                 border: 3px solid rgb(30, 30, 30);  
                 font-family: Helvetica;
                 font-size: 18px;
                 color: rgb(235,235,235);
             }
-            QTextEdit#user_task_description_textedit {
+            QTextEdit#user_input_task_description {
                 padding-top: 5px;
                 padding-left: 10px;
                 padding-right: 10px;
@@ -68,14 +68,14 @@ class ChangeVisualUI:
                 font: bold;
                 color: rgb(235,235,235);
             }
-            QLabel#user_task_name_label, QLabel#user_task_deadline_label, QTextEdit#user_task_description_textedit {
+            QLabel#user_input_task_name, QLabel#user_input_task_deadline, QTextEdit#user_input_task_description {
                 background-color: rgb(246, 246, 246);
                 font-family: Helvetica;
                 font-size: 18px;
                 border: 3px solid rgb(222, 222, 222);
                 color: rgb(44, 44, 44);
             }
-            QTextEdit#user_task_description_textedit {
+            QTextEdit#user_input_task_description {
                 padding-top: 5px;
                 padding-left: 10px;
                 padding-right: 10px;

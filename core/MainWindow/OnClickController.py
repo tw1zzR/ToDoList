@@ -1,16 +1,13 @@
+from PyQt5.QtCore import QDateTime
+
+from core import find_methods
+from core.manage_windows_data import update_window_fields
 from modules.TaskInputDialog.dialog_tools import get_task_data
 from modules import global_tools
+from windows.TaskInfoDialog import TaskInfoDialog
 from windows.TaskInputDialog import TaskInputDialog
 from PyQt5.QtWidgets import *
 
-def open_task_dialog(current_task_dialog, new_task_dialog):
-    if current_task_dialog is None or not current_task_dialog.isVisible():
-        current_task_dialog = new_task_dialog
-        current_task_dialog.show()
-        return current_task_dialog
-    else:
-        current_task_dialog.raise_()
-        current_task_dialog.activateWindow()
 
 class OnClickController:
 
@@ -21,7 +18,7 @@ class OnClickController:
         self.checkbox_mgr = self.main_window.task_checkbox_manager
         self.button_mgr = self.main_window.task_button_manager
 
-        self.current_task_dialog = None
+        self.current_add_task_dialog = None
 
     def on_click_task_button(self):
         sender = self.main_window.sender()
@@ -29,18 +26,23 @@ class OnClickController:
 
         match object_name:
             case "add_task_button" | "add_task_plus_button":
-                if self.current_task_dialog is not None and self.current_task_dialog.isVisible():
-                    self.current_task_dialog.raise_()
-                    self.current_task_dialog.activateWindow()
-                else:
-                    add_task_input_dialog = TaskInputDialog("Add Task")
-                    global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
-                    self.current_task_dialog = open_task_dialog(self.current_task_dialog, add_task_input_dialog)
+                self.main_window.task_input_window.show()
+                update_window_fields(self.main_window.task_input_window)
 
-                    if self.current_task_dialog.exec_():
-                        task_name, task_deadline, task_description = get_task_data(self.current_task_dialog)
-                        self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
-                        self.checkbox_mgr.show_all_task_checkboxes()
+                if self.main_window.task_input_window.exec_():
+                    task_name, task_deadline, task_description = get_task_data(self.main_window.task_input_window)
+                    self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
+                    self.checkbox_mgr.show_all_task_checkboxes()
+
+                # if self.current_add_task_dialog is not None and self.current_add_task_dialog.isVisible():
+                #     self.current_add_task_dialog.raise_()
+                #     self.current_add_task_dialog.activateWindow()
+                # else:
+                #     add_task_input_dialog = TaskInputDialog("Add Task")
+                #     global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
+                #     self.current_add_task_dialog = global_tools.open_task_dialog(self.current_add_task_dialog, add_task_input_dialog)
+
+
 
             case "del_tasks_button":
                 if not any(self.main_window.dicts):
@@ -117,8 +119,10 @@ class OnClickController:
         sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
             self.main_window.sender()
         )
+        task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts,returns=["name", "deadline", "description"])
 
-        self.comp_mgr.create_task_info_dialog_checkbox_button(sender_checkbox)
+        self.main_window.task_info_window.show()
+        update_window_fields(self.main_window.task_info_window, task_info)
 
     def on_click_edit_task_checkbox_button(self):
         sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(

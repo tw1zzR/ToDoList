@@ -2,6 +2,28 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+# def set_datetime(task_dialog, field, datetime):
+
+
+
+def is_valid_task_dialog_type(current_task_window, task_dialog_class, clicked_checkbox_name, task_window_checkbox_name):
+    if (current_task_window is not None
+            and current_task_window.isVisible()
+            and isinstance(current_task_window, task_dialog_class)
+            and clicked_checkbox_name == task_window_checkbox_name):
+        return True
+    else:
+        return False
+
+def open_task_dialog(current_task_dialog, new_task_dialog):
+    if current_task_dialog is None or not current_task_dialog.isVisible():
+        current_task_dialog = new_task_dialog
+        current_task_dialog.show()
+        return current_task_dialog
+    else:
+        current_task_dialog.raise_()
+        current_task_dialog.activateWindow()
+
 def set_app_theme(main_window_dark_theme):
     for window in QApplication.topLevelWidgets():
         if isinstance(window, (QMainWindow, QDialog)):

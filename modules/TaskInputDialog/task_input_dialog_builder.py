@@ -1,8 +1,10 @@
+from PyQt5.QtCore import QDateTime
+
 from modules.TaskInputDialog import dialog_tools
 from PyQt5.QtGui import *
 
-def setup_UI(task_input_dialog, title):
-    setup_task_input_dialog(task_input_dialog, title)
+def setup_UI(task_input_dialog):
+    setup_task_input_dialog(task_input_dialog)
     setup_input_fields(task_input_dialog)
     setup_connections(task_input_dialog)
     setup_button_layout(task_input_dialog)
@@ -10,8 +12,8 @@ def setup_UI(task_input_dialog, title):
     setup_what_this_button(task_input_dialog)
     setup_object_names(task_input_dialog)
 
-def setup_task_input_dialog(task_input_dialog, title):
-    task_input_dialog.setWindowTitle(title)
+def setup_task_input_dialog(task_input_dialog):
+    # task_input_dialog.setWindowTitle(title)
     task_input_dialog.setWindowIcon(QIcon("assets/TaskInputDialog/addtask_dialogbox_icon.png"))
     task_input_dialog.resize(520, 600)
 
@@ -19,8 +21,7 @@ def setup_input_fields(task_input_dialog):
     task_input_dialog.user_input_task_name.setMaxLength(24)
     task_input_dialog.user_input_task_name.setPlaceholderText("Enter task name")
 
-    task_input_dialog.user_input_task_deadline.setDateTime(task_input_dialog.current_time)
-    task_input_dialog.user_input_task_deadline.setMinimumDateTime(task_input_dialog.current_time)
+    task_input_dialog.user_input_task_deadline.setMinimumDateTime(QDateTime.currentDateTime())
 
     task_input_dialog.user_input_task_description.setPlaceholderText("Enter task description")
 
