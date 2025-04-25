@@ -1,32 +1,4 @@
 
-
-
-
-def create_task_info_dialog(self, checkbox, task_info, *dicts):
-    task_info = None
-
-    for dictionary in self.main_window.dicts:
-        if checkbox_sender in dictionary:
-            task_info = dictionary[checkbox_sender]
-            break
-
-    if task_info:
-
-
-
-
-    if self.current_task_window:
-        self.current_task_window.close()
-
-        task_display_tools.set_task_info_msgbox_new_data(self.current_task_window, task_name, task_deadline,
-                                                         task_description)
-    else:
-        self.current_task_window = TaskInfoDialog(task_name, task_deadline, task_description)
-
-    global_tools.compare_with_main_window_theme(self.current_task_window, self.main_window.dark_theme)
-    self.current_task_window.show()
-
-
 def create_and_open_edit_task_input_dialog(self, sender_checkbox, primary_task_name, primary_task_deadline,
                                            primary_task_description):
     if (self.current_task_window is not None

@@ -1,20 +1,13 @@
-from modules.TaskInputDialog.dialog_tools import get_task_data
 from modules import global_tools
-from modules.TaskInfoDialog import task_display_tools
-from windows.TaskInfoDialog import TaskInfoDialog
-from windows.TaskInputDialog import TaskInputDialog
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 
-class ComponentBuilderUI:
+class CheckboxElementManager:
 
     def __init__(self, main_window):
         self.main_window = main_window
         self.visual_mgr = self.main_window.visual_changer
-
-        self.current_task_window = None
 
 
     def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):

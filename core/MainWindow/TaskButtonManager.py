@@ -4,12 +4,6 @@ class TaskButtonManager:
     def __init__(self, main_window):
         self.main_window = main_window
 
-    def find_checkbox_by_checkbox_button(self, clicked_button):
-        for dictionary in self.main_window.dicts:
-            for checkbox, data in dictionary.items():
-                if clicked_button in data["buttons"] or clicked_button in data["reorder_buttons"]:
-                    return checkbox
-
     def connect_checkbox_buttons(self):
         for dictionary in self.main_window.dicts:
             for checkbox, data in dictionary.items():

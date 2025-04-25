@@ -1,5 +1,5 @@
 from core.TaskInfoDialog.change_visual_ui import ChangeVisualUI
-from modules.TaskInfoDialog import task_display_tools, task_info_dialog_builder
+from modules.TaskInfoDialog import task_info_dialog_builder
 from PyQt5.QtWidgets import *
 
 

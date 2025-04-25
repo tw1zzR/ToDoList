@@ -2,9 +2,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-# def set_datetime(task_dialog, field, datetime):
-
-
 
 def is_valid_task_dialog_type(current_task_window, task_dialog_class, clicked_checkbox_name, task_window_checkbox_name):
     if (current_task_window is not None

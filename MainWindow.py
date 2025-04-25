@@ -1,4 +1,4 @@
-from core.MainWindow.ComponentBuilderUI import ComponentBuilderUI
+from core.MainWindow.CheckboxElementManager import CheckboxElementManager
 from core.MainWindow.ChangeVisualUI import ChangeVisualUI
 from core.MainWindow.OnClickController import OnClickController
 from core.MainWindow.TaskButtonManager import TaskButtonManager
@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 
         # -- Managers
         self.visual_changer = ChangeVisualUI(self)
-        self.component_builder = ComponentBuilderUI(self)
+        self.component_builder = CheckboxElementManager(self)
         self.time_tracker = TimeTracker(self)
         self.task_checkbox_manager = TaskCheckboxManager(self)
         self.task_button_manager = TaskButtonManager(self)

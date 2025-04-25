@@ -1,11 +1,8 @@
-from PyQt5.QtCore import QDateTime
-
 from core import find_methods
 from core.manage_windows_data import update_window_fields, edit_task_data
+from core.find_methods import find_checkbox_by_checkbox_button
 from modules.TaskInputDialog.dialog_tools import get_task_data
 from modules import global_tools
-from windows.TaskInfoDialog import TaskInfoDialog
-from windows.TaskInputDialog import TaskInputDialog
 from PyQt5.QtWidgets import *
 
 
@@ -18,7 +15,6 @@ class OnClickController:
         self.checkbox_mgr = self.main_window.task_checkbox_manager
         self.button_mgr = self.main_window.task_button_manager
 
-        self.current_add_task_dialog = None
 
     def on_click_task_button(self):
         sender = self.main_window.sender()
@@ -33,16 +29,6 @@ class OnClickController:
                     task_name, task_deadline, task_description = get_task_data(self.main_window.task_input_window)
                     self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
                     self.checkbox_mgr.show_all_task_checkboxes()
-
-                # if self.current_add_task_dialog is not None and self.current_add_task_dialog.isVisible():
-                #     self.current_add_task_dialog.raise_()
-                #     self.current_add_task_dialog.activateWindow()
-                # else:
-                #     add_task_input_dialog = TaskInputDialog("Add Task")
-                #     global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
-                #     self.current_add_task_dialog = global_tools.open_task_dialog(self.current_add_task_dialog, add_task_input_dialog)
-
-
 
             case "del_tasks_button":
                 if not any(self.main_window.dicts):
@@ -116,18 +102,14 @@ class OnClickController:
 
     # Checkbox buttons
     def on_click_task_info_checkbox_button(self):
-        sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
-            self.main_window.sender()
-        )
+        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), self.main_window.dicts)
         task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts,returns=["name", "deadline", "description"])
 
         self.main_window.task_info_window.show()
         update_window_fields(self.main_window.task_info_window, task_info)
 
     def on_click_edit_task_checkbox_button(self):
-        sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
-            self.main_window.sender()
-        )
+        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), self.main_window.dicts)
         task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts, returns=["name", "deadline", "description"])
 
         self.main_window.task_input_window.show()
@@ -137,9 +119,7 @@ class OnClickController:
             edit_task_data(self.main_window.task_input_window, sender_checkbox, *self.main_window.dicts)
 
     def on_click_delete_task_checkbox_button(self):
-        sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
-            self.main_window.sender()
-        )
+        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), self.main_window.dicts)
 
         self.checkbox_mgr.delete_task_checkbox_with_buttons(
             sender_checkbox,
@@ -155,7 +135,7 @@ class OnClickController:
 
     def on_click_reorder_button(self):
         sender = self.main_window.sender()
-        sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(sender)
+        sender_checkbox = find_checkbox_by_checkbox_button(sender, self.main_window.dicts)
 
         for data in self.main_window.checkbox_dict.values():
             if data["reorder_buttons"][0] is sender:
