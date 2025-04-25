@@ -40,29 +40,7 @@ def create_and_open_edit_task_input_dialog(self, sender_checkbox, primary_task_n
 
         global_tools.compare_with_main_window_theme(edit_task_input_dialog, self.main_window.dark_theme)
 
-        date_format = "dd.MM.yyyy HH:mm"
 
-        # Set primary checkbox data
-        edit_task_input_dialog.user_input_task_name.setText(primary_task_name)
-        edit_task_input_dialog.user_input_task_deadline.setDateTime(
-            QDateTime.fromString(primary_task_deadline, date_format)
-        )
-        edit_task_input_dialog.user_input_task_description.setText(primary_task_description)
-
-        if edit_task_input_dialog.exec_():
-            # Change to edited checkbox data
-            edited_task_name, edited_task_deadline, edited_task_description = get_task_data(edit_task_input_dialog)
-
-            for dictionary in self.main_window.dicts:
-                if sender_checkbox in dictionary:
-                    dictionary[sender_checkbox].update({
-                        "name": edited_task_name,
-                        "deadline": edited_task_deadline,
-                        "description": edited_task_description
-                    })
-                    break
-
-            sender_checkbox.setText(edited_task_name)
 
 
 def create_and_setup_delete_confirmation_dialog(self):

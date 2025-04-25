@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QDateTime
 
 from core import find_methods
-from core.manage_windows_data import update_window_fields
+from core.manage_windows_data import update_window_fields, edit_task_data
 from modules.TaskInputDialog.dialog_tools import get_task_data
 from modules import global_tools
 from windows.TaskInfoDialog import TaskInfoDialog
@@ -128,19 +128,13 @@ class OnClickController:
         sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
             self.main_window.sender()
         )
+        task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts, returns=["name", "deadline", "description"])
 
-        # Get primary checkbox data
-        data = next(dictionary[sender_checkbox]
-                    for dictionary in self.main_window.dicts
-                    if sender_checkbox in dictionary
-        )
+        self.main_window.task_input_window.show()
+        update_window_fields(self.main_window.task_input_window, task_info)
 
-        self.comp_mgr.create_and_open_edit_task_input_dialog(
-            sender_checkbox,
-            data["name"],
-            data["deadline"],
-            data["description"]
-        )
+        if self.main_window.task_input_window.exec_():
+            edit_task_data(self.main_window.task_input_window, sender_checkbox, *self.main_window.dicts)
 
     def on_click_delete_task_checkbox_button(self):
         sender_checkbox = self.button_mgr.find_checkbox_by_checkbox_button(
