@@ -3,6 +3,15 @@ from modules import global_tools
 from windows.TaskInputDialog import TaskInputDialog
 from PyQt5.QtWidgets import *
 
+def open_task_dialog(current_task_dialog, new_task_dialog):
+    if current_task_dialog is None or not current_task_dialog.isVisible():
+        current_task_dialog = new_task_dialog
+        current_task_dialog.show()
+        return current_task_dialog
+    else:
+        current_task_dialog.raise_()
+        current_task_dialog.activateWindow()
+
 class OnClickController:
 
     def __init__(self, main_window):
@@ -12,19 +21,26 @@ class OnClickController:
         self.checkbox_mgr = self.main_window.task_checkbox_manager
         self.button_mgr = self.main_window.task_button_manager
 
+        self.current_task_dialog = None
+
     def on_click_task_button(self):
         sender = self.main_window.sender()
         object_name = sender.objectName()
 
         match object_name:
             case "add_task_button" | "add_task_plus_button":
-                add_task_input_dialog = TaskInputDialog("Add Task")
-                global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
+                if self.current_task_dialog is not None and self.current_task_dialog.isVisible():
+                    self.current_task_dialog.raise_()
+                    self.current_task_dialog.activateWindow()
+                else:
+                    add_task_input_dialog = TaskInputDialog("Add Task")
+                    global_tools.compare_with_main_window_theme(add_task_input_dialog, self.main_window.dark_theme)
+                    self.current_task_dialog = open_task_dialog(self.current_task_dialog, add_task_input_dialog)
 
-                if add_task_input_dialog.exec_():
-                    task_name, task_deadline, task_description = get_task_data(add_task_input_dialog)
-                    self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
-                    self.checkbox_mgr.show_all_task_checkboxes()
+                    if self.current_task_dialog.exec_():
+                        task_name, task_deadline, task_description = get_task_data(self.current_task_dialog)
+                        self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
+                        self.checkbox_mgr.show_all_task_checkboxes()
 
             case "del_tasks_button":
                 if not any(self.main_window.dicts):
