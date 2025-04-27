@@ -1,4 +1,4 @@
-from modules.MainWindow import layout_tools
+from modules.MainWindow import main_window_tools
 
 class TaskCheckboxManager:
 
@@ -7,7 +7,7 @@ class TaskCheckboxManager:
         self.comp_mgr = self.main_window.component_builder
 
     def show_all_task_checkboxes(self):
-        layout_tools.clear_layout(self.main_window.tasks_layout)
+        main_window_tools.clear_layout(self.main_window.tasks_layout)
 
         self.comp_mgr.create_title_and_task_layouts()
         self.comp_mgr.create_plus_button_layout()

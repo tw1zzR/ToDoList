@@ -2,13 +2,14 @@ from modules import global_tools
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+from modules.MainWindow import main_window_tools
 
-class CheckboxElementManager:
+
+class CheckboxElementBuilder:
 
     def __init__(self, main_window):
         self.main_window = main_window
         self.visual_mgr = self.main_window.visual_changer
-
 
     def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):
         task_checkbox = QCheckBox(user_task_name, self.main_window)
@@ -28,8 +29,7 @@ class CheckboxElementManager:
         }
 
         self.visual_mgr.change_checkboxes_button_icons_theme()
-        self.main_window.task_button_manager.connect_checkbox_buttons()
-
+        main_window_tools.connect_checkbox_buttons(self.main_window)
 
     def create_reorder_buttons(self):
         moveup_button = QPushButton(self.main_window)
@@ -38,7 +38,6 @@ class CheckboxElementManager:
             button.setFixedSize(50, 25)
             button.setStyleSheet("background-color: transparent;")
         return [moveup_button, movedown_button]
-
 
     def create_checkbox_buttons(self):
         task_info_button = QPushButton(self.main_window)

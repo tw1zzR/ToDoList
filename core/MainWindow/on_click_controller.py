@@ -13,7 +13,6 @@ class OnClickController:
         self.visual_mgr = self.main_window.visual_changer
         self.comp_mgr = self.main_window.component_builder
         self.checkbox_mgr = self.main_window.task_checkbox_manager
-        self.button_mgr = self.main_window.task_button_manager
 
 
     def on_click_task_button(self):
