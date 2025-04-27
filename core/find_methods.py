@@ -1,11 +1,9 @@
 
-
 def find_checkbox_by_checkbox_button(clicked_button, *dicts):
     for dictionary in dicts:
         for checkbox, data in dictionary.items():
             if clicked_button in data["buttons"] or clicked_button in data["reorder_buttons"]:
                 return checkbox
-
 
 def find_task_info_by_checkbox(checkbox, *dicts, returns=None):
     task_info = None

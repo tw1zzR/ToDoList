@@ -11,18 +11,13 @@ def update_window_fields(task_window, task_info=None):
         task_deadline = ""
         task_description = ""
 
-
-    # ------
     if task_deadline:
         task_deadline_datetime = QDateTime.fromString(task_deadline, "dd.MM.yyyy HH:mm")
     else:
         task_deadline_datetime = QDateTime.currentDateTime()
 
     task_window.user_input_task_deadline.setMinimumDateTime(task_deadline_datetime)
-
     task_window.user_input_task_deadline.setDateTime(task_deadline_datetime)
-    # ------
-
 
     task_window.user_input_task_name.setText(task_name)
     task_window.user_input_task_description.setText(task_description)

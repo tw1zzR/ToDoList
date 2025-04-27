@@ -1,8 +1,7 @@
+from modules.MainWindow import main_window_tools
 from modules import global_tools
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
-from modules.MainWindow import main_window_tools
 
 
 class CheckboxElementBuilder:

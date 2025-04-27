@@ -1,6 +1,7 @@
 from modules import global_tools
 from PyQt5.QtCore import *
 
+
 class TimeTracker:
 
     def __init__(self, main_window):

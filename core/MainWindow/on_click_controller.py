@@ -1,6 +1,6 @@
-from core import find_methods
 from core.manage_windows_data import update_window_fields, edit_task_data
 from core.find_methods import find_checkbox_by_checkbox_button
+from core import find_methods
 from modules.TaskDialog.dialog_tools import get_task_data
 from modules import global_tools
 from PyQt5.QtWidgets import *

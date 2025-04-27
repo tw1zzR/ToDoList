@@ -1,10 +1,7 @@
-from PyQt5.QtGui import QIcon
+from core.task_window_theme_manager import TaskWindowThemeManager
+from modules.window_builders import task_window_builder
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
-from core.task_window_theme_manager import TaskWindowThemeManager
-from modules.TaskDialog import dialog_tools
-from modules.window_builders import task_window_builder
 
 
 class TaskDialog(QDialog):

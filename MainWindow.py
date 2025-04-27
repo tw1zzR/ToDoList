@@ -1,11 +1,11 @@
 from core.MainWindow.checkbox_element_builder import CheckboxElementBuilder
 from core.MainWindow.main_window_theme_manager import MainWindowThemeManager
-from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
+from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TimeTracker import TimeTracker
-from PyQt5.QtWidgets import *
 from modules.window_builders import main_window_builder
-from windows.TaskDialog import TaskDialog
+from TaskDialog import TaskDialog
+from PyQt5.QtWidgets import *
 
 
 class MainWindow(QMainWindow):

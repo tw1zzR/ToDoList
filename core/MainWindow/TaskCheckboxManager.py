@@ -1,5 +1,6 @@
 from modules.MainWindow import main_window_tools
 
+
 class TaskCheckboxManager:
 
     def __init__(self, main_window):
