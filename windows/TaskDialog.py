@@ -2,7 +2,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-from core.TaskDialog.task_window_theme_manager import TaskWindowThemeManager
+from core.task_window_theme_manager import TaskWindowThemeManager
 from modules.TaskDialog import dialog_tools
 
 

@@ -21,6 +21,7 @@ def open_task_dialog(current_task_dialog, new_task_dialog):
         current_task_dialog.raise_()
         current_task_dialog.activateWindow()
 
+
 def set_app_theme(main_window_dark_theme):
     for window in QApplication.topLevelWidgets():
         if isinstance(window, (QMainWindow, QDialog)):

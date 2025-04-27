@@ -1,5 +1,5 @@
 from core.MainWindow.checkbox_element_builder import CheckboxElementBuilder
-from core.MainWindow.ChangeVisualUI import ChangeVisualUI
+from core.MainWindow.main_window_theme_manager import MainWindowThemeManager
 from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.TimeTracker import TimeTracker
@@ -14,7 +14,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # -- Managers
-        self.visual_changer = ChangeVisualUI(self)
+        self.visual_changer = MainWindowThemeManager(self)
         self.checkbox_elems_builder = CheckboxElementBuilder(self)
         self.time_tracker = TimeTracker(self)
         self.task_checkbox_manager = TaskCheckboxManager(self)
