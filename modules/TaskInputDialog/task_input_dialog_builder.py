@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QDateTime
 
-from modules.TaskInputDialog import dialog_tools
+from modules.TaskDialog import dialog_tools
 from PyQt5.QtGui import *
 
 def setup_UI(task_input_dialog):

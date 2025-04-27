@@ -18,8 +18,8 @@ class TaskInputDialog(QDialog):
         self.button_widget = QWidget(self)
         self.button_layout = QHBoxLayout(self.button_widget)
 
-        self.task_name_label = QLabel("Task name", self)
-        self.task_deadline_label = QLabel("Deadline", self)
+        self.task_name_label = QLabel("Task Name", self)
+        self.task_deadline_label = QLabel("Task Deadline", self)
         self.task_description_label = QLabel("Task Description", self)
 
         self.user_input_task_name = QLineEdit(self)

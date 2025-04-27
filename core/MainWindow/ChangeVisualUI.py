@@ -13,7 +13,6 @@ class ChangeVisualUI:
             self.apply_light_theme()
         else:
             self.apply_dark_theme()
-        global_tools.set_app_theme(self.main_window.dark_theme)
 
     def task_checkbox_set_style_sheet(self, sender, checked):
         if checked:

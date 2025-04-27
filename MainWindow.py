@@ -5,6 +5,7 @@ from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.TimeTracker import TimeTracker
 from PyQt5.QtWidgets import *
 from modules.MainWindow import main_window_builder
+from windows.TaskDialog import TaskDialog
 from windows.TaskInfoDialog import TaskInfoDialog
 from windows.TaskInputDialog import TaskInputDialog
 
@@ -22,8 +23,8 @@ class MainWindow(QMainWindow):
         self.on_click_controller = OnClickController(self)
 
         # -- Windows
-        self.task_info_window = TaskInfoDialog()
-        self.task_input_window = TaskInputDialog()
+        self.task_info_window = TaskDialog(is_input=False)
+        self.task_input_window = TaskDialog(is_input=True)
         self.task_info_window.hide()
         self.task_input_window.hide()
 
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
         self.dicts = [self.checkbox_dict, self.completed_checkbox_dict]
 
         # -- State Flags
-        self.dark_theme = False
+        self.dark_theme = True
         self.completed_task_opened = False
 
         # -- Widgets
@@ -73,7 +74,7 @@ class MainWindow(QMainWindow):
     def init_UI(self):
         main_window_builder.setup_UI(self)
         self.task_checkbox_manager.show_all_task_checkboxes()
-        self.visual_changer.change_UI_theme()
+        self.visual_changer.apply_dark_theme()
         self.show()
 
     def print_dicts(self):

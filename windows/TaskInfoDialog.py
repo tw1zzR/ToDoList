@@ -11,9 +11,13 @@ class TaskInfoDialog(QDialog):
         self.main_layout = QVBoxLayout()
         self.dark_theme = True
 
-        self.task_name_label = QLabel("Name:", self)
-        self.task_deadline_label = QLabel("Deadline:", self)
-        self.task_description_label = QLabel("Description:", self)
+        self.task_name_label = QLabel("Task name", self)
+        self.task_deadline_label = QLabel("Deadline", self)
+        self.task_description_label = QLabel("Task Description", self)
+
+        # self.task_name_label = QLabel("Name:", self)
+        # self.task_deadline_label = QLabel("Deadline:", self)
+        # self.task_description_label = QLabel("Description:", self)
 
         self.user_input_task_name = QLabel(self)
         self.user_input_task_deadline = QLabel(self)

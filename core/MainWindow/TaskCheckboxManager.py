@@ -4,7 +4,7 @@ class TaskCheckboxManager:
 
     def __init__(self, main_window):
         self.main_window = main_window
-        self.comp_mgr = self.main_window.component_builder
+        self.comp_mgr = self.main_window.checkbox_elems_builder
 
     def show_all_task_checkboxes(self):
         main_window_tools.clear_layout(self.main_window.tasks_layout)

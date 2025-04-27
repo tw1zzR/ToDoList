@@ -1,14 +1,20 @@
 
-class ChangeVisualUI:
 
-    def __init__(self, task_input_dialog):
-        self.task_input_dialog = task_input_dialog
+class TaskWindowThemeManager:
 
-    def change_UI_theme(self):
-        pass
+    def __init__(self, window):
+        self.window = window
+
+    def change_theme(self):
+        if self.window.dark_theme:
+            self.apply_light_theme()
+        else:
+            self.apply_dark_theme()
 
     def apply_light_theme(self):
-        self.task_input_dialog.setStyleSheet("""
+        self.window.dark_theme = False
+
+        self.window.setStyleSheet("""
             QDialog {
                 background-color: rgb(255, 255, 255);
             }
@@ -24,9 +30,9 @@ class ChangeVisualUI:
             }
             QLineEdit#user_input_task_name, QDateTimeEdit#user_input_task_deadline, QTextEdit#user_input_task_description {
                 background-color: rgb(60,60,60);
+                border: 3px solid rgb(30,30,30);
                 font-family: Helvetica;
                 font-size: 18px;
-                border: 3px solid rgb(30,30,30);
                 color: rgb(235,235,235);
             }
             QTextEdit#user_input_task_description, QLineEdit#user_input_task_name, QDateTimeEdit#user_input_task_deadline {
@@ -43,7 +49,7 @@ class ChangeVisualUI:
                 width: 80px;
                 height: 50px;
             }
-            QPushButton#send_button {
+            QPushButton#OK_Button, QPushButton#send_button {
                 background-color: rgb(93, 217, 110);
                 border-color: rgb(66, 135, 76);
             }
@@ -54,7 +60,9 @@ class ChangeVisualUI:
         """)
 
     def apply_dark_theme(self):
-        self.task_input_dialog.setStyleSheet("""
+        self.window.dark_theme = True
+
+        self.window.setStyleSheet("""
             QDialog {
                 background-color: rgb(44, 44, 44);
             }
@@ -89,7 +97,7 @@ class ChangeVisualUI:
                 width: 80px;
                 height: 50px;
             }
-            QPushButton#send_button {
+            QPushButton#OK_Button, QPushButton#send_button {
                 background-color: rgb(93, 217, 110);
                 border-color: rgb(66, 135, 76);
             }

@@ -5,10 +5,7 @@ class ChangeVisualUI:
         self.task_info_dialog = task_info_dialog
 
     def change_UI_theme(self):
-        if self.task_info_dialog.dark_theme:
-            self.apply_light_theme()
-        else:
-            self.apply_dark_theme()
+        pass
 
     def apply_light_theme(self):
         self.task_info_dialog.dark_theme = False

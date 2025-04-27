@@ -1,7 +1,7 @@
 from core import find_methods
 from core.manage_windows_data import update_window_fields, edit_task_data
 from core.find_methods import find_checkbox_by_checkbox_button
-from modules.TaskInputDialog.dialog_tools import get_task_data
+from modules.TaskDialog.dialog_tools import get_task_data
 from modules import global_tools
 from PyQt5.QtWidgets import *
 
@@ -11,7 +11,7 @@ class OnClickController:
     def __init__(self, main_window):
         self.main_window = main_window
         self.visual_mgr = self.main_window.visual_changer
-        self.comp_mgr = self.main_window.component_builder
+        self.comp_mgr = self.main_window.checkbox_elems_builder
         self.checkbox_mgr = self.main_window.task_checkbox_manager
 
 
@@ -52,6 +52,7 @@ class OnClickController:
 
     def on_click_change_theme_button(self):
         self.visual_mgr.change_UI_theme()
+        global_tools.set_app_theme(self.main_window.dark_theme)
 
     def on_click_about_button(self):
         about_app_dialog = self.comp_mgr.create_and_setup_about_app_dialog()
@@ -101,14 +102,14 @@ class OnClickController:
 
     # Checkbox buttons
     def on_click_task_info_checkbox_button(self):
-        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), self.main_window.dicts)
+        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
         task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts,returns=["name", "deadline", "description"])
 
         self.main_window.task_info_window.show()
         update_window_fields(self.main_window.task_info_window, task_info)
 
     def on_click_edit_task_checkbox_button(self):
-        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), self.main_window.dicts)
+        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
         task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts, returns=["name", "deadline", "description"])
 
         self.main_window.task_input_window.show()
