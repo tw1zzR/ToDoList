@@ -4,7 +4,7 @@ from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.TimeTracker import TimeTracker
 from PyQt5.QtWidgets import *
-from modules.MainWindow import main_window_builder
+from modules.window_builders import main_window_builder
 from windows.TaskDialog import TaskDialog
 
 
@@ -67,12 +67,10 @@ class MainWindow(QMainWindow):
         self.menu_buttons = [self.add_task_button, self.del_tasks_button, self.change_theme_button, self.about_button]
         self.tool_button = QToolButton(self)
 
-        self.init_UI()
-
-    def init_UI(self):
-        main_window_builder.setup_UI(self)
-        self.task_checkbox_manager.show_all_task_checkboxes()
+        # Init UI
+        main_window_builder.setup_ui(self)
         self.visual_changer.apply_dark_theme()
+        self.task_checkbox_manager.show_all_task_checkboxes()
         self.show()
 
     def print_dicts(self):
