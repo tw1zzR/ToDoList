@@ -6,8 +6,6 @@ from core.MainWindow.TimeTracker import TimeTracker
 from PyQt5.QtWidgets import *
 from modules.MainWindow import main_window_builder
 from windows.TaskDialog import TaskDialog
-from windows.TaskInfoDialog import TaskInfoDialog
-from windows.TaskInputDialog import TaskInputDialog
 
 
 class MainWindow(QMainWindow):

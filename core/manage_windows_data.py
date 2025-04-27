@@ -1,7 +1,4 @@
-from PyQt5.QtCore import Qt
-
 from modules.TaskDialog.dialog_tools import get_task_data
-from windows.TaskInputDialog import TaskInputDialog
 from PyQt5.QtCore import QDateTime
 
 def update_window_fields(task_window, task_info=None):

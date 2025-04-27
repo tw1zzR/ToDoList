@@ -1,7 +1,5 @@
 from PyQt5.QtGui import *
 
-from modules import global_tools
-
 
 class ChangeVisualUI:
 
