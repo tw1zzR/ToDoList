@@ -46,7 +46,7 @@ class CheckboxElementBuilder:
         for button in [task_info_button, edit_task_button, delete_task_button]:
             button.setFixedSize(50, 50)
             button.setIconSize(QSize(30, 30))
-            global_tools.set_default_widget_style(self.main_window, button)
+            global_tools.set_default_widget_style(button, self.main_window)
 
         task_info_button.setToolTip("View task details")
         edit_task_button.setToolTip("Edit task")
