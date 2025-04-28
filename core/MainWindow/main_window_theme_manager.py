@@ -200,8 +200,7 @@ class MainWindowThemeManager:
         self.main_window.dark_theme = True
 
         # to Dark
-        self.main_window.change_theme_button.setIcon(QIcon("assets/MainWindow/ToolMenu/dark_theme_icon.png"))
-        self.set_widget_icon(self.main_window.change_theme_button, "assets/MainWindow/ToolMenu/light_theme_icon.png")
+        self.set_widget_icon(self.main_window.change_theme_button, "assets/MainWindow/ToolMenu/dark_theme_icon.png")
         self.set_widget_icon(self.main_window.tool_button, "assets/MainWindow/white_menu_icon.png")
         self.set_widget_icon(self.main_window.user_login_button, "assets/MainWindow/white_user_icon.png")
         self.set_widget_icon(self.main_window.add_task_plus_button, "assets/MainWindow/gray_add_task_plus_button_v1_icon.png")

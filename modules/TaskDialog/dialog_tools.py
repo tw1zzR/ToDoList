@@ -1,3 +1,4 @@
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtGui import QTextCursor
 from modules import global_tools
 
@@ -11,7 +12,10 @@ def get_task_data(task_input_dialog):
 
         return user_task_name, user_task_deadline, user_task_description
     else:
-        empty_task_name_msgbox = global_tools.create_warning_messagebox(task_input_dialog, "About App", "Task name cannot be blank.")
+        empty_task_name_msgbox = global_tools.create_messagebox("About App",
+                                                                "Task name cannot be blank.",
+                                                                QMessageBox.Warning,
+                                                                "assets/warning_icon_1.png")
         empty_task_name_msgbox.exec_()
 
 def limit_max_chars_in_textedit(task_input_dialog):

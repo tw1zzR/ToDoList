@@ -30,19 +30,25 @@ class OnClickController:
                     self.checkbox_mgr.show_all_task_checkboxes()
 
             case "del_tasks_button":
+                warning_messagebox = global_tools.create_messagebox("Delete All Tasks",
+                                                                    "",
+                                                                    QMessageBox.Warning,
+                                                                    "assets/warning_icon_1.png")
+
                 if not any(self.main_window.dicts):
-                    error_messagebox = global_tools.create_warning_messagebox(self.main_window, "Delete all tasks", "Task list is empty.")
-                    error_messagebox.exec_()
+                    warning_messagebox.setText("Task list is empty.")
+                    warning_messagebox.exec_()
                     return
 
-                confirmation_dialog = self.comp_mgr.create_and_setup_delete_confirmation_dialog()
-                user_reply = confirmation_dialog.exec_()
+                warning_messagebox.setText("Are you sure you want to delete all tasks?")
+                warning_messagebox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+                user_reply = warning_messagebox.exec_()
 
                 if user_reply == QMessageBox.Yes:
                     for dictionary in self.main_window.dicts:
                         for checkbox in list(dictionary.keys()):
                             self.checkbox_mgr.delete_task_checkbox_with_buttons(checkbox, *self.main_window.dicts)
-                    self.comp_mgr.current_task_info_window = None
 
                 self.checkbox_mgr.show_all_task_checkboxes()
 
@@ -55,8 +61,11 @@ class OnClickController:
         global_tools.set_app_theme(self.main_window.dark_theme)
 
     def on_click_about_button(self):
-        about_app_dialog = self.comp_mgr.create_and_setup_about_app_dialog()
-        about_app_dialog.exec_()
+        about_messagebox = global_tools.create_messagebox("About App",
+                                                              "My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>",
+                                                              QMessageBox.Information,
+                                                              "assets/AboutAppMessageBox/information_icon.png")
+        about_messagebox.exec_()
 
     def on_click_task_checkbox(self):
         sender_checkbox = self.main_window.sender()

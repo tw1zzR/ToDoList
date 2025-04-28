@@ -33,20 +33,20 @@ def compare_with_main_window_theme(window, main_window_dark_theme):
     else:
         window.visual_changer.apply_light_theme()
 
-def create_warning_messagebox(window, title, message):
+def create_messagebox(title, message=None, icon=None, win_icon=None):
     warning_msgbox = QMessageBox()
 
     warning_msgbox.setWindowTitle(title)
-    warning_msgbox.setWindowIcon(QIcon("assets/warning_icon_1.png"))
+    warning_msgbox.setWindowIcon(QIcon(win_icon))
     warning_msgbox.setTextFormat(Qt.RichText)
     warning_msgbox.setText(message)
-    warning_msgbox.setIcon(QMessageBox.Warning)
+    warning_msgbox.setIcon(icon)
 
-    set_default_widget_style(window, warning_msgbox)
+    set_default_widget_style(warning_msgbox)
 
     return warning_msgbox
 
-def set_default_widget_style(window, widget):
+def set_default_widget_style(widget, window=None):
     if isinstance(widget, QCheckBox):
         if window.dark_theme:
             widget.setStyleSheet(
