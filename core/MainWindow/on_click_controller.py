@@ -1,6 +1,9 @@
+from Task.task_methods import create_task_item
 from core.manage_windows_data import update_window_fields, edit_task_data, update_opened_task_info_window
 from core.find_methods import find_checkbox_by_checkbox_button
 from core import find_methods
+from Task.task import Task
+from modules.MainWindow.main_window_tools import clear_layout
 from modules.TaskDialog.dialog_tools import get_task_data
 from modules import global_tools
 from PyQt5.QtWidgets import *
@@ -27,8 +30,18 @@ class OnClickController:
 
                 if self.main_window.task_input_window.exec_():
                     task_name, task_deadline, task_description = get_task_data(self.main_window.task_input_window)
-                    self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
-                    self.checkbox_mgr.show_all_task_checkboxes()
+
+                    checkbox, checkbox_buttons, reorder_buttons = self.comp_mgr.create_checkbox_with_buttons(task_name)
+
+                    task_item = create_task_item(task_name, task_deadline, task_description, checkbox, checkbox_buttons, reorder_buttons)
+
+                    self.main_window.tasks_data.insert_task(task_item)
+
+                    self.checkbox_mgr.refresh_ui_task_checkboxes()
+                    # clear_layout(self.main_window.tasks_layout)
+
+                    # self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
+                    # self.checkbox_mgr.show_all_task_checkboxes()
 
             case "del_tasks_button":
                 warning_messagebox = global_tools.create_messagebox("Delete All Tasks",

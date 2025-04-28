@@ -10,25 +10,18 @@ class CheckboxElementBuilder:
         self.main_window = main_window
         self.visual_mgr = self.main_window.visual_changer
 
-    def create_task_checkbox_with_buttons(self, user_task_name, user_task_deadline, user_task_description):
-        task_checkbox = QCheckBox(user_task_name, self.main_window)
-        task_checkbox.stateChanged.connect(self.main_window.on_click_controller.on_click_task_checkbox)
-        task_checkbox.setFixedHeight(50)
+    def create_checkbox_with_buttons(self, task_name):
+        checkbox = QCheckBox(task_name)
+        checkbox.stateChanged.connect(self.main_window.on_click_controller.on_click_task_checkbox)
+        checkbox.setFixedHeight(50)
 
-        reorder_buttons = self.create_reorder_buttons()
         checkbox_buttons = self.create_checkbox_buttons()
-
-        self.main_window.checkbox_order.append(task_checkbox)
-        self.main_window.checkbox_dict[task_checkbox] = {
-            "buttons": checkbox_buttons,
-            "reorder_buttons": reorder_buttons,
-            "name": user_task_name,
-            "deadline": user_task_deadline,
-            "description": user_task_description
-        }
+        reorder_buttons = self.create_reorder_buttons()
 
         self.visual_mgr.change_checkboxes_button_icons_theme()
         main_window_tools.connect_checkbox_buttons(self.main_window)
+
+        return checkbox, checkbox_buttons, reorder_buttons
 
     def create_reorder_buttons(self):
         moveup_button = QPushButton(self.main_window)

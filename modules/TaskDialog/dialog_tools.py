@@ -12,7 +12,7 @@ def get_task_data(task_input_dialog):
 
         return user_task_name, user_task_deadline, user_task_description
     else:
-        empty_task_name_msgbox = global_tools.create_messagebox("About App",
+        empty_task_name_msgbox = global_tools.create_messagebox("Task Error",
                                                                 "Task name cannot be blank.",
                                                                 QMessageBox.Warning,
                                                                 "assets/warning_icon_1.png")

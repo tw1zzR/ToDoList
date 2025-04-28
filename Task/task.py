@@ -9,10 +9,4 @@ class Task:
         self.deadline = deadline
         self.description = description
 
-        self.is_complete = False
-
-
-t = Task("Task 1", 10, "Task description")
-t1 = Task("Task 2", 20, "Task description")
-print(t.id)
-print(t1.id)
+        self.is_done = False

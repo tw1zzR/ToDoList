@@ -1,3 +1,4 @@
+from Task.tasks_data import TasksData
 from core.MainWindow.checkbox_element_builder import CheckboxElementBuilder
 from core.MainWindow.main_window_theme_manager import MainWindowThemeManager
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
@@ -12,6 +13,9 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
+        # -- Data
+        self.tasks_data = TasksData()
 
         # -- Managers
         self.visual_changer = MainWindowThemeManager(self)
@@ -74,6 +78,13 @@ class MainWindow(QMainWindow):
         self.show()
 
     def print_dicts(self):
-        print(f"Checkbox postition: {self.checkbox_order}")
-        print(f"Unchecked: {self.checkbox_dict}")
-        print(f"Checked: {self.completed_checkbox_dict}")
+        print(f"Task Items: {self.tasks_data.task_items}")
+        print(f"Checked task items: {self.tasks_data.completed_task_items}")
+        print(f"Unhecked task items: {self.tasks_data.uncompleted_task_items}")
+
+        for task_item in self.tasks_data.task_items:
+            print(f"Task: {task_item.task.name}, {task_item.task.deadline}, {task_item.task.description} - {task_item.task.is_done}")
+            print(f"checkbox: {task_item.checkbox}")
+            print(f"checkbox_buttons: {task_item.checkbox_buttons}")
+            print(f"reorder_buttons: {task_item.reorder_buttons}")
+            print(f"checkbox_layout: {task_item.checkbox_layout}")
