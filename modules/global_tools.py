@@ -2,23 +2,16 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-def is_valid_task_dialog_type(current_task_window, task_dialog_class, clicked_checkbox_name, task_window_checkbox_name):
-    if (current_task_window is not None
-            and current_task_window.isVisible()
-            and isinstance(current_task_window, task_dialog_class)
-            and clicked_checkbox_name == task_window_checkbox_name):
-        return True
-    else:
+def open_task_dialog(task_dialog):
+    if task_dialog.isVisible():
+        task_dialog.raise_()
+        task_dialog.activateWindow()
         return False
-
-def open_task_dialog(current_task_dialog, new_task_dialog):
-    if current_task_dialog is None or not current_task_dialog.isVisible():
-        current_task_dialog = new_task_dialog
-        current_task_dialog.show()
-        return current_task_dialog
     else:
-        current_task_dialog.raise_()
-        current_task_dialog.activateWindow()
+        task_dialog.show()
+        if task_dialog.is_input:
+            task_dialog.user_input_task_name.setFocus()
+        return True
 
 
 def set_app_theme(main_window_dark_theme):

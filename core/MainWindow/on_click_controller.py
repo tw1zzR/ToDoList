@@ -1,4 +1,4 @@
-from core.manage_windows_data import update_window_fields, edit_task_data
+from core.manage_windows_data import update_window_fields, edit_task_data, update_opened_task_info_window
 from core.find_methods import find_checkbox_by_checkbox_button
 from core import find_methods
 from modules.TaskDialog.dialog_tools import get_task_data
@@ -14,6 +14,8 @@ class OnClickController:
         self.comp_mgr = self.main_window.checkbox_elems_builder
         self.checkbox_mgr = self.main_window.task_checkbox_manager
 
+        self.previous_checkbox_sender = None
+
 
     def on_click_task_button(self):
         sender = self.main_window.sender()
@@ -21,7 +23,6 @@ class OnClickController:
 
         match object_name:
             case "add_task_button" | "add_task_plus_button":
-                self.main_window.task_input_window.show()
                 update_window_fields(self.main_window.task_input_window)
 
                 if self.main_window.task_input_window.exec_():
@@ -114,21 +115,25 @@ class OnClickController:
         sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
         task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts,returns=["name", "deadline", "description"])
 
-        self.main_window.task_info_window.show()
         update_window_fields(self.main_window.task_info_window, task_info)
+        global_tools.open_task_dialog(self.main_window.task_info_window)
 
     def on_click_edit_task_checkbox_button(self):
         sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
+        primary_checkbox_text = sender_checkbox.text()
+
         task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts, returns=["name", "deadline", "description"])
 
-        self.main_window.task_input_window.show()
         update_window_fields(self.main_window.task_input_window, task_info)
 
         if self.main_window.task_input_window.exec_():
             edit_task_data(self.main_window.task_input_window, sender_checkbox, *self.main_window.dicts)
 
+            if primary_checkbox_text == self.main_window.task_info_window.user_input_task_name.text():
+                update_opened_task_info_window(self.main_window.task_info_window, sender_checkbox, *self.main_window.dicts)
+
     def on_click_delete_task_checkbox_button(self):
-        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), self.main_window.dicts)
+        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
 
         self.checkbox_mgr.delete_task_checkbox_with_buttons(
             sender_checkbox,

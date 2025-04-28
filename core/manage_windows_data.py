@@ -24,6 +24,21 @@ def update_window_fields(task_window, task_info=None):
 
     task_window.update()
 
+def update_opened_task_info_window(task_window, checkbox, *dicts):
+    task_info = None
+
+    for dictionary in dicts:
+        if checkbox in dictionary :
+            task_data = dictionary[checkbox]
+
+            task_info = {
+                "name": task_data["name"],
+                "deadline": task_data["deadline"],
+                "description": task_data["description"]
+            }
+
+    update_window_fields(task_window, task_info)
+
 def edit_task_data(task_window, checkbox, *dicts):
     edited_task_name, edited_task_deadline, edited_task_description = get_task_data(task_window)
 
