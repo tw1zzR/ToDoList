@@ -20,11 +20,15 @@ class TaskCheckboxManager:
             new_task_layout = self.create_task_item_layout(task_item)
             self.main_window.tasks_layout.addLayout(new_task_layout)
 
-        plus_button_layout = self.build_plus_button_layout()
+        plus_button_layout = self.build_plus_button()
         self.main_window.tasks_layout.addLayout(plus_button_layout)
 
-        self.main_window.show()
+        completed_tasks_button_layout = self.build_completed_task_button()
+        # self.main_window.completed_task_open_button.hide()
+        self.main_window.completed_task_open_button.show()
+        self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
 
+        self.main_window.show()
 
         # self.comp_mgr.create_completed_task_button_layout()
         #
@@ -56,7 +60,9 @@ class TaskCheckboxManager:
             button.show()
             task_layout.addWidget(button)
 
+
         task_layout.addSpacing(50)
+
 
         return task_layout
 
@@ -94,7 +100,7 @@ class TaskCheckboxManager:
 
         return task_item.checkbox_layout
 
-    def build_plus_button_layout(self):
+    def build_plus_button(self):
         plus_button_layout = QHBoxLayout()
         plus_button_layout.addSpacing(50)
         plus_button_layout.addWidget(self.main_window.add_task_plus_button, alignment=Qt.AlignLeft)
@@ -107,14 +113,13 @@ class TaskCheckboxManager:
 
 
 
-    def create_completed_task_button_layout(self):
+    def build_completed_task_button(self):
         completed_tasks_button_layout = QHBoxLayout()
         completed_tasks_button_layout.addSpacing(50)
         completed_tasks_button_layout.addWidget(self.main_window.completed_task_open_button, alignment=Qt.AlignCenter)
         completed_tasks_button_layout.addSpacing(50)
 
-        self.main_window.completed_task_open_button.hide()
-        self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
+        return completed_tasks_button_layout
 
 
 

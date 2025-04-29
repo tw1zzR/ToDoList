@@ -3,6 +3,7 @@ from core.manage_windows_data import update_window_fields, edit_task_data, updat
 from core.find_methods import find_checkbox_by_checkbox_button
 from core import find_methods
 from Task.task import Task
+from modules.MainWindow import main_window_tools
 from modules.MainWindow.main_window_tools import clear_layout
 from modules.TaskDialog.dialog_tools import get_task_data
 from modules import global_tools
@@ -37,11 +38,10 @@ class OnClickController:
 
                     self.main_window.tasks_data.insert_task(task_item)
 
-                    self.checkbox_mgr.refresh_ui_task_checkboxes()
-                    # clear_layout(self.main_window.tasks_layout)
+                    self.visual_mgr.change_checkboxes_button_icons_theme()
+                    main_window_tools.connect_checkbox_buttons(self.main_window)
 
-                    # self.comp_mgr.create_task_checkbox_with_buttons(task_name, task_deadline, task_description)
-                    # self.checkbox_mgr.show_all_task_checkboxes()
+                    self.checkbox_mgr.refresh_ui_task_checkboxes()
 
             case "del_tasks_button":
                 warning_messagebox = global_tools.create_messagebox("Delete All Tasks",

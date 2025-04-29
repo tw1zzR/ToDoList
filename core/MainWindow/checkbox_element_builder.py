@@ -18,8 +18,7 @@ class CheckboxElementBuilder:
         checkbox_buttons = self.create_checkbox_buttons()
         reorder_buttons = self.create_reorder_buttons()
 
-        self.visual_mgr.change_checkboxes_button_icons_theme()
-        main_window_tools.connect_checkbox_buttons(self.main_window)
+
 
         return checkbox, checkbox_buttons, reorder_buttons
 
