@@ -1,4 +1,4 @@
-from modules.TaskDialog.dialog_tools import get_task_data
+from modules.task_dialog_tools import get_task_data
 from PyQt5.QtCore import QDateTime
 
 def update_window_fields(task_window, task_info=None, is_add=False):
@@ -23,38 +23,6 @@ def update_window_fields(task_window, task_info=None, is_add=False):
     task_window.user_input_task_description.setText(description)
 
     task_window.update()
-
-
-# def update_window_fields(task_window, task_info=None):
-#     if isinstance(task_info, dict):
-#         task_name = task_info.get("name", "")
-#         task_deadline = task_info.get("deadline", "")
-#         task_description = task_info.get("description", "")
-#     else:
-#         task_name = ""
-#         task_deadline = ""
-#         task_description = ""
-#
-#     if task_deadline:
-#         task_deadline_datetime = QDateTime.fromString(task_deadline, "dd.MM.yyyy HH:mm")
-#     else:
-#         task_deadline_datetime = QDateTime.currentDateTime()
-#
-#     task_window.user_input_task_deadline.setMinimumDateTime(task_deadline_datetime)
-#     task_window.user_input_task_deadline.setDateTime(task_deadline_datetime)
-#
-#     task_window.user_input_task_name.setText(task_name)
-#     task_window.user_input_task_description.setText(task_description)
-#
-#     task_window.update()
-
-# def update_opened_task_info_window(task_window, task_item):
-#     task_item.task.name
-#     task_item.task.deadline
-#     task_item.task.description
-#
-#
-#     update_window_fields(task_window,)
 
 def edit_task_data(task_window, task_item, task_items):
     edited_task_name, edited_task_deadline, edited_task_description = get_task_data(task_window)

@@ -1,6 +1,6 @@
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 def setup_ui(main_window):
     setup_window(main_window)

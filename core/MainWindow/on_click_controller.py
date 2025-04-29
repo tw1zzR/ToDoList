@@ -1,12 +1,7 @@
 from Task.task_methods import create_task_item, find_task_item_by_element, transfer_task
 from core.manage_windows_data import update_window_fields, edit_task_data
-from core.find_methods import find_checkbox_by_checkbox_button
-from core import find_methods
-from Task.task import Task
-from modules.MainWindow import main_window_tools
-from modules.MainWindow.main_window_tools import clear_layout
-from modules.TaskDialog.dialog_tools import get_task_data
-from modules import global_tools
+from modules.task_dialog_tools import get_task_data
+from modules import global_tools, main_window_tools
 from PyQt5.QtWidgets import *
 
 
@@ -15,7 +10,6 @@ class OnClickController:
     def __init__(self, main_window):
         self.main_window = main_window
         self.visual_mgr = self.main_window.visual_changer
-        self.comp_mgr = self.main_window.checkbox_elems_builder
         self.checkbox_mgr = self.main_window.task_checkbox_manager
 
 
@@ -30,7 +24,7 @@ class OnClickController:
                 if self.main_window.task_input_window.exec_():
                     # Create and insert task item
                     task_name, task_deadline, task_description = get_task_data(self.main_window.task_input_window)
-                    checkbox, checkbox_buttons, reorder_buttons = self.comp_mgr.create_checkbox_with_buttons(task_name)
+                    checkbox, checkbox_buttons, reorder_buttons = self.main_window.checkbox_builder.create_checkbox_with_buttons(task_name)
                     task_item = create_task_item(task_name, task_deadline, task_description, checkbox, checkbox_buttons, reorder_buttons)
 
                     self.main_window.tasks_data.insert_task(task_item)
@@ -125,7 +119,12 @@ class OnClickController:
         task_info = task_item.task
 
         update_window_fields(self.main_window.task_info_window, task_info)
-        global_tools.open_task_dialog(self.main_window.task_info_window)
+
+        if self.main_window.task_info_window.isVisible():
+            self.main_window.task_info_window.raise_()
+            self.main_window.task_info_window.activateWindow()
+        else:
+            self.main_window.task_info_window.show()
 
     def on_click_edit_task_checkbox_button(self):
         task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data.task_items)

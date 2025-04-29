@@ -1,6 +1,6 @@
-from modules.TaskDialog import dialog_tools
-from PyQt5.QtGui import *
+from modules.task_dialog_tools import get_task_data, limit_max_chars_in_textedit
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 def setup_ui(task_window):
     setup_window(task_window)
@@ -51,8 +51,8 @@ def setup_layouts(task_window):
 
 def setup_connections(task_window):
     if task_window.is_input:
-        task_window.user_input_task_description.textChanged.connect(lambda: dialog_tools.limit_max_chars_in_textedit(task_window))
-        task_window.send_button.clicked.connect(lambda: dialog_tools.get_task_data(task_window))
+        task_window.user_input_task_description.textChanged.connect(lambda: limit_max_chars_in_textedit(task_window))
+        task_window.send_button.clicked.connect(lambda: get_task_data(task_window))
         task_window.cancel_button.clicked.connect(task_window.reject)
     else:
         task_window.OK_Button.clicked.connect(task_window.close)

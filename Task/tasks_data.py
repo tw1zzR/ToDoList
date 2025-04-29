@@ -1,5 +1,4 @@
 
-
 class TasksData:
 
     def __init__(self):
@@ -18,11 +17,3 @@ class TasksData:
             self.completed_task_items.append(task_item)
         else:
             self.uncompleted_task_items.append(task_item)
-
-    # def move_task_to_another_dict(self, completed_task_checkbox, from_dict, to_dict):
-    #     if completed_task_checkbox in self.main_window.checkbox_order:
-    #         checkbox_index  = self.main_window.checkbox_order.index(completed_task_checkbox)
-    #         checkbox_key = self.main_window.checkbox_order[checkbox_index]
-    #
-    #         completed_task_checkbox_data = from_dict.pop(checkbox_key)
-    #         to_dict[completed_task_checkbox] = completed_task_checkbox_data

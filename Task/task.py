@@ -1,6 +1,5 @@
 import uuid
 
-
 class Task:
 
     def __init__(self, name, deadline, description):

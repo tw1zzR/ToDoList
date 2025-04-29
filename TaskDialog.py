@@ -9,13 +9,11 @@ class TaskDialog(QDialog):
     def __init__(self, is_input):
         super().__init__()
         self.is_input = is_input
+        self.dark_theme = True
 
         self.visual_changer = TaskWindowThemeManager(self)
 
-        self.dark_theme = True
-
         self.main_layout = QVBoxLayout()
-
         self.button_widget = QWidget(self)
         self.button_layout = QHBoxLayout(self.button_widget)
 
@@ -39,4 +37,3 @@ class TaskDialog(QDialog):
         # Init UI
         task_window_builder.setup_ui(self)
         self.visual_changer.apply_dark_theme()
-        self.show()

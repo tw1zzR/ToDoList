@@ -46,12 +46,11 @@ class MainWindowThemeManager:
 
         theme = self.main_window.dark_theme
 
-        for task_item in self.main_window.tasks_data.task_items:
+        for task_item in self.task_items:
             for btn, icon_path in zip(task_item.checkbox_buttons, checkbox_icons[theme]):
                 self.set_widget_icon(btn, icon_path)
             for btn, icon_path in zip(task_item.reorder_buttons, reorder_icons[theme]):
                 self.set_widget_icon(btn, icon_path)
-
 
     def change_completed_task_button_icon(self):
         theme_color = "white" if self.main_window.dark_theme else "gray"

@@ -1,6 +1,5 @@
-from Task.task import Task
 from Task.task_item import TaskItem
-
+from Task.task import Task
 
 def create_task_item(name, deadline, description, checkbox, checkbox_buttons, reorder_buttons):
     task = Task(name, deadline, description)

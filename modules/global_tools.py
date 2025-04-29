@@ -2,18 +2,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-def open_task_dialog(task_dialog):
-    if task_dialog.isVisible():
-        task_dialog.raise_()
-        task_dialog.activateWindow()
-        return False
-    else:
-        task_dialog.show()
-        if task_dialog.is_input:
-            task_dialog.user_input_task_name.setFocus()
-        return True
-
-
 def set_app_theme(main_window_dark_theme):
     for window in QApplication.topLevelWidgets():
         if isinstance(window, (QMainWindow, QDialog)):

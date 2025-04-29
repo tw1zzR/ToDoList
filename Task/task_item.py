@@ -1,5 +1,4 @@
 
-
 class TaskItem:
 
     def __init__(self, task, checkbox, checkbox_buttons, reorder_buttons):
