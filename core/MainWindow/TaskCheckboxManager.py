@@ -1,6 +1,8 @@
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+
+from Task.task_methods import find_task_item_by_element
 from modules.MainWindow import main_window_tools
 
 
@@ -16,28 +18,24 @@ class TaskCheckboxManager:
         tasks_title = self.build_tasks_title()
         self.main_window.tasks_layout.addLayout(tasks_title)
 
-        for task_item in self.main_window.tasks_data.task_items:
-            new_task_layout = self.create_task_item_layout(task_item)
+        for task_item in self.main_window.tasks_data.uncompleted_task_items:
+            new_task_layout = self.build_task_item_layout(task_item)
             self.main_window.tasks_layout.addLayout(new_task_layout)
 
         plus_button_layout = self.build_plus_button()
         self.main_window.tasks_layout.addLayout(plus_button_layout)
 
         completed_tasks_button_layout = self.build_completed_task_button()
-        # self.main_window.completed_task_open_button.hide()
-        self.main_window.completed_task_open_button.show()
         self.main_window.tasks_layout.addLayout(completed_tasks_button_layout)
+
+        if self.main_window.tasks_data.completed_task_items:
+            self.main_window.completed_task_open_button.show()
+        else:
+            self.main_window.completed_task_open_button.hide()
 
         self.main_window.show()
 
-        # self.comp_mgr.create_completed_task_button_layout()
-        #
-        # if self.main_window.completed_checkbox_dict:
-        #     self.main_window.completed_task_open_button.show()
-        # else:
-        #     self.main_window.completed_task_open_button.hide()
-
-    def create_task_item_layout(self, task_item):
+    def build_task_item_layout(self, task_item):
         task_layout = QHBoxLayout()
         task_layout.setContentsMargins(0, 0, 0, 0)
         task_layout.setSpacing(0)
@@ -60,13 +58,9 @@ class TaskCheckboxManager:
             button.show()
             task_layout.addWidget(button)
 
-
         task_layout.addSpacing(50)
 
-
         return task_layout
-
-
 
     def build_tasks_title(self):
         tasks_title = QHBoxLayout()
@@ -110,9 +104,6 @@ class TaskCheckboxManager:
 
         return plus_button_layout
 
-
-
-
     def build_completed_task_button(self):
         completed_tasks_button_layout = QHBoxLayout()
         completed_tasks_button_layout.addSpacing(50)
@@ -125,28 +116,29 @@ class TaskCheckboxManager:
 
 
 
-    def show_all_task_checkboxes(self):
-        main_window_tools.clear_layout(self.main_window.tasks_layout)
-
-        self.comp_mgr.create_title_and_task_layouts()
-        self.comp_mgr.create_plus_button_layout()
-        self.comp_mgr.create_completed_task_button_layout()
-
-        if self.main_window.completed_checkbox_dict:
-            self.main_window.completed_task_open_button.show()
-        else:
-            self.main_window.completed_task_open_button.hide()
-
-        self.main_window.show()
+    # def show_all_task_checkboxes(self):
+    #     main_window_tools.clear_layout(self.main_window.tasks_layout)
+    #
+    #     self.comp_mgr.create_title_and_task_layouts()
+    #     self.comp_mgr.create_plus_button_layout()
+    #     self.comp_mgr.create_completed_task_button_layout()
+    #
+    #     if self.main_window.completed_checkbox_dict:
+    #         self.main_window.completed_task_open_button.show()
+    #     else:
+    #         self.main_window.completed_task_open_button.hide()
+    #
+    #     self.main_window.show()
 
     def show_completed_tasks(self):
-        for checkbox, data in self.main_window.completed_checkbox_dict.items():
 
-            if "checkbox_layout" in data:
-                continue
+        for task_item in self.main_window.tasks_data.completed_task_items:
 
-            checkbox_layout = self.comp_mgr.create_completed_task_layout(checkbox, data)
-            data["checkbox_layout"] = checkbox_layout
+            # if "checkbox_layout" in data:
+            #     continue
+
+            checkbox_layout = self.comp_mgr.create_completed_task_layout(task_item)
+            # data["checkbox_layout"] = checkbox_layout
             self.main_window.tasks_layout.addLayout(checkbox_layout)
             self.main_window.show()
 
@@ -191,8 +183,8 @@ class TaskCheckboxManager:
             self.main_window.update()
 
     def delete_completed_tasks_from_ui(self):
-        for checkbox, data in self.main_window.completed_checkbox_dict.items():
-            checkbox_layout = data.get("checkbox_layout")
+        for task_item in self.main_window.tasks_data.completed_task_items:
+            checkbox_layout = t
             if checkbox_layout:
                 while checkbox_layout.count():
                     item = checkbox_layout.takeAt(0)
@@ -232,5 +224,12 @@ class TaskCheckboxManager:
             completed_task_checkbox_data = from_dict.pop(checkbox_key)
             to_dict[completed_task_checkbox] = completed_task_checkbox_data
 
-    def move_to_completed_task_list(self, task):
-        s
+    def transfer_task(self, task_item, is_checked):
+        if is_checked:
+            task_item.task.is_done = True
+            self.main_window.tasks_data.uncompleted_task_items.remove(task_item)
+            self.main_window.tasks_data.completed_task_items.append(task_item)
+        else:
+            task_item.task.is_done = False
+            self.main_window.tasks_data.completed_task_items.remove(task_item)
+            self.main_window.tasks_data.uncompleted_task_items.append(task_item)

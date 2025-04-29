@@ -85,35 +85,30 @@ class OnClickController:
         is_checked = sender_checkbox.isChecked()
 
         self.visual_mgr.task_checkbox_set_style_sheet(sender_checkbox, is_checked)
+        task_item = find_task_item_by_element(sender_checkbox, self.main_window.tasks_data.task_items)
 
-        if is_checked:
-            self.checkbox_mgr.move_task_to_another_dict(
-                sender_checkbox,
-                self.main_window.checkbox_dict,
-                self.main_window.completed_checkbox_dict
-            )
-            self.checkbox_mgr.remove_completed_task_from_ui(sender_checkbox)
-        else:
-            self.checkbox_mgr.move_task_to_another_dict(
-                sender_checkbox,
-                self.main_window.completed_checkbox_dict,
-                self.main_window.checkbox_dict
-            )
+        self.checkbox_mgr.transfer_task(task_item, is_checked)
 
-        if self.main_window.completed_checkbox_dict:
+        # self.checkbox_mgr.refresh_ui_task_checkboxes()
+
+
+        if self.main_window.tasks_data.completed_task_items:
             self.main_window.completed_task_open_button.show()
         else:
             self.main_window.completed_task_open_button.hide()
 
         if self.main_window.completed_task_opened:
-            self.checkbox_mgr.show_all_task_checkboxes()
-            self.checkbox_mgr.delete_completed_tasks_from_ui()
             self.checkbox_mgr.show_completed_tasks()
+
+        # if self.main_window.completed_task_opened:
+        #     self.checkbox_mgr.show_all_task_checkboxes()
+        #     self.checkbox_mgr.delete_completed_tasks_from_ui()
+        #     self.checkbox_mgr.show_completed_tasks()
 
     def on_click_completed_tasks_button(self):
         self.main_window.completed_task_opened = not self.main_window.completed_task_opened
 
-        self.checkbox_mgr.show_all_task_checkboxes()
+        self.checkbox_mgr.refresh_ui_task_checkboxes()
 
         if self.main_window.completed_task_opened:
             self.checkbox_mgr.show_completed_tasks()
@@ -124,7 +119,7 @@ class OnClickController:
 
     # Checkbox buttons
     def on_click_task_info_checkbox_button(self):
-        task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data)
+        task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data.task_items)
         task_info = task_item.task
 
         update_window_fields(self.main_window.task_info_window, task_info)
