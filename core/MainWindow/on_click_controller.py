@@ -52,6 +52,8 @@ class OnClickController:
                     for task_item in self.main_window.tasks_data.task_items[:]:
                         self.checkbox_mgr.delete_task_item(task_item, *self.main_window.tasks_data.task_lists)
 
+                self.main_window.task_info_window.close() # If no tasks remain, close the task info window.
+
         #         self.checkbox_mgr.show_all_task_checkboxes()
         #
         # if self.main_window.completed_task_opened:
@@ -137,6 +139,7 @@ class OnClickController:
         if self.main_window.task_input_window.exec_():
             edit_task_data(self.main_window.task_input_window, task_item, self.main_window.tasks_data.task_items)
 
+            # If the task info window is open for this task, update info.
             if self.main_window.task_info_window.user_input_task_name.text() == old_task_name:
                 update_window_fields(self.main_window.task_info_window, task_item.task)
 
@@ -144,6 +147,11 @@ class OnClickController:
         task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data.task_items)
 
         self.checkbox_mgr.delete_task_item(task_item, *self.main_window.tasks_data.task_lists)
+
+        # If the task info window is open for this task, close it.
+        if task_item.task.name == self.main_window.task_info_window.user_input_task_name.text():
+            self.main_window.task_info_window.close()
+
         self.checkbox_mgr.refresh_ui_task_checkboxes()
 
     def on_click_reorder_button(self):
