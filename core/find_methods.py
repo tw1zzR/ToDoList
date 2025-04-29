@@ -17,3 +17,4 @@ def find_task_info_by_checkbox(checkbox, *dicts, returns=None):
         return {key: task_info[key] for key in returns if key in task_info}
 
     return task_info
+

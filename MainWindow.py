@@ -30,12 +30,6 @@ class MainWindow(QMainWindow):
         self.task_info_window.hide()
         self.task_input_window.hide()
 
-        # -- Data Structures
-        self.checkbox_order = []
-        self.checkbox_dict = {}
-        self.completed_checkbox_dict = {}
-        self.dicts = [self.checkbox_dict, self.completed_checkbox_dict]
-
         # -- State Flags
         self.dark_theme = True
         self.completed_task_opened = False
@@ -74,17 +68,16 @@ class MainWindow(QMainWindow):
         # Init UI
         main_window_builder.setup_ui(self)
         self.visual_changer.apply_dark_theme()
-        self.task_checkbox_manager.show_all_task_checkboxes()
+        self.task_checkbox_manager.refresh_ui_task_checkboxes()
         self.show()
 
     def print_dicts(self):
         print(f"Task Items: {self.tasks_data.task_items}")
         print(f"Checked task items: {self.tasks_data.completed_task_items}")
-        print(f"Unhecked task items: {self.tasks_data.uncompleted_task_items}")
+        print(f"Unchecked task items: {self.tasks_data.uncompleted_task_items}")
 
         for task_item in self.tasks_data.task_items:
             print(f"Task: {task_item.task.name}, {task_item.task.deadline}, {task_item.task.description} - {task_item.task.is_done}")
             print(f"checkbox: {task_item.checkbox}")
             print(f"checkbox_buttons: {task_item.checkbox_buttons}")
             print(f"reorder_buttons: {task_item.reorder_buttons}")
-            print(f"checkbox_layout: {task_item.checkbox_layout}")

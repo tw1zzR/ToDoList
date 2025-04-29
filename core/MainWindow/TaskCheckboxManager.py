@@ -172,23 +172,23 @@ class TaskCheckboxManager:
         if self.main_window.completed_task_opened:
             self.show_completed_tasks()
 
-    def delete_task_checkbox_with_buttons(self, checkbox_sender, *dicts):
-        for dictionary in dicts:
-            if checkbox_sender in dictionary:
-                checkbox_data = dictionary[checkbox_sender]
+    def delete_task_item(self, task_item, *task_lists):
+        for task_list in task_lists:
+            # for task in task_list:
+            if task_item in task_list:
 
-                for button in checkbox_data["buttons"] + checkbox_data["reorder_buttons"]:
+                for button in task_item.checkbox_buttons + task_item.reorder_buttons:
                     button.setParent(None)
                     button.deleteLater()
 
-                checkbox_sender.setParent(None)
-                checkbox_sender.deleteLater()
+                task_item.checkbox.setParent(None)
+                task_item.checkbox.deleteLater()
 
-                self.main_window.checkbox_order.remove(checkbox_sender)
-                del dictionary[checkbox_sender]
-                break
+                task_list.remove(task_item)
 
-        self.delete_completed_tasks_button()
+        if not task_lists[0]:
+            self.delete_completed_tasks_button()
+            self.main_window.update()
 
     def delete_completed_tasks_from_ui(self):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
@@ -223,7 +223,6 @@ class TaskCheckboxManager:
     def delete_completed_tasks_button(self):
         self.main_window.tasks_layout.removeWidget(self.main_window.completed_task_open_button)
         self.main_window.completed_task_open_button.setParent(None)
-        self.main_window.update()
 
     def move_task_to_another_dict(self, completed_task_checkbox, from_dict, to_dict):
         if completed_task_checkbox in self.main_window.checkbox_order:
@@ -232,3 +231,6 @@ class TaskCheckboxManager:
 
             completed_task_checkbox_data = from_dict.pop(checkbox_key)
             to_dict[completed_task_checkbox] = completed_task_checkbox_data
+
+    def move_to_completed_task_list(self, task):
+        s

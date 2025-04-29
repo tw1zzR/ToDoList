@@ -1,4 +1,4 @@
-from Task.task_methods import create_task_item
+from Task.task_methods import create_task_item, find_task_item_by_element
 from core.manage_windows_data import update_window_fields, edit_task_data, update_opened_task_info_window
 from core.find_methods import find_checkbox_by_checkbox_button
 from core import find_methods
@@ -27,7 +27,7 @@ class OnClickController:
 
         match object_name:
             case "add_task_button" | "add_task_plus_button":
-                update_window_fields(self.main_window.task_input_window)
+                update_window_fields(self.main_window.task_input_window, is_add=True)
 
                 if self.main_window.task_input_window.exec_():
                     task_name, task_deadline, task_description = get_task_data(self.main_window.task_input_window)
@@ -49,7 +49,7 @@ class OnClickController:
                                                                     QMessageBox.Warning,
                                                                     "assets/warning_icon_1.png")
 
-                if not any(self.main_window.dicts):
+                if not any(self.main_window.tasks_data.task_items):
                     warning_messagebox.setText("Task list is empty.")
                     warning_messagebox.exec_()
                     return
@@ -60,15 +60,14 @@ class OnClickController:
                 user_reply = warning_messagebox.exec_()
 
                 if user_reply == QMessageBox.Yes:
-                    for dictionary in self.main_window.dicts:
-                        for checkbox in list(dictionary.keys()):
-                            self.checkbox_mgr.delete_task_checkbox_with_buttons(checkbox, *self.main_window.dicts)
+                    for task_item in self.main_window.tasks_data.task_items[:]:
+                        self.checkbox_mgr.delete_task_item(task_item, *self.main_window.tasks_data.task_lists)
 
-                self.checkbox_mgr.show_all_task_checkboxes()
-
-        if self.main_window.completed_task_opened:
-            self.checkbox_mgr.delete_completed_tasks_from_ui()
-            self.checkbox_mgr.show_completed_tasks()
+        #         self.checkbox_mgr.show_all_task_checkboxes()
+        #
+        # if self.main_window.completed_task_opened:
+        #     self.checkbox_mgr.delete_completed_tasks_from_ui()
+        #     self.checkbox_mgr.show_completed_tasks()
 
     def on_click_change_theme_button(self):
         self.visual_mgr.change_UI_theme()
@@ -76,9 +75,9 @@ class OnClickController:
 
     def on_click_about_button(self):
         about_messagebox = global_tools.create_messagebox("About App",
-                                                              "My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>",
-                                                              QMessageBox.Information,
-                                                              "assets/AboutAppMessageBox/information_icon.png")
+                  "My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>",
+                          QMessageBox.Information,
+                  "assets/AboutAppMessageBox/information_icon.png")
         about_messagebox.exec_()
 
     def on_click_task_checkbox(self):
@@ -125,8 +124,8 @@ class OnClickController:
 
     # Checkbox buttons
     def on_click_task_info_checkbox_button(self):
-        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
-        task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts,returns=["name", "deadline", "description"])
+        task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data)
+        task_info = task_item.task
 
         update_window_fields(self.main_window.task_info_window, task_info)
         global_tools.open_task_dialog(self.main_window.task_info_window)
