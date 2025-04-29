@@ -48,31 +48,21 @@ def update_window_fields(task_window, task_info=None, is_add=False):
 #
 #     task_window.update()
 
-def update_opened_task_info_window(task_window, checkbox, *dicts):
-    task_info = None
+# def update_opened_task_info_window(task_window, task_item):
+#     task_item.task.name
+#     task_item.task.deadline
+#     task_item.task.description
+#
+#
+#     update_window_fields(task_window,)
 
-    for dictionary in dicts:
-        if checkbox in dictionary :
-            task_data = dictionary[checkbox]
-
-            task_info = {
-                "name": task_data["name"],
-                "deadline": task_data["deadline"],
-                "description": task_data["description"]
-            }
-
-    update_window_fields(task_window, task_info)
-
-def edit_task_data(task_window, checkbox, *dicts):
+def edit_task_data(task_window, task_item, task_items):
     edited_task_name, edited_task_deadline, edited_task_description = get_task_data(task_window)
 
-    for dictionary in dicts:
-        if checkbox in dictionary:
-            dictionary[checkbox].update({
-                "name": edited_task_name,
-                "deadline": edited_task_deadline,
-                "description": edited_task_description
-            })
-            break
+    for task in task_items:
+        if task_item == task:
+            task_item.task.name = edited_task_name
+            task_item.task.deadline = edited_task_deadline
+            task_item.task.description = edited_task_description
 
-    checkbox.setText(edited_task_name)
+    task_item.checkbox.setText(edited_task_name)

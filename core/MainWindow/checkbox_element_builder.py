@@ -3,6 +3,8 @@ from modules import global_tools
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+from modules.MainWindow.main_window_tools import clear_layout
+
 
 class CheckboxElementBuilder:
 
@@ -43,27 +45,3 @@ class CheckboxElementBuilder:
         delete_task_button.setToolTip("Delete task")
 
         return [task_info_button, edit_task_button, delete_task_button]
-
-
-
-
-    # Show completed tasks methods
-    def create_completed_task_layout(self, task_item):
-        checkbox_layout = QHBoxLayout()
-        checkbox_layout.setContentsMargins(0, 0, 0, 0)
-        checkbox_layout.setSpacing(0)
-        checkbox_layout.addSpacing(50)
-
-        task_item.checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        task_item.checkbox.show()
-        checkbox_layout.addWidget(task_item.checkbox)
-
-        for reorder_button in task_item.reorder_buttons:
-            reorder_button.hide()
-        for button in task_item.buttons:
-            button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            button.show()
-            checkbox_layout.addWidget(button)
-
-        checkbox_layout.addSpacing(50)
-        return checkbox_layout

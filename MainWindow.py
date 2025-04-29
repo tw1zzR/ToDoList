@@ -76,7 +76,8 @@ class MainWindow(QMainWindow):
         print(f"Checked task items: {self.tasks_data.completed_task_items}")
         print(f"Unchecked task items: {self.tasks_data.uncompleted_task_items}")
 
-        for task_item in self.tasks_data.task_items:
+        for task_item in self.tasks_data.uncompleted_task_items:
+            print("-----------------------------------------------------")
             print(f"Task: {task_item.task.name}, {task_item.task.deadline}, {task_item.task.description} - {task_item.task.is_done}")
             print(f"checkbox: {task_item.checkbox}")
             print(f"checkbox_buttons: {task_item.checkbox_buttons}")

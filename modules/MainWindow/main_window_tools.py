@@ -19,6 +19,24 @@ def clear_layout(layout):
             # child_layout.setParent(None)  # Для layouts можно не вызывать setParent
             pass
 
+# def clear_layout(layout, window):
+#     window.setUpdatesEnabled(False)
+#
+#     while layout.count():
+#         item = layout.takeAt(0)
+#
+#         widget = item.widget()
+#         if widget is not None:
+#             widget.deleteLater()
+#
+#         child_layout = item.layout()
+#         if child_layout is not None:
+#             clear_layout(child_layout, window)  # Рекурсивно очищаем вложенный layout
+#
+#     window.setUpdatesEnabled(True)
+
+
+
 def connect_checkbox_buttons(main_window):
     def connect_button(button, handler):
         if not hasattr(button, "_clicked_connected"):

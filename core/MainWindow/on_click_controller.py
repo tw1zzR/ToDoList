@@ -1,5 +1,5 @@
-from Task.task_methods import create_task_item, find_task_item_by_element
-from core.manage_windows_data import update_window_fields, edit_task_data, update_opened_task_info_window
+from Task.task_methods import create_task_item, find_task_item_by_element, transfer_task
+from core.manage_windows_data import update_window_fields, edit_task_data
 from core.find_methods import find_checkbox_by_checkbox_button
 from core import find_methods
 from Task.task import Task
@@ -19,6 +19,22 @@ class OnClickController:
         self.checkbox_mgr = self.main_window.task_checkbox_manager
 
         self.previous_checkbox_sender = None
+
+    def on_click_change_theme_button(self):
+        self.visual_mgr.change_UI_theme()
+        global_tools.set_app_theme(self.main_window.dark_theme)
+
+    def on_click_about_button(self):
+        about_messagebox = global_tools.create_messagebox("About App",
+                  "My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>",
+                          QMessageBox.Information,
+                  "assets/AboutAppMessageBox/information_icon.png")
+        about_messagebox.exec_()
+
+
+
+
+
 
 
     def on_click_task_button(self):
@@ -69,16 +85,9 @@ class OnClickController:
         #     self.checkbox_mgr.delete_completed_tasks_from_ui()
         #     self.checkbox_mgr.show_completed_tasks()
 
-    def on_click_change_theme_button(self):
-        self.visual_mgr.change_UI_theme()
-        global_tools.set_app_theme(self.main_window.dark_theme)
 
-    def on_click_about_button(self):
-        about_messagebox = global_tools.create_messagebox("About App",
-                  "My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>",
-                          QMessageBox.Information,
-                  "assets/AboutAppMessageBox/information_icon.png")
-        about_messagebox.exec_()
+
+
 
     def on_click_task_checkbox(self):
         sender_checkbox = self.main_window.sender()
@@ -87,15 +96,14 @@ class OnClickController:
         self.visual_mgr.task_checkbox_set_style_sheet(sender_checkbox, is_checked)
         task_item = find_task_item_by_element(sender_checkbox, self.main_window.tasks_data.task_items)
 
-        self.checkbox_mgr.transfer_task(task_item, is_checked)
-
-        # self.checkbox_mgr.refresh_ui_task_checkboxes()
-
+        transfer_task(task_item, is_checked, self.main_window)
 
         if self.main_window.tasks_data.completed_task_items:
             self.main_window.completed_task_open_button.show()
         else:
             self.main_window.completed_task_open_button.hide()
+
+        self.checkbox_mgr.refresh_ui_task_checkboxes()
 
         if self.main_window.completed_task_opened:
             self.checkbox_mgr.show_completed_tasks()
@@ -117,6 +125,9 @@ class OnClickController:
 
         self.visual_mgr.change_completed_task_button_icon()
 
+
+
+
     # Checkbox buttons
     def on_click_task_info_checkbox_button(self):
         task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data.task_items)
@@ -126,42 +137,34 @@ class OnClickController:
         global_tools.open_task_dialog(self.main_window.task_info_window)
 
     def on_click_edit_task_checkbox_button(self):
-        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
-        primary_checkbox_text = sender_checkbox.text()
+        task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data.task_items)
+        task_info = task_item.task
 
-        task_info = find_methods.find_task_info_by_checkbox(sender_checkbox,*self.main_window.dicts, returns=["name", "deadline", "description"])
+        old_task_name = task_info.name
 
         update_window_fields(self.main_window.task_input_window, task_info)
 
         if self.main_window.task_input_window.exec_():
-            edit_task_data(self.main_window.task_input_window, sender_checkbox, *self.main_window.dicts)
+            edit_task_data(self.main_window.task_input_window, task_item, self.main_window.tasks_data.task_items)
 
-            if primary_checkbox_text == self.main_window.task_info_window.user_input_task_name.text():
-                update_opened_task_info_window(self.main_window.task_info_window, sender_checkbox, *self.main_window.dicts)
+            if self.main_window.task_info_window.user_input_task_name.text() == old_task_name:
+                update_window_fields(self.main_window.task_info_window, task_item.task)
 
     def on_click_delete_task_checkbox_button(self):
-        sender_checkbox = find_checkbox_by_checkbox_button(self.main_window.sender(), *self.main_window.dicts)
+        task_item = find_task_item_by_element(self.main_window.sender(), self.main_window.tasks_data.task_items)
 
-        self.checkbox_mgr.delete_task_checkbox_with_buttons(
-            sender_checkbox,
-            self.main_window.checkbox_dict,
-            self.main_window.completed_checkbox_dict
-        )
+        self.checkbox_mgr.delete_task_item(task_item, *self.main_window.tasks_data.task_lists)
+        self.checkbox_mgr.refresh_ui_task_checkboxes()
 
-        self.checkbox_mgr.show_all_task_checkboxes()
-
-        if self.main_window.completed_task_opened:
-            self.checkbox_mgr.delete_completed_tasks_from_ui()
-            self.checkbox_mgr.show_completed_tasks()
 
     def on_click_reorder_button(self):
         sender = self.main_window.sender()
-        sender_checkbox = find_checkbox_by_checkbox_button(sender, self.main_window.dicts)
+        task_item = find_task_item_by_element(sender, self.main_window.tasks_data.task_items)
 
-        for data in self.main_window.checkbox_dict.values():
-            if data["reorder_buttons"][0] is sender:
-                self.checkbox_mgr.move_up_down_checkbox(sender_checkbox, "up")
+        for task_item in self.main_window.tasks_data.task_items:
+            if task_item.reorder_buttons[0] is sender:
+                self.checkbox_mgr.move_up_down_checkbox(task_item, "up")
                 break
-            elif data["reorder_buttons"][1] is sender:
-                self.checkbox_mgr.move_up_down_checkbox(sender_checkbox, "down")
+            elif task_item.reorder_buttons[1] is sender:
+                self.checkbox_mgr.move_up_down_checkbox(task_item, "down")
                 break

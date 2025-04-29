@@ -19,7 +19,12 @@ class TaskCheckboxManager:
         self.main_window.tasks_layout.addLayout(tasks_title)
 
         for task_item in self.main_window.tasks_data.uncompleted_task_items:
+            # if hasattr(task_item, "checkbox_layout") and task_item.checkbox_layout is not None:
+            #     main_window_tools.clear_layout(task_item.checkbox_layout)
+            #     del task_item.checkbox_layout
+
             new_task_layout = self.build_task_item_layout(task_item)
+            task_item.checkbox_layout = new_task_layout
             self.main_window.tasks_layout.addLayout(new_task_layout)
 
         plus_button_layout = self.build_plus_button()
@@ -137,32 +142,66 @@ class TaskCheckboxManager:
             # if "checkbox_layout" in data:
             #     continue
 
-            checkbox_layout = self.comp_mgr.create_completed_task_layout(task_item)
+            for button in task_item.reorder_buttons:
+                button.setVisible(False)
+
+            # checkbox_layout = self.comp_mgr.create_completed_task_layout(task_item)
             # data["checkbox_layout"] = checkbox_layout
-            self.main_window.tasks_layout.addLayout(checkbox_layout)
+            self.main_window.tasks_layout.addLayout(task_item.checkbox_layout)
             self.main_window.show()
 
-    def move_up_down_checkbox(self, target_checkbox, up_down):
+    # Show completed tasks methods -=-=--=-==-=-=-=-=--==-=--=-==-
+    def create_completed_task_layout(self, task_item):
+        main_window_tools.clear_layout(task_item.checkbox_layout)
+
+        checkbox_layout = QHBoxLayout()
+        checkbox_layout.setContentsMargins(0, 0, 0, 0)
+        checkbox_layout.setSpacing(0)
+        checkbox_layout.addSpacing(50)
+
+        task_item.checkbox.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        task_item.checkbox.show()
+        checkbox_layout.addWidget(task_item.checkbox)
+
+        for reorder_button in task_item.reorder_buttons:
+            reorder_button.hide()
+        for button in task_item.buttons:
+            button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+            button.show()
+            checkbox_layout.addWidget(button)
+
+        checkbox_layout.addSpacing(50)
+
+        task_item.checkbox_layout = checkbox_layout
+        return checkbox_layout
+    # -=-=--=-==-=-=-=-=--==-=--=-==--=-=--=-==-=-=-=-=--==-=--=-==-
+
+
+
+
+
+    def move_up_down_checkbox(self, task_item, up_down):
+        tasks_list = self.main_window.tasks_data.uncompleted_task_items
+
         try:
-            i = self.main_window.checkbox_order.index(target_checkbox)
+            i = tasks_list.index(task_item)
         except ValueError:
             return
 
         if up_down == "up" and i == 0:
+            print("above")
             return
-        elif up_down == "down" and i == len(self.main_window.checkbox_order) - 1 :
+        elif up_down == "down" and i == len(tasks_list) - 1 :
+            print("below")
             return
 
         if up_down == "up":
-            self.main_window.checkbox_order[i-1], self.main_window.checkbox_order[i] = self.main_window.checkbox_order[i], self.main_window.checkbox_order[i-1]
+            tasks_list[i-1], tasks_list[i] = tasks_list[i], tasks_list[i-1]
         elif up_down == "down":
-            self.main_window.checkbox_order[i+1], self.main_window.checkbox_order[i] = self.main_window.checkbox_order[i], self.main_window.checkbox_order[i+1]
+            tasks_list[i+1], tasks_list[i] = tasks_list[i], tasks_list[i+1]
 
-        self.delete_completed_tasks_from_ui()
+        self.refresh_ui_task_checkboxes()
 
-        self.show_all_task_checkboxes()
-        if self.main_window.completed_task_opened:
-            self.show_completed_tasks()
 
     def delete_task_item(self, task_item, *task_lists):
         for task_list in task_lists:
@@ -184,7 +223,7 @@ class TaskCheckboxManager:
 
     def delete_completed_tasks_from_ui(self):
         for task_item in self.main_window.tasks_data.completed_task_items:
-            checkbox_layout = t
+            checkbox_layout = task_item.checkbox_layout
             if checkbox_layout:
                 while checkbox_layout.count():
                     item = checkbox_layout.takeAt(0)
@@ -193,7 +232,7 @@ class TaskCheckboxManager:
                         widget.hide()
 
                 self.main_window.tasks_layout.removeItem(checkbox_layout)
-                del data["checkbox_layout"]
+                task_item.checkbox_layout = None
 
     def remove_completed_task_from_ui(self, sender_checkbox):
         for checkbox, data in self.main_window.completed_checkbox_dict.items():
@@ -215,21 +254,3 @@ class TaskCheckboxManager:
     def delete_completed_tasks_button(self):
         self.main_window.tasks_layout.removeWidget(self.main_window.completed_task_open_button)
         self.main_window.completed_task_open_button.setParent(None)
-
-    def move_task_to_another_dict(self, completed_task_checkbox, from_dict, to_dict):
-        if completed_task_checkbox in self.main_window.checkbox_order:
-            checkbox_index  = self.main_window.checkbox_order.index(completed_task_checkbox)
-            checkbox_key = self.main_window.checkbox_order[checkbox_index]
-
-            completed_task_checkbox_data = from_dict.pop(checkbox_key)
-            to_dict[completed_task_checkbox] = completed_task_checkbox_data
-
-    def transfer_task(self, task_item, is_checked):
-        if is_checked:
-            task_item.task.is_done = True
-            self.main_window.tasks_data.uncompleted_task_items.remove(task_item)
-            self.main_window.tasks_data.completed_task_items.append(task_item)
-        else:
-            task_item.task.is_done = False
-            self.main_window.tasks_data.completed_task_items.remove(task_item)
-            self.main_window.tasks_data.uncompleted_task_items.append(task_item)

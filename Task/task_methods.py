@@ -1,8 +1,5 @@
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QSizePolicy
 from Task.task import Task
 from Task.task_item import TaskItem
-from Task.tasks_data import TasksData
-from modules.MainWindow import main_window_tools
 
 
 def create_task_item(name, deadline, description, checkbox, checkbox_buttons, reorder_buttons):
@@ -18,3 +15,13 @@ def find_task_item_by_element(element, task_items):
             element in task_item.reorder_buttons
         ):
             return task_item
+
+def transfer_task(task_item, is_checked, main_window):
+    if is_checked:
+        task_item.task.is_done = True
+        main_window.tasks_data.uncompleted_task_items.remove(task_item)
+        main_window.tasks_data.completed_task_items.append(task_item)
+    else:
+        task_item.task.is_done = False
+        main_window.tasks_data.completed_task_items.remove(task_item)
+        main_window.tasks_data.uncompleted_task_items.append(task_item)
