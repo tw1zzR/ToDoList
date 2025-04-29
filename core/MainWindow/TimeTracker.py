@@ -38,13 +38,11 @@ class TimeTracker:
         formatted_deadline_realtime = current_time.toString("dd.MM.yyyy HH:mm")
         formatted_deadline_realtime = QDateTime.fromString(formatted_deadline_realtime, "dd.MM.yyyy HH:mm")
 
-        for checkbox, task_data in self.main_window.checkbox_dict.items():
-            task_deadline_str = task_data["deadline"]
+        for task_item in self.main_window.tasks_data.uncompleted_task_items:
+            task_deadline_str = task_item.task.deadline
             task_deadline = QDateTime.fromString(task_deadline_str, "dd.MM.yyyy HH:mm")
 
-            if current_time > task_deadline and not checkbox.isChecked():
-                checkbox.setStyleSheet(
+            if current_time > task_deadline:
+                task_item.checkbox.setStyleSheet(
                     "background-color: rgb(242, 155, 155);"
                     "border: 3px solid rgb(130, 57, 57);")
-            elif not checkbox.isChecked():
-                global_tools.set_default_widget_style(self.main_window, checkbox)
