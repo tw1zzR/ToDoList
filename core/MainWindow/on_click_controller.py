@@ -32,7 +32,16 @@ class OnClickController:
                     self.visual_mgr.change_checkboxes_button_icons_theme()
                     main_window_tools.connect_checkbox_buttons(self.main_window)
 
+
+
+
+                    if self.main_window.tasks_data.completed_task_items and self.main_window.completed_task_opened:
+                        self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
+                        self.checkbox_mgr.show_completed_tasks()
+
                     self.checkbox_mgr.refresh_ui_task_checkboxes()
+
+
 
             case "del_tasks_button":
                 warning_messagebox = global_tools.create_messagebox("Delete All Tasks","",
@@ -54,12 +63,6 @@ class OnClickController:
 
                 self.main_window.task_info_window.close() # If no tasks remain, close the task info window.
 
-        #         self.checkbox_mgr.show_all_task_checkboxes()
-        #
-        # if self.main_window.completed_task_opened:
-        #     self.checkbox_mgr.delete_completed_tasks_from_ui()
-        #     self.checkbox_mgr.show_completed_tasks()
-
 
     def on_click_task_checkbox(self):
         sender_checkbox = self.main_window.sender()
@@ -74,6 +77,8 @@ class OnClickController:
             self.main_window.completed_task_open_button.show()
         else:
             self.main_window.completed_task_open_button.hide()
+
+        self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
 
         self.checkbox_mgr.refresh_ui_task_checkboxes()
 
@@ -153,6 +158,9 @@ class OnClickController:
             self.main_window.task_info_window.close()
 
         self.checkbox_mgr.refresh_ui_task_checkboxes()
+        if self.main_window.completed_task_opened:
+            self.checkbox_mgr.delete_completed_tasks_from_ui()
+            self.checkbox_mgr.show_completed_tasks()
 
     def on_click_reorder_button(self):
         sender = self.main_window.sender()

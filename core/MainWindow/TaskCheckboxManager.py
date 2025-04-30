@@ -32,6 +32,9 @@ class TaskCheckboxManager:
 
         if self.main_window.tasks_data.completed_task_items:
             self.main_window.completed_task_open_button.show()
+
+            if self.main_window.completed_task_opened:
+                self.show_completed_tasks()
         else:
             self.main_window.completed_task_open_button.hide()
 
@@ -132,25 +135,22 @@ class TaskCheckboxManager:
     #
     #     self.main_window.show()
 
+
+    # Show completed tasks methods -=-=--=-==-=-=-=-=--==-=--=-==-
     def show_completed_tasks(self):
 
         for task_item in self.main_window.tasks_data.completed_task_items:
 
-            # if "checkbox_layout" in data:
-            #     continue
+            if task_item.checkbox_layout is not None:
+                continue
 
-            for button in task_item.reorder_buttons:
-                button.setVisible(False)
+            checkbox_layout = self.create_completed_task_layout(task_item)
 
-            # checkbox_layout = self.checkbox_builder.create_completed_task_layout(task_item)
-            # data["checkbox_layout"] = checkbox_layout
-            self.main_window.tasks_layout.addLayout(task_item.checkbox_layout)
+            self.main_window.tasks_layout.addLayout(checkbox_layout)
             self.main_window.show()
 
-    # Show completed tasks methods -=-=--=-==-=-=-=-=--==-=--=-==-
-    def create_completed_task_layout(self, task_item):
-        main_window_tools.clear_layout(task_item.checkbox_layout)
 
+    def create_completed_task_layout(self, task_item):
         checkbox_layout = QHBoxLayout()
         checkbox_layout.setContentsMargins(0, 0, 0, 0)
         checkbox_layout.setSpacing(0)
@@ -162,7 +162,7 @@ class TaskCheckboxManager:
 
         for reorder_button in task_item.reorder_buttons:
             reorder_button.hide()
-        for button in task_item.buttons:
+        for button in task_item.checkbox_buttons:
             button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
             button.show()
             checkbox_layout.addWidget(button)
@@ -170,6 +170,7 @@ class TaskCheckboxManager:
         checkbox_layout.addSpacing(50)
 
         task_item.checkbox_layout = checkbox_layout
+
         return checkbox_layout
     # -=-=--=-==-=-=-=-=--==-=--=-==--=-=--=-==-=-=-=-=--==-=--=-==-
 
