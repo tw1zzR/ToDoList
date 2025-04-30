@@ -1,7 +1,6 @@
 from Task.task_methods import create_task_item, find_task_item_by_element, transfer_task
 from core.manage_windows_data import update_window_fields, edit_task_data
-from modules.task_dialog_tools import get_task_data
-from modules import global_tools, main_window_tools
+from modules.global_tools import get_task_from_dialog, create_messagebox
 from PyQt5.QtWidgets import *
 
 
@@ -22,7 +21,7 @@ class OnClickController:
 
                 if self.main_window.task_input_window.exec_():
                     # Create and insert task item
-                    task_name, task_deadline, task_description = get_task_data(self.main_window.task_input_window)
+                    task_name, task_deadline, task_description = get_task_from_dialog(self.main_window.task_input_window)
                     checkbox, checkbox_buttons, reorder_buttons = self.main_window.checkbox_builder.create_checkbox_with_buttons(task_name)
                     task_item = create_task_item(task_name, task_deadline, task_description, checkbox, checkbox_buttons, reorder_buttons)
 
@@ -30,7 +29,7 @@ class OnClickController:
 
                     self.main_window.theme_manager.change_checkbox_buttons_theme()
                     self.main_window.theme_manager.change_checkboxes_button_icons_theme()
-                    main_window_tools.connect_checkbox_buttons(self.main_window)
+                    self.main_window.checkbox_builder.connect_checkbox_buttons()
 
 
                     self.checkbox_mgr.refresh_ui_task_checkboxes()
@@ -39,8 +38,8 @@ class OnClickController:
                         self.checkbox_mgr.show_completed_tasks()
 
             case "del_tasks_button":
-                warning_messagebox = global_tools.create_messagebox("Delete All Tasks","",
-                                                                    QMessageBox.Warning,"assets/warning_icon_1.png")
+                warning_messagebox = create_messagebox("Delete All Tasks","",
+                                                        QMessageBox.Warning,"assets/warning_icon_1.png")
 
                 if not any(self.main_window.tasks_data.task_items):
                     warning_messagebox.setText("Task list is empty.")
@@ -96,7 +95,7 @@ class OnClickController:
         self.main_window.theme_manager.change_UI_theme()
 
     def on_click_about_button(self):
-        about_messagebox = global_tools.create_messagebox("About App",
+        about_messagebox = create_messagebox("About App",
                   "My GitHub: <a href=\"https://github.com/tw1zzR\">tw1zzR</a>",
                           QMessageBox.Information,"assets/AboutAppMessageBox/information_icon.png")
         about_messagebox.exec_()

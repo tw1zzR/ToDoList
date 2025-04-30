@@ -1,4 +1,4 @@
-from modules.task_dialog_tools import get_task_data
+from modules.global_tools import get_task_from_dialog
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
@@ -59,7 +59,7 @@ def setup_layouts(task_window):
 def setup_connections(task_window):
     if task_window.is_input:
         task_window.user_input_task_description.textChanged.connect(lambda: limit_text_length(task_window))
-        task_window.send_button.clicked.connect(lambda: get_task_data(task_window))
+        task_window.send_button.clicked.connect(lambda: get_task_from_dialog(task_window))
         task_window.cancel_button.clicked.connect(task_window.reject)
     else:
         task_window.OK_Button.clicked.connect(task_window.close)

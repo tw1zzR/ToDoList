@@ -1,4 +1,4 @@
-from modules import main_window_tools
+from modules.global_tools import clear_layout
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
@@ -9,7 +9,7 @@ class TaskCheckboxManager:
         self.main_window = main_window
 
     def refresh_ui_task_checkboxes(self):
-        main_window_tools.clear_layout(self.main_window.tasks_layout)
+        clear_layout(self.main_window.tasks_layout)
 
         tasks_title = self.build_tasks_title()
         self.main_window.tasks_layout.addLayout(tasks_title)

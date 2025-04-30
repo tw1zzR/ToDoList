@@ -1,4 +1,4 @@
-from modules.task_dialog_tools import get_task_data
+from modules.global_tools import get_task_from_dialog
 from PyQt5.QtCore import QDateTime
 
 def update_window_fields(task_window, task_info=None, is_add=False):
@@ -25,7 +25,7 @@ def update_window_fields(task_window, task_info=None, is_add=False):
     task_window.update()
 
 def edit_task_data(task_window, task_item, task_items):
-    edited_task_name, edited_task_deadline, edited_task_description = get_task_data(task_window)
+    edited_task_name, edited_task_deadline, edited_task_description = get_task_from_dialog(task_window)
 
     for task in task_items:
         if task_item == task:
