@@ -3,7 +3,7 @@ from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TimeTracker import TimeTracker
 from core.ThemeManager.ThemeManager import ThemeManager
-from modules.window_builders import main_window_builder
+from modules import main_window_builder
 from Task.tasks_data import TasksData
 from TaskDialog import TaskDialog
 from PyQt5.QtWidgets import *

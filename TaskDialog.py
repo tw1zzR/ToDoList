@@ -1,4 +1,4 @@
-from modules.window_builders import task_window_builder
+from modules import task_window_builder
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
