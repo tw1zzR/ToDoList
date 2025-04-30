@@ -83,8 +83,7 @@ class ThemeManager:
 
         self.change_checkbox_buttons_theme()
 
-        self.apply_qss_config(self.main_window,
-        "core/ThemeManager/theme_presets/mw_light.qss")
+        self.apply_qss_config(self.main_window,"core/ThemeManager/theme_presets/mw_light.qss")
 
         for window in self.task_windows:
             self.apply_qss_config(window, "core/ThemeManager/theme_presets/tw_light.qss")
@@ -99,16 +98,14 @@ class ThemeManager:
         self.set_widget_icon(self.main_window.change_theme_button, "assets/MainWindow/ToolMenu/dark_theme_icon.png")
         self.set_widget_icon(self.main_window.tool_button, "assets/MainWindow/white_menu_icon.png")
         self.set_widget_icon(self.main_window.user_login_button, "assets/MainWindow/white_user_icon.png")
-        self.set_widget_icon(self.main_window.add_task_plus_button,
-                             "assets/MainWindow/gray_add_task_plus_button_v1_icon.png")
+        self.set_widget_icon(self.main_window.add_task_plus_button,"assets/MainWindow/gray_add_task_plus_button_v1_icon.png")
 
         self.change_checkboxes_button_icons_theme()
         self.change_completed_task_button_icon()
 
         self.change_checkbox_buttons_theme()
 
-        self.apply_qss_config(self.main_window,
-        "core/ThemeManager/theme_presets/mw_dark.qss")
+        self.apply_qss_config(self.main_window,"core/ThemeManager/theme_presets/mw_dark.qss")
 
         for window in self.task_windows:
             self.apply_qss_config(window, "core/ThemeManager/theme_presets/tw_dark.qss")

@@ -8,6 +8,7 @@ class TaskCheckboxManager:
     def __init__(self, main_window):
         self.main_window = main_window
 
+    # Show uncompleted tasks method + completed task btn
     def refresh_ui_task_checkboxes(self):
         clear_layout(self.main_window.tasks_layout)
 
@@ -105,7 +106,7 @@ class TaskCheckboxManager:
         completed_tasks_button_layout.addSpacing(50)
         return completed_tasks_button_layout
 
-
+    # Show completed task methods
     def show_completed_tasks(self):
 
         for task_item in self.main_window.tasks_data.completed_task_items:
