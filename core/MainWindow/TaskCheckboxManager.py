@@ -199,6 +199,9 @@ class TaskCheckboxManager:
             tasks_list[i+1], tasks_list[i] = tasks_list[i], tasks_list[i+1]
 
         self.refresh_ui_task_checkboxes()
+        if self.main_window.tasks_data.completed_task_items and self.main_window.completed_task_opened:
+            self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
+            self.main_window.task_checkbox_manager.show_completed_tasks()
 
 
     def delete_task_item(self, task_item, *task_lists):
@@ -222,12 +225,31 @@ class TaskCheckboxManager:
     def delete_completed_tasks_from_ui(self):
         for task_item in self.main_window.tasks_data.completed_task_items:
             checkbox_layout = task_item.checkbox_layout
+
             if checkbox_layout:
                 while checkbox_layout.count():
                     item = checkbox_layout.takeAt(0)
                     widget = item.widget()
                     if widget:
                         widget.hide()
+                    else:
+                        inner_layout = item.layout()
+                        if inner_layout:
+                            # Скрытие всех элементов во вложенном лейауте
+                            while inner_layout.count():
+                                inner_item = inner_layout.takeAt(0)
+                                inner_widget = inner_item.widget()
+                                if inner_widget:
+                                    inner_widget.hide()
+                            # Вместо удаления, просто скрываем сам лейаут
+                            inner_layout.setEnabled(False)
+
+                # if checkbox_layout:
+            #     while checkbox_layout.count():
+            #         item = checkbox_layout.takeAt(0)
+            #         widget = item.widget()
+            #         if widget:
+            #             widget.hide()
 
                 self.main_window.tasks_layout.removeItem(checkbox_layout)
                 task_item.checkbox_layout = None

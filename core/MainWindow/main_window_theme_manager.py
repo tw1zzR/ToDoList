@@ -5,6 +5,7 @@ class MainWindowThemeManager:
     def __init__(self, main_window):
         self.main_window = main_window
         self.task_items = self.main_window.tasks_data.task_items
+        self.uncompleted_task_items = self.main_window.tasks_data.uncompleted_task_items
 
     def change_UI_theme(self):
         if self.main_window.dark_theme:
@@ -192,7 +193,7 @@ class MainWindowThemeManager:
             }
         """)
 
-        for task_item in self.task_items:
+        for task_item in self.uncompleted_task_items:
             self.task_checkbox_set_style_sheet(task_item.checkbox, False)
 
     def apply_dark_theme(self):
@@ -331,5 +332,5 @@ class MainWindowThemeManager:
             }
         """)
 
-        for task_item in self.task_items:
+        for task_item in self.uncompleted_task_items:
             self.task_checkbox_set_style_sheet(task_item.checkbox, False)

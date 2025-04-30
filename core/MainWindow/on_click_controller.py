@@ -33,13 +33,12 @@ class OnClickController:
                     main_window_tools.connect_checkbox_buttons(self.main_window)
 
 
-
-
+                    self.checkbox_mgr.refresh_ui_task_checkboxes()
                     if self.main_window.tasks_data.completed_task_items and self.main_window.completed_task_opened:
                         self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
                         self.checkbox_mgr.show_completed_tasks()
 
-                    self.checkbox_mgr.refresh_ui_task_checkboxes()
+
 
 
 
