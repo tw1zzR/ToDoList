@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import QMessageBox
-from PyQt5.QtGui import QTextCursor
 from modules import global_tools
 
 def get_task_data(task_input_dialog):
@@ -17,10 +16,3 @@ def get_task_data(task_input_dialog):
                                                                 QMessageBox.Warning,
                                                                 "assets/warning_icon_1.png")
         empty_task_name_msgbox.exec_()
-
-def limit_max_chars_in_textedit(task_input_dialog):
-    text_chars = task_input_dialog.user_input_task_description.toPlainText()
-
-    if len(text_chars) > task_input_dialog.max_chars:
-        task_input_dialog.user_input_task_description.setPlainText(text_chars[:task_input_dialog.max_chars])
-        task_input_dialog.user_input_task_description.moveCursor(QTextCursor.End)
