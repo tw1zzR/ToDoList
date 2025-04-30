@@ -1,4 +1,5 @@
-from modules.global_tools import get_task_from_dialog
+from modules.global_tools import create_messagebox
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import QDateTime
 
 def update_window_fields(task_window, task_info=None, is_add=False):
@@ -24,8 +25,22 @@ def update_window_fields(task_window, task_info=None, is_add=False):
 
     task_window.update()
 
+def get_task_data_from_dialog(task_input_dialog):
+    user_task_name = task_input_dialog.user_input_task_name.text()
+    user_task_deadline = task_input_dialog.user_input_task_deadline.text()
+    user_task_description = task_input_dialog.user_input_task_description.toPlainText()
+
+    if user_task_name.strip():
+        task_input_dialog.accept()
+
+        return user_task_name, user_task_deadline, user_task_description
+    else:
+        empty_task_name_msgbox = create_messagebox("Task Error","Task name cannot be blank.",
+                                                    QMessageBox.Warning,"assets/warning_icon_1.png")
+        empty_task_name_msgbox.exec_()
+
 def edit_task_data(task_window, task_item, task_items):
-    edited_task_name, edited_task_deadline, edited_task_description = get_task_from_dialog(task_window)
+    edited_task_name, edited_task_deadline, edited_task_description = get_task_data_from_dialog(task_window)
 
     for task in task_items:
         if task_item == task:

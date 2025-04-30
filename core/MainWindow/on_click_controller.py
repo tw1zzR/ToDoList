@@ -1,6 +1,6 @@
 from Task.task_methods import create_task_item, find_task_item_by_element, transfer_task
-from core.manage_windows_data import update_window_fields, edit_task_data
-from modules.global_tools import get_task_from_dialog, create_messagebox
+from core.manage_data import update_window_fields, get_task_data_from_dialog, edit_task_data
+from modules.global_tools import create_messagebox
 from PyQt5.QtWidgets import *
 
 
@@ -21,7 +21,7 @@ class OnClickController:
 
                 if self.main_window.task_input_window.exec_():
                     # Create and insert task item
-                    task_name, task_deadline, task_description = get_task_from_dialog(self.main_window.task_input_window)
+                    task_name, task_deadline, task_description = get_task_data_from_dialog(self.main_window.task_input_window)
                     checkbox, checkbox_buttons, reorder_buttons = self.main_window.checkbox_builder.create_checkbox_with_buttons(task_name)
                     task_item = create_task_item(task_name, task_deadline, task_description, checkbox, checkbox_buttons, reorder_buttons)
 
