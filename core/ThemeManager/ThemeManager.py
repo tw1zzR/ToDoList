@@ -1,3 +1,4 @@
+from core.ThemeManager.icons_path import reorder_icons, checkbox_icons
 from PyQt5.QtGui import *
 
 class ThemeManager:
@@ -35,28 +36,10 @@ class ThemeManager:
 
     # Set MW icons methods
     def change_checkboxes_button_icons_theme(self):
-        reorder_icons = {
-            True: ["assets/MainWindow/white_moveup_arrow_icon.png",
-                   "assets/MainWindow/white_movedown_arrow_icon.png"],
-            False: ["assets/MainWindow/gray_moveup_arrow_icon.png",
-                    "assets/MainWindow/gray_movedown_arrow_icon.png"]
-        }
-
-        checkbox_icons = {
-            True: ["assets/MainWindow/CheckBox/gray_task_info_button_V1_icon.png",
-                   "assets/MainWindow/CheckBox/gray_edit_task_button_icon.png",
-                   "assets/MainWindow/CheckBox/gray_delete_task_button_icon.png"],
-            False: ["assets/MainWindow/CheckBox/white_task_info_button_V1_icon.png",
-                    "assets/MainWindow/CheckBox/white_edit_task_button_icon.png",
-                    "assets/MainWindow/CheckBox/white_delete_task_button_icon.png"]
-        }
-
-        theme = self.dark_theme
-
         for task_item in self.main_window.tasks_data.task_items:
-            for btn, icon_path in zip(task_item.checkbox_buttons, checkbox_icons[theme]):
+            for btn, icon_path in zip(task_item.checkbox_buttons, checkbox_icons[self.dark_theme]):
                 self.set_widget_icon(btn, icon_path)
-            for btn, icon_path in zip(task_item.reorder_buttons, reorder_icons[theme]):
+            for btn, icon_path in zip(task_item.reorder_buttons, reorder_icons[self.dark_theme]):
                 self.set_widget_icon(btn, icon_path)
 
     def change_completed_task_button_icon(self):
