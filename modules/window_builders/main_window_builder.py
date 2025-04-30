@@ -90,6 +90,7 @@ def setup_object_sizes(main_window):
     main_window.title_label.setFixedHeight(100)
     main_window.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     main_window.status_label.setFixedHeight(25)
+    main_window.add_task_plus_button.setFixedSize(50, 50)
 
 def setup_object_names(main_window):
     main_window.title_label.setObjectName("title_label")

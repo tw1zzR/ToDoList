@@ -7,5 +7,4 @@ class Task:
         self.name = name
         self.deadline = deadline
         self.description = description
-
         self.is_done = False

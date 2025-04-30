@@ -9,7 +9,6 @@ class OnClickController:
 
     def __init__(self, main_window):
         self.main_window = main_window
-        # self.visual_mgr = self.main_window.visual_changer
         self.checkbox_mgr = self.main_window.task_checkbox_manager
 
 
@@ -38,10 +37,6 @@ class OnClickController:
                     if self.main_window.tasks_data.completed_task_items and self.main_window.completed_task_opened:
                         self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
                         self.checkbox_mgr.show_completed_tasks()
-
-
-
-
 
             case "del_tasks_button":
                 warning_messagebox = global_tools.create_messagebox("Delete All Tasks","",
@@ -85,11 +80,6 @@ class OnClickController:
         if self.main_window.completed_task_opened:
             self.checkbox_mgr.show_completed_tasks()
 
-        # if self.main_window.completed_task_opened:
-        #     self.checkbox_mgr.show_all_task_checkboxes()
-        #     self.checkbox_mgr.delete_completed_tasks_from_ui()
-        #     self.checkbox_mgr.show_completed_tasks()
-
     def on_click_completed_tasks_button(self):
         self.main_window.completed_task_opened = not self.main_window.completed_task_opened
 
@@ -102,17 +92,8 @@ class OnClickController:
 
         self.main_window.theme_manager.change_completed_task_button_icon()
 
-
-
-
-
-
-
-
-
     def on_click_change_theme_button(self):
         self.main_window.theme_manager.change_UI_theme()
-        # global_tools.set_app_theme(self.main_window.dark_theme)
 
     def on_click_about_button(self):
         about_messagebox = global_tools.create_messagebox("About App",

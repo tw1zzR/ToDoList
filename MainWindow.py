@@ -1,5 +1,4 @@
 from core.MainWindow.checkbox_element_builder import CheckboxElementBuilder
-# from core.MainWindow.main_window_theme_manager import MainWindowThemeManager
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TimeTracker import TimeTracker
@@ -21,13 +20,6 @@ class MainWindow(QMainWindow):
         # -- Windows
         self.task_info_window = TaskDialog(is_input=False)
         self.task_input_window = TaskDialog(is_input=True)
-
-        # -- Managers
-        # self.visual_changer = MainWindowThemeManager(self)
-        self.checkbox_builder = CheckboxElementBuilder(self)
-        self.time_tracker = TimeTracker(self)
-        self.task_checkbox_manager = TaskCheckboxManager(self)
-        self.on_click_controller = OnClickController(self)
 
         # -- State Flags
         self.dark_theme = True
@@ -64,8 +56,14 @@ class MainWindow(QMainWindow):
         self.menu_buttons = [self.add_task_button, self.del_tasks_button, self.change_theme_button, self.about_button]
         self.tool_button = QToolButton(self)
 
-        # ThemeManager
+
+        # -- Managers
+        self.checkbox_builder = CheckboxElementBuilder(self)
+        self.time_tracker = TimeTracker(self)
+        self.task_checkbox_manager = TaskCheckboxManager(self)
+        self.on_click_controller = OnClickController(self)
         self.theme_manager = ThemeManager(self, [self.task_info_window, self.task_input_window])
+
 
         # Init UI
         main_window_builder.setup_ui(self)

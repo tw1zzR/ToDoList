@@ -1,41 +1,11 @@
 
-# def clear_layout(layout):
-#     for i in reversed(range(layout.count())):
-#         item = layout.itemAt(i)
-#         widget = item.widget()
-#         if widget is not None:
-#             widget.setParent(None)
-#         layout.removeItem(item)
-
 def clear_layout(layout):
     while layout.count():
         item = layout.takeAt(0)
         widget = item.widget()
-        child_layout = item.layout()
 
         if widget is not None:
-            widget.setParent(None)  # Просто отвязываем виджет
-        if child_layout is not None:
-            # child_layout.setParent(None)  # Для layouts можно не вызывать setParent
-            pass
-
-# def clear_layout(layout, window):
-#     window.setUpdatesEnabled(False)
-#
-#     while layout.count():
-#         item = layout.takeAt(0)
-#
-#         widget = item.widget()
-#         if widget is not None:
-#             widget.deleteLater()
-#
-#         child_layout = item.layout()
-#         if child_layout is not None:
-#             clear_layout(child_layout, window)  # Рекурсивно очищаем вложенный layout
-#
-#     window.setUpdatesEnabled(True)
-
-
+            widget.setParent(None)
 
 def connect_checkbox_buttons(main_window):
     def connect_button(button, handler):

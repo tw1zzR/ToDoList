@@ -7,7 +7,6 @@ class TaskCheckboxManager:
 
     def __init__(self, main_window):
         self.main_window = main_window
-        # self.checkbox_builder = self.main_window.checkbox_elems_builder
 
     def refresh_ui_task_checkboxes(self):
         main_window_tools.clear_layout(self.main_window.tasks_layout)
@@ -16,10 +15,6 @@ class TaskCheckboxManager:
         self.main_window.tasks_layout.addLayout(tasks_title)
 
         for task_item in self.main_window.tasks_data.uncompleted_task_items:
-            # if hasattr(task_item, "checkbox_layout") and task_item.checkbox_layout is not None:
-            #     main_window_tools.clear_layout(task_item.checkbox_layout)
-            #     del task_item.checkbox_layout
-
             new_task_layout = self.build_task_item_layout(task_item)
             task_item.checkbox_layout = new_task_layout
             self.main_window.tasks_layout.addLayout(new_task_layout)
@@ -64,7 +59,6 @@ class TaskCheckboxManager:
             task_layout.addWidget(button)
 
         task_layout.addSpacing(50)
-
         return task_layout
 
     def build_tasks_title(self):
@@ -72,7 +66,6 @@ class TaskCheckboxManager:
         tasks_title.addStretch()
         tasks_title.addWidget(self.main_window.title_tasks_label, alignment=Qt.AlignCenter)
         tasks_title.addStretch()
-
         return tasks_title
 
     def build_task_layout(self, task_item):
@@ -96,7 +89,6 @@ class TaskCheckboxManager:
             task_item.checkbox_layout.addWidget(button)
 
         task_item.checkbox_layout.addSpacing(50)
-
         return task_item.checkbox_layout
 
     def build_plus_button(self):
@@ -104,9 +96,6 @@ class TaskCheckboxManager:
         plus_button_layout.addSpacing(50)
         plus_button_layout.addWidget(self.main_window.add_task_plus_button, alignment=Qt.AlignLeft)
         plus_button_layout.addStretch()
-
-        self.main_window.add_task_plus_button.setFixedSize(50, 50)
-
         return plus_button_layout
 
     def build_completed_task_button(self):
@@ -114,29 +103,9 @@ class TaskCheckboxManager:
         completed_tasks_button_layout.addSpacing(50)
         completed_tasks_button_layout.addWidget(self.main_window.completed_task_open_button, alignment=Qt.AlignCenter)
         completed_tasks_button_layout.addSpacing(50)
-
         return completed_tasks_button_layout
 
 
-
-
-
-    # def show_all_task_checkboxes(self):
-    #     main_window_tools.clear_layout(self.main_window.tasks_layout)
-    #
-    #     self.checkbox_builder.create_title_and_task_layouts()
-    #     self.checkbox_builder.create_plus_button_layout()
-    #     self.checkbox_builder.create_completed_task_button_layout()
-    #
-    #     if self.main_window.completed_checkbox_dict:
-    #         self.main_window.completed_task_open_button.show()
-    #     else:
-    #         self.main_window.completed_task_open_button.hide()
-    #
-    #     self.main_window.show()
-
-
-    # Show completed tasks methods -=-=--=-==-=-=-=-=--==-=--=-==-
     def show_completed_tasks(self):
 
         for task_item in self.main_window.tasks_data.completed_task_items:
@@ -148,7 +117,6 @@ class TaskCheckboxManager:
 
             self.main_window.tasks_layout.addLayout(checkbox_layout)
             self.main_window.show()
-
 
     def create_completed_task_layout(self, task_item):
         checkbox_layout = QHBoxLayout()
@@ -170,12 +138,7 @@ class TaskCheckboxManager:
         checkbox_layout.addSpacing(50)
 
         task_item.checkbox_layout = checkbox_layout
-
         return checkbox_layout
-    # -=-=--=-==-=-=-=-=--==-=--=-==--=-=--=-==-=-=-=-=--==-=--=-==-
-
-
-
 
 
     def move_up_down_checkbox(self, task_item, up_down):
@@ -203,10 +166,8 @@ class TaskCheckboxManager:
             self.main_window.task_checkbox_manager.delete_completed_tasks_from_ui()
             self.main_window.task_checkbox_manager.show_completed_tasks()
 
-
     def delete_task_item(self, task_item, *task_lists):
         for task_list in task_lists:
-            # for task in task_list:
             if task_item in task_list:
 
                 for button in task_item.checkbox_buttons + task_item.reorder_buttons:
@@ -235,21 +196,12 @@ class TaskCheckboxManager:
                     else:
                         inner_layout = item.layout()
                         if inner_layout:
-                            # Скрытие всех элементов во вложенном лейауте
                             while inner_layout.count():
                                 inner_item = inner_layout.takeAt(0)
                                 inner_widget = inner_item.widget()
                                 if inner_widget:
                                     inner_widget.hide()
-                            # Вместо удаления, просто скрываем сам лейаут
                             inner_layout.setEnabled(False)
-
-                # if checkbox_layout:
-            #     while checkbox_layout.count():
-            #         item = checkbox_layout.takeAt(0)
-            #         widget = item.widget()
-            #         if widget:
-            #             widget.hide()
 
                 self.main_window.tasks_layout.removeItem(checkbox_layout)
                 task_item.checkbox_layout = None

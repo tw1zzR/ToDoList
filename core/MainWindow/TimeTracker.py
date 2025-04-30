@@ -33,9 +33,6 @@ class TimeTracker:
     def refresh_task_deadline(self):
         current_time = QDateTime.currentDateTime()
 
-        formatted_deadline_realtime = current_time.toString("dd.MM.yyyy HH:mm")
-        formatted_deadline_realtime = QDateTime.fromString(formatted_deadline_realtime, "dd.MM.yyyy HH:mm")
-
         for task_item in self.main_window.tasks_data.uncompleted_task_items:
             task_deadline_str = task_item.task.deadline
             task_deadline = QDateTime.fromString(task_deadline_str, "dd.MM.yyyy HH:mm")

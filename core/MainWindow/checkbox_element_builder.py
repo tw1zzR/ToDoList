@@ -41,4 +41,3 @@ class CheckboxElementBuilder:
         delete_task_button.setToolTip("Delete task")
 
         return [task_info_button, edit_task_button, delete_task_button]
-

@@ -5,7 +5,6 @@ class TasksData:
         self.task_items = []
 
         self.completed_task_items = [task for task in self.task_items if task.is_done]
-
         self.uncompleted_task_items = [task for task in self.task_items if not task.is_done]
 
         self.task_lists = [self.task_items, self.completed_task_items, self.uncompleted_task_items]
