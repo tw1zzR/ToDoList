@@ -2,17 +2,17 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
-def set_app_theme(main_window_dark_theme):
-    for window in QApplication.topLevelWidgets():
-        if isinstance(window, (QMainWindow, QDialog)):
-            compare_with_main_window_theme(window, main_window_dark_theme)
-            window.update()
-
-def compare_with_main_window_theme(window, main_window_dark_theme):
-    if main_window_dark_theme:
-        window.visual_changer.apply_dark_theme()
-    else:
-        window.visual_changer.apply_light_theme()
+# def set_app_theme(main_window_dark_theme):
+#     for window in QApplication.topLevelWidgets():
+#         if isinstance(window, (QMainWindow, QDialog)):
+#             compare_with_main_window_theme(window, main_window_dark_theme)
+#             window.update()
+#
+# def compare_with_main_window_theme(window, main_window_dark_theme):
+#     if main_window_dark_theme:
+#         window.theme_manager.apply_dark_theme()
+#     else:
+#         window.theme_manager.apply_light_theme()
 
 def create_messagebox(title, message=None, icon=None, win_icon=None):
     warning_msgbox = QMessageBox()

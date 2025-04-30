@@ -1,8 +1,9 @@
 from core.MainWindow.checkbox_element_builder import CheckboxElementBuilder
-from core.MainWindow.main_window_theme_manager import MainWindowThemeManager
+# from core.MainWindow.main_window_theme_manager import MainWindowThemeManager
 from core.MainWindow.TaskCheckboxManager import TaskCheckboxManager
 from core.MainWindow.on_click_controller import OnClickController
 from core.MainWindow.TimeTracker import TimeTracker
+from core.ThemeManager.ThemeManager import ThemeManager
 from modules.window_builders import main_window_builder
 from Task.tasks_data import TasksData
 from TaskDialog import TaskDialog
@@ -17,16 +18,16 @@ class MainWindow(QMainWindow):
         # -- Data
         self.tasks_data = TasksData()
 
+        # -- Windows
+        self.task_info_window = TaskDialog(is_input=False)
+        self.task_input_window = TaskDialog(is_input=True)
+
         # -- Managers
-        self.visual_changer = MainWindowThemeManager(self)
+        # self.visual_changer = MainWindowThemeManager(self)
         self.checkbox_builder = CheckboxElementBuilder(self)
         self.time_tracker = TimeTracker(self)
         self.task_checkbox_manager = TaskCheckboxManager(self)
         self.on_click_controller = OnClickController(self)
-
-        # -- Windows
-        self.task_info_window = TaskDialog(is_input=False)
-        self.task_input_window = TaskDialog(is_input=True)
 
         # -- State Flags
         self.dark_theme = True
@@ -63,9 +64,12 @@ class MainWindow(QMainWindow):
         self.menu_buttons = [self.add_task_button, self.del_tasks_button, self.change_theme_button, self.about_button]
         self.tool_button = QToolButton(self)
 
+        # ThemeManager
+        self.theme_manager = ThemeManager(self, [self.task_info_window, self.task_input_window])
+
         # Init UI
         main_window_builder.setup_ui(self)
-        self.visual_changer.apply_dark_theme()
+        self.theme_manager.apply_dark_theme()
         self.task_checkbox_manager.refresh_ui_task_checkboxes()
 
 

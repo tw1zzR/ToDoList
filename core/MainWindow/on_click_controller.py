@@ -9,7 +9,7 @@ class OnClickController:
 
     def __init__(self, main_window):
         self.main_window = main_window
-        self.visual_mgr = self.main_window.visual_changer
+        # self.visual_mgr = self.main_window.visual_changer
         self.checkbox_mgr = self.main_window.task_checkbox_manager
 
 
@@ -29,7 +29,8 @@ class OnClickController:
 
                     self.main_window.tasks_data.insert_task(task_item)
 
-                    self.visual_mgr.change_checkboxes_button_icons_theme()
+                    self.main_window.theme_manager.change_checkbox_buttons_theme()
+                    self.main_window.theme_manager.change_checkboxes_button_icons_theme()
                     main_window_tools.connect_checkbox_buttons(self.main_window)
 
 
@@ -67,7 +68,7 @@ class OnClickController:
         sender_checkbox = self.main_window.sender()
         is_checked = sender_checkbox.isChecked()
 
-        self.visual_mgr.task_checkbox_set_style_sheet(sender_checkbox, is_checked)
+        self.main_window.theme_manager.task_checkbox_set_style_sheet(sender_checkbox, is_checked)
         task_item = find_task_item_by_element(sender_checkbox, self.main_window.tasks_data.task_items)
 
         transfer_task(task_item, is_checked, self.main_window)
@@ -99,7 +100,7 @@ class OnClickController:
         else:
             self.checkbox_mgr.delete_completed_tasks_from_ui()
 
-        self.visual_mgr.change_completed_task_button_icon()
+        self.main_window.theme_manager.change_completed_task_button_icon()
 
 
 
@@ -110,8 +111,8 @@ class OnClickController:
 
 
     def on_click_change_theme_button(self):
-        self.visual_mgr.change_UI_theme()
-        global_tools.set_app_theme(self.main_window.dark_theme)
+        self.main_window.theme_manager.change_UI_theme()
+        # global_tools.set_app_theme(self.main_window.dark_theme)
 
     def on_click_about_button(self):
         about_messagebox = global_tools.create_messagebox("About App",

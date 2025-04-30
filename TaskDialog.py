@@ -1,4 +1,4 @@
-from core.task_window_theme_manager import TaskWindowThemeManager
+# from core.task_window_theme_manager import TaskWindowThemeManager
 from modules.window_builders import task_window_builder
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -11,7 +11,7 @@ class TaskDialog(QDialog):
         self.is_input = is_input
         self.dark_theme = True
 
-        self.visual_changer = TaskWindowThemeManager(self)
+        # self.visual_changer = TaskWindowThemeManager(self)
 
         self.main_layout = QVBoxLayout()
         self.button_widget = QWidget(self)
@@ -36,4 +36,4 @@ class TaskDialog(QDialog):
 
         # Init UI
         task_window_builder.setup_ui(self)
-        self.visual_changer.apply_dark_theme()
+        # self.visual_changer.apply_dark_theme()
